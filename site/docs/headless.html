@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Headless / custom UI — ConsentLoop docs</title>
+<meta name="description" content="Run ConsentLoop without its UI and build your own banner on top of the consent engine.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<div class="layout">
+  <nav data-sidebar aria-label="Docs"></nav>
+  <main class="content">
+    <div class="breadcrumb">Docs / Headless</div>
+    <h1>Headless / custom UI</h1>
+    <p class="lead">Designers: the built-in UI is intentionally minimal and fully themeable — but if you want pixel-perfect control, run the engine headless (<code>ui: false</code>) and keep everything else: storage, revisions, gating, auto-clear, Consent Mode, events, adapters.</p>
+
+    <h2>Engine only</h2>
+    <pre data-lang="js">
+import * as ConsentLoop from "consentloop";
+
+await ConsentLoop.run({
+  ui: false,
+  categories: { necessary: { required: true }, analytics: {}, marketing: {} },
+  googleConsentMode: true,
+});
+
+// Decide whether to show *your* banner:
+if (!ConsentLoop.hasConsent()) showMyBanner();
+
+// Wire your buttons:
+myAcceptButton.onclick = () => { ConsentLoop.acceptAll(); hideMyBanner(); };
+myRejectButton.onclick = () => { ConsentLoop.rejectAll(); hideMyBanner(); };
+mySaveButton.onclick = () =>
+  ConsentLoop.accept(["analytics"], { analytics: ["ga4"] }); // granular</pre>
+
+    <div class="callout"><span>💡</span><span>Everything still works headless: gated <code>&lt;script type="text/plain" data-consent&gt;</code> tags activate on <code>accept*()</code>, cookies auto-clear on withdrawal, <code>consentloop:*</code> DOM events fire for your analytics.</span></div>
+
+    <h2>Custom UI checklist (stay compliant)</h2>
+    <ul>
+      <li>Equal prominence for <strong>Accept</strong> and <strong>Reject</strong> under GDPR — no color tricks.</li>
+      <li>A way back in: call <code>showPreferences()</code>-equivalent (your dialog) from a persistent footer link.</li>
+      <li>No pre-ticked optional boxes (<code>default: true</code> is for opt-out regimes only).</li>
+      <li>Keyboard + screen reader support: <code>role="dialog"</code>, focus trap, <kbd>Esc</kbd>.</li>
+      <li>Re-prompt on policy change by bumping <code>storage.revision</code>.</li>
+    </ul>
+
+    <h2>Theming instead of replacing</h2>
+    <p>Often you don’t need headless — the built-in UI accepts design tokens and, with <code>ui.shadow: false</code>, plain CSS:</p>
+    <pre data-lang="js">
+ConsentLoop.run({
+  ui: {
+    tokens: {
+      accent: "#0ea5e9",
+      "accent-fg": "#fff",
+      radius: "6px",
+      font: "'Inter', sans-serif",
+      shadow: "0 4px 24px rgba(2,132,199,.25)",
+      width: "22rem",
+    },
+  },
+});</pre>
+    <div class="table-scroll"><table class="props">
+      <tr><th>Token</th><th>Default (light)</th><th>What it styles</th></tr>
+      <tr><td><code>--cl-bg / --cl-fg / --cl-muted</code></td><td><code>#fff / #18181b / #6b6b76</code></td><td>Surfaces &amp; text</td></tr>
+      <tr><td><code>--cl-accent / --cl-accent-fg</code></td><td><code>#18181b / #fff</code></td><td>Primary button, switches (via <code>--cl-switch-on</code>)</td></tr>
+      <tr><td><code>--cl-btn-bg / --cl-btn-fg</code></td><td><code>#f2f2f4 / #18181b</code></td><td>Secondary buttons</td></tr>
+      <tr><td><code>--cl-radius / --cl-btn-radius</code></td><td><code>16px / 10px</code></td><td>Corners</td></tr>
+      <tr><td><code>--cl-width</code></td><td><code>24.5rem</code></td><td>Box banner width</td></tr>
+      <tr><td><code>--cl-shadow / --cl-border / --cl-overlay</code></td><td>soft</td><td>Elevation, hairlines, modal backdrop</td></tr>
+      <tr><td><code>--cl-font / --cl-text / --cl-z</code></td><td>system / 14px / 2147483000</td><td>Typography &amp; stacking</td></tr>
+    </table></div>
+    <p>Try tokens live in the <a href="/docs/configuration#opt-ui-tokens">configurator</a> or the <a href="/playground/">playground</a>.</p>
+  </main>
+</div>
+<script src="/vendor/meta.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

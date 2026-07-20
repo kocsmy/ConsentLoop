@@ -1,0 +1,27 @@
+{
+  "name": "consentloop-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "description": "ConsentLoop — the fastest open-source cookie consent for developers, designers and founders.",
+  "license": "MIT",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "pnpm -r --filter './packages/*' run build && node scripts/sync-site.mjs",
+    "test": "pnpm --filter consentloop run test",
+    "size": "node scripts/check-size.mjs",
+    "bench": "node bench/run.mjs",
+    "site": "node scripts/serve.mjs site",
+    "verify": "pnpm run build && pnpm run test && pnpm run size"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.49.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ConsentLoop preview</title>
+<style>
+  :root { color-scheme: light; }
+  [data-mock-theme="dark"] { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #fafafa; color: #17171b; min-height: 100vh;
+  }
+  [data-mock-theme="dark"] body { background: #131316; color: #ececf0; }
+  .mock { padding: 26px 30px; opacity: .9; }
+  .mock-nav { display: flex; align-items: center; gap: 14px; margin-bottom: 42px; }
+  .dot { width: 26px; height: 26px; border-radius: 8px; background: #17171b; }
+  [data-mock-theme="dark"] .dot { background: #ececf0; }
+  .bar { height: 9px; border-radius: 5px; background: rgba(23,23,27,.12); }
+  [data-mock-theme="dark"] .bar { background: rgba(236,236,240,.14); }
+  .mock-nav .bar { width: 54px; }
+  .mock-nav .bar:last-child { margin-left: auto; width: 74px; background: #4f46e5; opacity: .85; }
+  .hero { max-width: 480px; }
+  .headline { height: 22px; width: 82%; border-radius: 7px; margin-bottom: 12px; background: rgba(23,23,27,.8); }
+  [data-mock-theme="dark"] .headline { background: rgba(236,236,240,.85); }
+  .headline.short { width: 55%; margin-bottom: 26px; }
+  .hero .bar { margin: 9px 0; }
+  .hero .bar:nth-child(4) { width: 92%; }
+  .hero .bar:nth-child(5) { width: 78%; }
+  .hero .bar:nth-child(6) { width: 85%; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 44px; }
+  .card { border: 1px solid rgba(23,23,27,.1); border-radius: 12px; padding: 16px; background: #fff; }
+  [data-mock-theme="dark"] .card { background: #1b1b21; border-color: rgba(236,236,240,.1); }
+  .card .bar { margin: 8px 0; }
+  .card .bar:first-child { width: 44%; background: rgba(23,23,27,.4); }
+  [data-mock-theme="dark"] .card .bar:first-child { background: rgba(236,236,240,.5); }
+  .status {
+    position: fixed; top: 10px; right: 10px; z-index: 99;
+    font-size: 11px; font-weight: 600; font-family: ui-monospace, Menlo, monospace;
+    background: rgba(23,23,27,.85); color: #fff; border-radius: 999px; padding: 4px 11px;
+    opacity: 0; transition: opacity .2s; pointer-events: none;
+  }
+  .status.on { opacity: 1; }
+</style>
+</head>
+<body>
+  <div class="mock" aria-hidden="true">
+    <div class="mock-nav"><div class="dot"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+    <div class="hero">
+      <div class="headline"></div>
+      <div class="headline short"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+      <div class="card"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+      <div class="card"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+    </div>
+  </div>
+  <div class="status" id="status"></div>
+
+  <script src="/vendor/consentloop.iife.min.js"></script>
+  <script>
+    const status = document.getElementById("status");
+    let statusTimer;
+    function flash(msg) {
+      status.textContent = msg;
+      status.classList.add("on");
+      clearTimeout(statusTimer);
+      statusTimer = setTimeout(() => status.classList.remove("on"), 2200);
+    }
+
+    function wipe() {
+      document.cookie = "cl_consent=; Max-Age=0; Path=/";
+      try { localStorage.removeItem("cl_consent"); } catch {}
+    }
+
+    let current = null;
+    async function boot(config, opts = {}) {
+      ConsentLoop.destroy();
+      if (!opts.keepConsent) wipe();
+      document.documentElement.dataset.mockTheme =
+        opts.mockTheme || (config.ui && config.ui.theme === "dark" ? "dark" : "light");
+      current = config;
+      await ConsentLoop.run(config);
+      parent.postMessage({ type: "cl-ready" }, "*");
+    }
+
+    addEventListener("message", (e) => {
+      const d = e.data || {};
+      if (d.type === "run") boot(d.config || {}, d.opts || {});
+      if (d.type === "show-preferences") ConsentLoop.showPreferences();
+      if (d.type === "reset") { wipe(); ConsentLoop.destroy(); if (current) boot(current); }
+      if (d.type === "accept-all") ConsentLoop.acceptAll();
+    });
+
+    addEventListener("consentloop:consent", (e) => {
+      const rec = e.detail || {};
+      flash((rec.method === "implied" ? "implied: " : "consent: ") + (rec.accepted || []).join(", "));
+      parent.postMessage({ type: "cl-consent", record: JSON.parse(JSON.stringify(rec)) }, "*");
+    });
+    addEventListener("consentloop:banner-show", () => parent.postMessage({ type: "cl-banner-show" }, "*"));
+
+    // default boot so the frame is never empty
+    boot({ categories: { necessary: { required: true }, analytics: {}, marketing: {} } });
+    parent.postMessage({ type: "cl-frame-loaded" }, "*");
+  </script>
+</body>
+</html>

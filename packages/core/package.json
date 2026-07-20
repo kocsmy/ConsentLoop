@@ -1,0 +1,61 @@
+{
+  "name": "consentloop",
+  "version": "0.1.0",
+  "description": "The fastest open-source cookie consent. Zero dependencies, zero layout shift, ~7KB, Google Consent Mode v2, script gating, i18n, headless mode. Built for developers, designers and founders — and for AI agents.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/consentloop.iife.min.js",
+  "jsdelivr": "./dist/consentloop.iife.min.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./min": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.min.js",
+      "default": "./dist/index.min.js"
+    },
+    "./iife": "./dist/consentloop.iife.min.js",
+    "./loader": "./dist/consentloop.loader.min.js",
+    "./schema.json": "./schema.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "schema.json",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node build.mjs && tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "cookie-consent",
+    "consent-management",
+    "cmp",
+    "gdpr",
+    "ccpa",
+    "cookie-banner",
+    "google-consent-mode",
+    "privacy",
+    "consentloop"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kocsmy/ConsentLoop.git",
+    "directory": "packages/core"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0",
+    "jsdom": "^25.0.0"
+  }
+}

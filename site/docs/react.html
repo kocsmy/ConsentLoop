@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>React — ConsentLoop docs</title>
+<meta name="description" content="React bindings: ConsentProvider, useConsent, ConsentGate. SSR-safe, Next.js-ready.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<div class="layout">
+  <nav data-sidebar aria-label="Docs"></nav>
+  <main class="content">
+    <div class="breadcrumb">Docs / React</div>
+    <h1>React</h1>
+    <p class="lead"><code>@consentloop/react</code> is a thin, tree-shakeable layer over the core: a provider, a hook, and a gate component. The widget itself stays vanilla — no React in the render path, no hydration cost, SSR-safe by construction.</p>
+
+    <pre data-lang="bash">npm i consentloop @consentloop/react</pre>
+
+    <h2>Provider</h2>
+    <pre data-lang="js">
+// app/providers.tsx (Next.js: a client component)
+"use client";
+import { ConsentProvider } from "@consentloop/react";
+
+export function Providers({ children }) {
+  return (
+    &lt;ConsentProvider
+      config={{
+        categories: {
+          necessary: { required: true },
+          analytics: { services: { ga4: { label: "Google Analytics 4" } } },
+          marketing: {},
+        },
+        googleConsentMode: true,
+      }}
+    &gt;
+      {children}
+    &lt;/ConsentProvider&gt;
+  );
+}</pre>
+    <p>The provider calls <code>ConsentLoop.run()</code> in an effect — nothing renders on the server, nothing blocks hydration. Strict-mode double-invoke is handled (run is idempotent).</p>
+
+    <h2>useConsent()</h2>
+    <pre data-lang="js">
+import { useConsent } from "@consentloop/react";
+
+function CookieSettingsLink() {
+  const { showPreferences } = useConsent();
+  return &lt;button onClick={showPreferences}&gt;Cookie settings&lt;/button&gt;;
+}
+
+function AnalyticsInfo() {
+  const { consent, isAccepted } = useConsent(); // re-renders on every consent change
+  if (!consent) return null; // no decision yet
+  return &lt;p&gt;Analytics: {isAccepted("analytics") ? "on" : "off"}&lt;/p&gt;;
+}</pre>
+    <p>Implemented with <code>useSyncExternalStore</code> — concurrent-mode safe, no tearing, <code>null</code> snapshot during SSR.</p>
+
+    <h2>&lt;ConsentGate&gt;</h2>
+    <p>The React-idiomatic way to gate embeds: the real element mounts only after consent, with a designed placeholder before.</p>
+    <pre data-lang="js">
+import { ConsentGate, useConsent } from "@consentloop/react";
+
+function Video({ id }) {
+  const { accept } = useConsent();
+  return (
+    &lt;ConsentGate
+      category="marketing"
+      fallback={
+        &lt;div className="video-placeholder"&gt;
+          &lt;p&gt;This video is hosted on YouTube.&lt;/p&gt;
+          &lt;button onClick={() =&gt; accept(["marketing"])}&gt;Load video &amp; accept marketing cookies&lt;/button&gt;
+        &lt;/div&gt;
+      }
+    &gt;
+      &lt;iframe src={`https://www.youtube.com/embed/${id}`} title="Video" /&gt;
+    &lt;/ConsentGate&gt;
+  );
+}</pre>
+
+    <h2>Next.js App Router recipe</h2>
+    <pre data-lang="js">
+// app/layout.tsx
+import { Providers } from "./providers";
+
+export default function RootLayout({ children }) {
+  return (
+    &lt;html lang="en"&gt;
+      &lt;body&gt;
+        &lt;Providers&gt;{children}&lt;/Providers&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+  );
+}</pre>
+    <div class="callout"><span>💡</span><span>Analytics scripts in Next.js: keep using <code>next/script</code>? Gate via services instead — <code>onAccept: () =&gt; import("./ga")</code> — or plain <code>&lt;script type="text/plain" data-consent&gt;</code> tags in <code>app/layout</code>. Both patterns play well with streaming.</span></div>
+
+    <h2>Headless React UI</h2>
+    <p>Want your own banner in JSX? Run headless and drive everything from the hook — full recipe in <a href="/docs/headless">Headless / custom UI</a>:</p>
+    <pre data-lang="js">
+&lt;ConsentProvider config={{ ui: false, categories: { analytics: {} } }}&gt;
+  &lt;MyOwnBanner /&gt;   {/* uses useConsent().accept / rejectAll / consent */}
+&lt;/ConsentProvider&gt;</pre>
+  </main>
+</div>
+<script src="/vendor/meta.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

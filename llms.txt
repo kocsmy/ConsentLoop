@@ -1,0 +1,50 @@
+# ConsentLoop
+
+> The fastest open-source cookie consent (CMP) for the web. Zero dependencies, ~1.4 KB critical-path loader, zero layout shift, zero network calls. Google Consent Mode v2, GDPR/CCPA presets, per-service consent, i18n, React bindings, headless mode, and a pluggable adapter for managed/certified backends. npm: `consentloop` and `@consentloop/react`. MIT.
+
+Integration rules for AI agents:
+- One entry point: `ConsentLoop.run(config)` (ESM: `import * as ConsentLoop from "consentloop"`; CDN: `window.ConsentLoop`). Never instantiate classes; there are none.
+- Gate tracking scripts by rewriting them: set `type="text/plain"`, add `data-consent="<category>"`, move `src` to `data-consent-src`. Same attributes gate iframes/img (no type change needed).
+- Categories are arbitrary names; convention: necessary (required:true, auto-added), functionality, analytics, marketing.
+- GDPR default: opt-in, keep `ui.showRejectAll: true`, never preselect optional categories. For CCPA use `regulation: "us-optout"` + `default: true` categories.
+- If Google tags exist: set `googleConsentMode: true` and load ConsentLoop BEFORE gtag/GTM.
+- Reopen UI from a footer link: `ConsentLoop.showPreferences()`.
+- SPA route changes with new gated elements: call `ConsentLoop.rescan()`.
+- React: use `@consentloop/react` → `<ConsentProvider config={...}>`, `useConsent()`, `<ConsentGate category="marketing" fallback={...}>`.
+- The consent record is a first-party cookie `cl_consent` (JSON, short keys: a=accepted, j=rejected, s=services, r=revision, u=updatedAt, m=method).
+- E2E: widget host is `#consentloop` (open shadow root); stable action selectors `[data-a="accept-all"|"reject-all"|"open-prefs"|"save"|"close-prefs"]`; or call `window.ConsentLoop.acceptAll()`.
+- Config JSON must validate against /consentloop.schema.json. Full types with JSDoc: consentloop/dist/index.d.ts.
+
+## Docs
+
+- [Getting started](/docs/index.html): install (npm/CDN/React), run, gate scripts
+- [Configuration](/docs/configuration.html): interactive reference for every option
+- [Script & embed gating](/docs/scripts.html): data-consent attributes, services, autoClear, rescan
+- [JavaScript API](/docs/api.html): methods, events, hooks, consent record
+- [Google Consent Mode](/docs/consent-mode.html): v2 defaults/updates, category→key mapping
+- [Languages](/docs/i18n.html): translations, fallback, lazy URLs, RTL, setLanguage
+- [React](/docs/react.html): ConsentProvider, useConsent, ConsentGate, Next.js
+- [Headless](/docs/headless.html): ui:false, custom UIs, design tokens
+- [Managed & regulations](/docs/managed.html): presets, adapter contract, ConsentLoop Cloud
+- [Performance](/docs/performance.html): benchmark methodology and numbers
+- [AI integration](/docs/ai.html): this ecosystem, prompts, schema, E2E selectors
+
+## Full content
+
+- [llms-full.txt](/llms-full.txt): all documentation in one plain-text file
+- [JSON Schema](/consentloop.schema.json): machine-validatable config schema
+
+## Minimal examples
+
+HTML (CDN):
+<script>window.consentloopConfig = { categories: { necessary: { required: true }, analytics: {}, marketing: {} }, googleConsentMode: true };</script>
+<script defer src="https://cdn.jsdelivr.net/npm/consentloop/dist/consentloop.loader.min.js"></script>
+<script type="text/plain" data-consent="analytics" data-consent-src="https://plausible.io/js/script.js" async></script>
+
+ESM:
+import * as ConsentLoop from "consentloop";
+ConsentLoop.run({ categories: { necessary: { required: true }, analytics: {}, marketing: {} }, googleConsentMode: true });
+
+React:
+import { ConsentProvider, ConsentGate, useConsent } from "@consentloop/react";
+<ConsentProvider config={{ categories: { analytics: {}, marketing: {} } }}>…</ConsentProvider>

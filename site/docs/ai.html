@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI integration — ConsentLoop docs</title>
+<meta name="description" content="ConsentLoop is built to be integrated by AI agents: llms.txt, JSON schema, strict types, deterministic selectors and copy-paste prompts.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<div class="layout">
+  <nav data-sidebar aria-label="Docs"></nav>
+  <main class="content">
+    <div class="breadcrumb">Docs / AI integration</div>
+    <h1>AI integration</h1>
+    <p class="lead">Most ConsentLoop installs will be done by an AI pair — Claude, Cursor, Copilot, or an autonomous agent. The product is designed for that: one obvious API, machine-readable contracts, and nothing that requires reading source code to get right.</p>
+
+    <h2>Point your assistant at the contracts</h2>
+    <div class="table-scroll"><table class="props">
+      <tr><th>Artifact</th><th>URL / path</th><th>Use</th></tr>
+      <tr><td><code>llms.txt</code></td><td><a href="/llms.txt">/llms.txt</a></td><td>Index + integration rules (llmstxt.org format)</td></tr>
+      <tr><td><code>llms-full.txt</code></td><td><a href="/llms-full.txt">/llms-full.txt</a></td><td>The entire documentation as one plain-text file — paste into any context window</td></tr>
+      <tr><td>JSON Schema</td><td><a href="/consentloop.schema.json">/consentloop.schema.json</a></td><td>Validate configs; editor autocomplete via <code>$schema</code></td></tr>
+      <tr><td>TypeScript types</td><td><code>consentloop/dist/index.d.ts</code></td><td>Fully JSDoc’d — agents can read intent, not just shape</td></tr>
+    </table></div>
+
+    <h2>One-shot prompt</h2>
+    <p>Paste this into your assistant inside your project:</p>
+    <pre data-lang="bash">
+Add cookie consent to this project using ConsentLoop (npm: consentloop, docs: https://consentloop.dev/llms-full.txt).
+Requirements:
+1. Categories: necessary (required), analytics, marketing.
+2. Gate every existing analytics/marketing script with type="text/plain" + data-consent + data-consent-src.
+3. Enable googleConsentMode if Google tags are present, and load ConsentLoop before them.
+4. Add a "Cookie settings" footer link calling ConsentLoop.showPreferences().
+5. GDPR defaults: keep showRejectAll on; do not preselect optional categories.
+If this is a React app, use @consentloop/react's ConsentProvider and ConsentGate instead of data-attributes for embeds.</pre>
+
+    <h2>Why agents get it right first try</h2>
+    <ul>
+      <li><strong>One entry point:</strong> <code>ConsentLoop.run(config)</code> — no builder chains, no imperative setup order.</li>
+      <li><strong>Declarative gating:</strong> <code>data-consent</code> attributes are grep-and-rewrite friendly; no code-flow analysis needed.</li>
+      <li><strong>Self-diagnosing:</strong> in dev, unknown config keys and gated-but-unconfigured categories log actionable <code>console.warn</code>s the agent can read and fix.</li>
+      <li><strong>Deterministic selectors:</strong> stable <code>data-a</code> attributes (<code>accept-all</code>, <code>reject-all</code>, <code>open-prefs</code>, <code>save</code>) inside a stable <code>#consentloop</code> host — browser agents and E2E tests never guess.</li>
+      <li><strong>Typed everything:</strong> strict TS with JSDoc on every field; <code>defineConfig()</code> for typed configs in plain JS.</li>
+    </ul>
+
+    <h2>Driving the widget in E2E / browser agents</h2>
+    <pre data-lang="js">
+// Playwright — the widget lives in an open shadow root under #consentloop
+const root = page.locator("#consentloop");
+await root.locator('[data-a="accept-all"]').click();
+
+// or skip the UI entirely:
+await page.evaluate(() => window.ConsentLoop.acceptAll());
+
+// assert state
+const accepted = await page.evaluate(() => window.ConsentLoop.acceptedCategories());</pre>
+
+    <h2>Config validation in CI</h2>
+    <pre data-lang="js">
+// validate-consent.mjs — run in CI with your schema validator of choice
+import { readFileSync } from "node:fs";
+import Ajv from "ajv";
+
+const schema = JSON.parse(readFileSync("node_modules/consentloop/schema.json", "utf8")); // or fetch /consentloop.schema.json
+const valid = new Ajv({ allowUnionTypes: true }).compile(schema)(myConfig);</pre>
+
+    <h2>MCP &amp; automation</h2>
+    <p>Because state is a readable first-party cookie and every transition emits a DOM event (<code>consentloop:consent</code>, <code>consentloop:change</code>…), monitoring agents can observe consent without any SDK. The <a href="/docs/managed">adapter contract</a> is two plain HTTP calls — trivial for an agent to implement against your backend.</p>
+  </main>
+</div>
+<script src="/vendor/meta.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

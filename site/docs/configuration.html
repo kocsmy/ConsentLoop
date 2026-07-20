@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Configuration — ConsentLoop docs</title>
+<meta name="description" content="Interactive configuration reference for ConsentLoop. Flip the options, watch the banner change, copy the generated code.">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .content { max-width: none; padding-right: 24px; }
+  .cfg-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, 460px); gap: 32px; align-items: start; }
+  .cfg-right { position: sticky; top: calc(var(--topbar-h) + 20px); }
+  .opt { border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin: 12px 0; scroll-margin-top: 90px; }
+  .opt-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+  .opt-title { font-size: 14px; font-weight: 600; display: flex; align-items: baseline; gap: 8px; }
+  .opt-title code { font-family: var(--mono); font-size: 12px; color: var(--accent); background: var(--accent-soft); padding: 1.5px 7px; border-radius: 6px; }
+  .opt-desc { color: var(--fg2); font-size: 13px; margin-top: 4px; max-width: 480px; }
+  .opt-control { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; }
+  .preview-shell { border: 1px solid var(--border2); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+  .preview-bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg2); border-bottom: 1px solid var(--border); }
+  .preview-bar .dots { display: flex; gap: 5px; margin-right: 4px; }
+  .preview-bar .dots span { width: 9px; height: 9px; border-radius: 50%; background: var(--border2); }
+  .preview-bar .addr { flex: 1; font-size: 11.5px; font-family: var(--mono); color: var(--fg3); background: var(--bg); border: 1px solid var(--border); border-radius: 7px; padding: 3px 10px; }
+  #preview-frame { width: 100%; height: 430px; border: 0; display: block; background: #fafafa; }
+  .preview-actions { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--border); background: var(--bg2); }
+  #consent-inspector { margin-top: 14px; }
+  #consent-inspector pre { max-height: 180px; overflow: auto; font-size: 11.5px; }
+  h2.section { margin-top: 36px; display: flex; align-items: center; gap: 10px; }
+  h2.section .n { font-size: 11px; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; padding: 2px 8px; letter-spacing: .05em; }
+  @media (max-width: 1150px) { .cfg-grid { grid-template-columns: 1fr; } .cfg-right { position: static; } }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav data-sidebar aria-label="Docs"></nav>
+  <main class="content">
+    <div class="breadcrumb">Docs / Configuration</div>
+    <h1>Configuration</h1>
+    <p class="lead">This page <em>is</em> the config. Flip an option, watch the live preview react, copy the generated code. Every option shows its config key — the same names you’ll find in <code>ConsentLoopConfig</code> and the <a href="/consentloop.schema.json">JSON schema</a>.</p>
+
+    <div class="cfg-grid">
+      <div class="cfg-left">
+
+        <h2 class="section"><span class="n">01</span>Categories</h2>
+        <div class="opt" id="opt-categories">
+          <div class="opt-head">
+            <div>
+              <div class="opt-title">Consent categories <code>categories</code></div>
+              <p class="opt-desc"><code>necessary</code> is always present and <code>required</code>. Add any custom categories you like — these three are just the convention.</p>
+            </div>
+          </div>
+          <div class="switchrow"><span>functionality</span><button data-switch="categories.functionality" aria-label="functionality"></button></div>
+          <div class="switchrow"><span>analytics</span><button data-switch="categories.analytics" aria-label="analytics"></button></div>
+          <div class="switchrow"><span>marketing</span><button data-switch="categories.marketing" aria-label="marketing"></button></div>
+        </div>
+        <div class="opt" id="opt-services">
+          <div class="opt-head">
+            <div>
+              <div class="opt-title">Per-service toggles <code>categories.*.services</code></div>
+              <p class="opt-desc">Let visitors accept Google Analytics but reject Hotjar. Services render as an expandable list inside their category — open the preferences in the preview to see it.</p>
+            </div>
+            <div class="opt-control"><button data-switch="categories.services" aria-label="services demo"></button></div>
+          </div>
+        </div>
+
+        <h2 class="section"><span class="n">02</span>Appearance</h2>
+        <div class="opt" id="opt-ui-layout">
+          <div class="opt-head">
+            <div>
+              <div class="opt-title">Banner layout <code>ui.layout</code></div>
+              <p class="opt-desc"><strong>box</strong> is a compact card, <strong>cloud</strong> a centered pill, <strong>bar</strong> a full-width strip.</p>
+            </div>
+            <div class="opt-control seg" data-seg="ui.layout">
+              <button data-v="box">box</button><button data-v="cloud">cloud</button><button data-v="bar">bar</button>
+            </div>
+          </div>
+        </div>
+        <div class="opt" id="opt-ui-position">
+          <div class="opt-head">
+            <div>
+              <div class="opt-title">Position <code>ui.position</code></div>
+              <p class="opt-desc">Nine positions for box &amp; cloud; bar snaps to a top or bottom strip. Everything is <code>position: fixed</code> — zero layout shift by construction.</p>
+            </div>
+            <div class="opt-control"><div data-posgrid="ui.position"></div></div>
+          </div>
+        </div>
+        <div class="opt" id="opt-ui-preferences">
+          <div class="opt-head">
+            <div>
+              <div class="opt-title">Preferences surface <code>ui.preferences</code></div>
+              <p class="opt-desc">The second layer: a centered <strong>modal</strong> or a right-side <strong>drawer</strong>. Click “Preferences” in the preview.</p>
+            </div>
+            <div class="opt-control seg" data-seg="ui.preferences">
+              <button data-v="modal">modal</button><button data-v="drawer">drawer</button>
+            </div>
+          </div>
+        </div>
+        <div class="opt" id="opt-ui-theme">
+          <div class="opt-head">
+            <div>
+              <div class="opt-title">Theme <code>ui.theme</code></div>
+              <p class="opt-desc"><strong>auto</strong> follows <code>prefers-color-scheme</code>. All colors are CSS tokens you can override.</p>
+            </div>
+            <div class="opt-control seg" data-seg="ui.theme">
+              <button data-v="auto">auto</button><button data-v="light">light</button><button data-v="dark">dark</button>
+            </div>
+          </div>
+        </div>
+        <div class="opt" id="opt-ui-tokens">
+          <div class="opt-head">
+            <div>
+              <div class="opt-title">Design tokens <code>ui.tokens</code></div>
+              <p class="opt-desc">Override any <code>--cl-*</code> token: accent, radius, font, shadow… Here: accent color and corner radius.</p>
+            </div>
+            <div class="opt-control">
+              <input type="color" id="accent-input" data-input="ui.accent" aria-label="accent color">
+              <button class="btn small" id="accent-clear" type="button">Default</button>
+            </div>
+          </div>
+          <label class="field" for="radius-input">radius: <span class="mono" id="radius-out"></span></label>
+          <input type="range" id="radius-input" data-input="ui.radius" min="0" max="24" step="2" style="width:100%">
+        </div>
+        <div class="opt" id="opt-ui-buttons">
+          <div class="opt-head">
+            <div>
+              <div class="opt-title">Buttons &amp; extras</div>
+              <p class="opt-desc"><code>ui.showRejectAll</code> keeps Accept and Reject equally weighted (keep it on under GDPR — it’s the law, and it’s the decent thing). <code>ui.floatingButton</code> shows a reopen bubble after consent. <code>ui.branding</code> toggles the small credit.</p>
+            </div>
+          </div>
+          <div class="switchrow"><span>showRejectAll</span><button data-switch="ui.showRejectAll" aria-label="showRejectAll"></button></div>
+          <div class="switchrow"><span>showPreferences</span><button data-switch="ui.showPreferences" aria-label="showPreferences"></button></div>
+          <div class="switchrow"><span>floatingButton</span><button data-switch="ui.floatingButton" aria-label="floatingButton"></button></div>
+          <div class="switchrow"><span>branding</span><button data-switch="ui.branding" aria-label="branding"></button></div>
+        </div>
+
+        <h2 class="section"><span class="n">03</span>Behavior</h2>
+        <div class="opt" id="opt-regulation">
+          <div class="opt-head">
+            <div>
+              <div class="opt-title">Regulation preset <code>regulation</code></div>
+              <p class="opt-desc"><strong>gdpr</strong>: opt-in, nothing runs before consent. <strong>us-optout</strong>: category defaults apply immediately (CCPA-style), the banner offers opting out, <kbd>Esc</kbd> dismisses. <strong>none</strong>: opt-in UI, dismissable.</p>
+            </div>
+            <div class="opt-control seg" data-seg="behavior.regulation">
+              <button data-v="gdpr">gdpr</button><button data-v="us-optout">us-optout</button><button data-v="none">none</button>
+            </div>
+          </div>
+        </div>
+        <div class="opt" id="opt-gcm">
+          <div class="opt-head">
+            <div>
+              <div class="opt-title">Google Consent Mode v2 <code>googleConsentMode</code></div>
+              <p class="opt-desc">Pushes <code>gtag('consent', 'default', …)</code> before Google tags load and <code>update</code> after every choice. <a href="/docs/consent-mode">See the mapping →</a></p>
+            </div>
+            <div class="opt-control"><button data-switch="behavior.gcm" aria-label="googleConsentMode"></button></div>
+          </div>
+        </div>
+        <div class="opt" id="opt-storage">
+          <div class="opt-head">
+            <div>
+              <div class="opt-title">Storage <code>storage</code></div>
+              <p class="opt-desc">Where consent lives (<code>cookie</code> is visible to your server; <code>localStorage</code> stays client-side), how long it’s valid, and a <code>revision</code> you bump to re-prompt everyone after a policy change.</p>
+            </div>
+            <div class="opt-control seg" data-seg="behavior.storage">
+              <button data-v="cookie">cookie</button><button data-v="localStorage">localStorage</button>
+            </div>
+          </div>
+          <label class="field">expiresDays <input type="number" data-input="behavior.expiresDays" min="1" max="730" style="width:90px;margin-left:8px"></label>
+          <label class="field">revision <input type="number" data-input="behavior.revision" min="0" max="99" style="width:90px;margin-left:8px"></label>
+        </div>
+
+        <h2 class="section"><span class="n">04</span>Content</h2>
+        <div class="opt" id="opt-content">
+          <div class="opt-head">
+            <div>
+              <div class="opt-title">Language &amp; texts <code>content</code></div>
+              <p class="opt-desc">Auto-detected from <code>&lt;html lang&gt;</code>, overridable per visitor. Any missing key falls back to built-in English. Full guide: <a href="/docs/i18n">Languages →</a></p>
+            </div>
+            <div class="opt-control seg" data-seg="content.lang">
+              <button data-v="en">en</button><button data-v="de">de</button><button data-v="hu">hu</button>
+            </div>
+          </div>
+          <label class="field" for="title-input">banner.title (English)</label>
+          <input type="text" id="title-input" data-input="content.title" placeholder="We value your privacy" style="width:100%">
+          <label class="field" for="desc-input">banner.description (English)</label>
+          <input type="text" id="desc-input" data-input="content.description" placeholder="We use cookies to run this site…" style="width:100%">
+        </div>
+
+        <div class="callout">
+          <span>💡</span>
+          <span>Options not shown here — <code>hooks</code>, <code>adapter</code>, <code>manage</code>, <code>autoScripts</code>, per-category <code>autoClear</code> — are covered in the <a href="/docs/api">API</a> and <a href="/docs/managed">Managed</a> guides. The full type contract lives in <code>consentloop/dist/index.d.ts</code>.</span>
+        </div>
+      </div>
+
+      <div class="cfg-right">
+        <div class="preview-shell">
+          <div class="preview-bar">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span class="addr">yoursite.com</span>
+          </div>
+          <iframe id="preview-frame" src="/assets/preview.html" title="Live ConsentLoop preview"></iframe>
+          <div class="preview-actions">
+            <button class="btn small" id="btn-replay">↻ Replay banner</button>
+            <button class="btn small" id="btn-prefs">Open preferences</button>
+          </div>
+        </div>
+
+        <div data-tabs id="code-tabs" style="margin-top:16px">
+          <div class="codeblock" data-tab="JavaScript" id="code-js"><pre data-raw><code></code></pre><button class="copy">Copy</button></div>
+          <div class="codeblock" data-tab="React" id="code-react"><pre data-raw><code></code></pre><button class="copy">Copy</button></div>
+          <div class="codeblock" data-tab="HTML" id="code-html"><pre data-raw><code></code></pre><button class="copy">Copy</button></div>
+        </div>
+
+        <div id="consent-inspector" hidden>
+          <div class="opt-title" style="margin-bottom:6px">Last consent record <code>getConsent()</code></div>
+          <div class="codeblock"><pre><code id="last-consent"></code></pre></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="/vendor/meta.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+  addEventListener("DOMContentLoaded", () => {
+    const r = document.getElementById("radius-input");
+    const out = document.getElementById("radius-out");
+    const sync = () => (out.textContent = r.value + "px");
+    r.addEventListener("input", sync); sync();
+  });
+</script>
+<script defer src="/assets/configurator.js"></script>
+</body>
+</html>

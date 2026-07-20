@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://consentloop.dev/consentloop.schema.json",
+  "title": "ConsentLoop configuration",
+  "description": "JSON-serializable subset of ConsentLoopConfig (what you can put in window.consentloopConfig or data-config). JS-only options — hooks, adapter, RegExp autoClear matchers, service callbacks — are available when calling ConsentLoop.run() from code; see consentloop/dist/index.d.ts.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "categories": {
+      "description": "Consent categories keyed by name. 'necessary' is added automatically as required if omitted.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "required": { "type": "boolean", "description": "Always granted, cannot be toggled off." },
+          "default": { "type": "boolean", "description": "Pre-enabled in the UI; under us-optout treated as granted until opted out." },
+          "autoClear": {
+            "type": "array",
+            "description": "Cookie names (exact) or {name, domain?, path?} objects cleared when this category is rejected. RegExp matchers are JS-only.",
+            "items": {
+              "anyOf": [
+                { "type": "string" },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": { "type": "string" },
+                    "domain": { "type": "string" },
+                    "path": { "type": "string" }
+                  },
+                  "required": ["name"]
+                }
+              ]
+            }
+          },
+          "services": {
+            "type": "object",
+            "description": "Per-service toggles inside this category.",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "label": { "type": "string" },
+                "cookies": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      { "type": "string" },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "name": { "type": "string" },
+                          "domain": { "type": "string" },
+                          "path": { "type": "string" }
+                        },
+                        "required": ["name"]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "ui": {
+      "description": "UI options, or false for headless mode.",
+      "anyOf": [
+        { "const": false },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "layout": { "enum": ["box", "cloud", "bar"], "default": "box" },
+            "position": {
+              "enum": ["top-left", "top-center", "top-right", "middle-center", "bottom-left", "bottom-center", "bottom-right"]
+            },
+            "preferences": { "enum": ["modal", "drawer"], "default": "modal" },
+            "theme": { "enum": ["light", "dark", "auto"], "default": "auto" },
+            "tokens": {
+              "type": "object",
+              "description": "CSS token overrides without the --cl- prefix, e.g. {\"accent\": \"#6d28d9\", \"radius\": \"8px\"}.",
+              "additionalProperties": { "type": "string" }
+            },
+            "showRejectAll": { "type": "boolean", "default": true },
+            "showPreferences": { "type": "boolean", "default": true },
+            "floatingButton": { "type": "boolean", "default": false },
+            "branding": { "type": "boolean", "default": true },
+            "shadow": { "type": "boolean", "default": true, "description": "Render in an isolating Shadow DOM." },
+            "container": { "type": "string", "description": "CSS selector of the mount element." },
+            "disableTransitions": { "type": "boolean" },
+            "zIndex": { "type": "number" }
+          }
+        }
+      ]
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "lang": { "type": "string", "description": "Force a language (otherwise auto-detected)." },
+        "autoDetect": { "enum": ["document", "browser", false], "default": "document" },
+        "fallback": { "type": "string", "default": "en" },
+        "translations": {
+          "type": "object",
+          "description": "Per-language Translation objects, or URL strings fetched lazily.",
+          "additionalProperties": {
+            "anyOf": [
+              { "type": "string", "description": "URL to a JSON Translation file." },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "rtl": { "type": "boolean" },
+                  "banner": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "title": { "type": "string" },
+                      "description": { "type": "string", "description": "HTML allowed." },
+                      "acceptAll": { "type": "string" },
+                      "rejectAll": { "type": "string" },
+                      "preferences": { "type": "string" },
+                      "links": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "properties": { "label": { "type": "string" }, "href": { "type": "string" } },
+                          "required": ["label", "href"]
+                        }
+                      }
+                    }
+                  },
+                  "preferences": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "title": { "type": "string" },
+                      "description": { "type": "string", "description": "HTML allowed." },
+                      "acceptAll": { "type": "string" },
+                      "rejectAll": { "type": "string" },
+                      "save": { "type": "string" },
+                      "close": { "type": "string" },
+                      "alwaysOn": { "type": "string" },
+                      "servicesLabel": { "type": "string" }
+                    }
+                  },
+                  "categories": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "title": { "type": "string" },
+                        "description": { "type": "string", "description": "HTML allowed." }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "storage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "default": "cl_consent" },
+        "type": { "enum": ["cookie", "localStorage"], "default": "cookie" },
+        "expiresDays": { "type": "number", "default": 182 },
+        "domain": { "type": "string" },
+        "path": { "type": "string", "default": "/" },
+        "sameSite": { "enum": ["Lax", "Strict", "None"], "default": "Lax" },
+        "revision": { "type": "number", "default": 0, "description": "Bump to re-prompt everyone." }
+      }
+    },
+    "regulation": { "enum": ["gdpr", "us-optout", "none"], "default": "gdpr" },
+    "googleConsentMode": {
+      "anyOf": [
+        { "type": "boolean" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "map": {
+              "type": "object",
+              "additionalProperties": { "type": "array", "items": { "type": "string" } }
+            },
+            "waitForUpdate": { "type": "number", "default": 500 }
+          }
+        }
+      ],
+      "default": false
+    },
+    "autoScripts": { "type": "boolean", "default": true },
+    "manage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "endpoint": { "type": "string" },
+        "siteId": { "type": "string" },
+        "timeout": { "type": "number", "default": 750 }
+      },
+      "required": ["endpoint"]
+    },
+    "debug": { "type": "boolean" }
+  }
+}

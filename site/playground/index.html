@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Playground — ConsentLoop</title>
+<meta name="description" content="Design your cookie banner visually: layouts, positions, themes, languages, presets — then export the code.">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  body { overflow: hidden; }
+  .pg { display: grid; grid-template-columns: 300px minmax(0, 1fr); height: calc(100vh - var(--topbar-h)); }
+  .pg-side { border-right: 1px solid var(--border); overflow-y: auto; padding: 20px 18px 40px; }
+  .pg-side h3 { font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--fg3); margin: 22px 0 10px; font-weight: 650; }
+  .pg-side h3:first-child { margin-top: 0; }
+  .pg-main { display: flex; flex-direction: column; min-width: 0; }
+  .pg-toolbar { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .pg-stage { flex: 1; padding: 20px; min-height: 0; background:
+    radial-gradient(circle at 30% 20%, var(--accent-soft), transparent 60%), var(--bg2); }
+  .stage-shell { height: 100%; border-radius: 14px; overflow: hidden; border: 1px solid var(--border2); box-shadow: var(--shadow); background: #fff; display: flex; flex-direction: column; }
+  .stage-bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg2); border-bottom: 1px solid var(--border); }
+  .stage-bar .dots { display: flex; gap: 5px; }
+  .stage-bar .dots span { width: 9px; height: 9px; border-radius: 50%; background: var(--border2); }
+  .stage-bar .addr { flex: 1; text-align: center; font-size: 11.5px; font-family: var(--mono); color: var(--fg3); background: var(--bg); border: 1px solid var(--border); border-radius: 7px; padding: 3px 10px; max-width: 320px; margin: 0 auto; }
+  #frame { flex: 1; width: 100%; border: 0; }
+
+  /* layout thumbnails */
+  .thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .thumb { border: 1.5px solid var(--border2); border-radius: 10px; padding: 6px; cursor: pointer; background: var(--bg); }
+  .thumb:hover { border-color: var(--fg3); }
+  .thumb.active { border-color: var(--accent); background: var(--accent-soft); }
+  .thumb .mini { position: relative; aspect-ratio: 4/3; border-radius: 6px; background: var(--bg3); overflow: hidden; }
+  .thumb .mini i { position: absolute; background: var(--fg); opacity: .75; border-radius: 2px; }
+  .thumb[data-v="box"] .mini i { right: 8%; bottom: 10%; width: 42%; height: 34%; }
+  .thumb[data-v="cloud"] .mini i { left: 14%; right: 14%; bottom: 10%; height: 24%; border-radius: 99px; }
+  .thumb[data-v="bar"] .mini i { left: 0; right: 0; bottom: 0; height: 26%; border-radius: 0; }
+  .thumb .lbl { text-align: center; font-size: 11.5px; font-weight: 600; color: var(--fg2); margin-top: 5px; }
+  .thumb.active .lbl { color: var(--accent); }
+
+  .swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+  .swatch { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--border2); cursor: pointer; position: relative; }
+  .swatch.active { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .swatch.none { background: conic-gradient(var(--bg3) 0 50%, var(--bg) 50% 100%); }
+
+  .presets { display: flex; flex-direction: column; gap: 8px; }
+  .preset { text-align: left; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+  .preset:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .preset b { display: block; font-size: 13px; }
+  .preset span { font-size: 11.5px; color: var(--fg2); }
+
+  dialog.export { border: 1px solid var(--border2); border-radius: var(--radius); background: var(--bg); color: var(--fg);
+    max-width: 720px; width: 92vw; padding: 0; box-shadow: var(--shadow); }
+  dialog.export::backdrop { background: rgba(0,0,0,.45); }
+  dialog.export .head { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+  dialog.export .body { padding: 4px 18px 18px; max-height: 70vh; overflow: auto; }
+  @media (max-width: 900px) { body { overflow: auto; } .pg { grid-template-columns: 1fr; height: auto; } .pg-stage { min-height: 480px; } }
+</style>
+</head>
+<body>
+
+<div class="pg">
+  <aside class="pg-side">
+    <h3>Presets</h3>
+    <div class="presets">
+      <button class="preset" data-preset="saas"><b>SaaS minimal</b><span>box · bottom-right · auto theme</span></button>
+      <button class="preset" data-preset="brand"><b>Brand color</b><span>cloud · accent + rounded</span></button>
+      <button class="preset" data-preset="publisher"><b>Publisher bar</b><span>bar · top · high contrast</span></button>
+      <button class="preset" data-preset="us"><b>US opt-out</b><span>us-optout · defaults on · Do-Not-Sell link</span></button>
+      <button class="preset" data-preset="dark"><b>Night mode</b><span>box · dark · drawer prefs</span></button>
+    </div>
+
+    <h3>Layout</h3>
+    <div class="thumbs" id="layout-thumbs">
+      <button class="thumb" data-v="box"><span class="mini"><i></i></span><span class="lbl">Box</span></button>
+      <button class="thumb" data-v="cloud"><span class="mini"><i></i></span><span class="lbl">Cloud</span></button>
+      <button class="thumb" data-v="bar"><span class="mini"><i></i></span><span class="lbl">Bar</span></button>
+    </div>
+
+    <h3>Position</h3>
+    <div id="posgrid"></div>
+
+    <h3>Preferences surface</h3>
+    <div class="seg" id="prefs-seg">
+      <button data-v="modal">Modal</button><button data-v="drawer">Drawer</button>
+    </div>
+
+    <h3>Theme</h3>
+    <div class="seg" id="theme-seg">
+      <button data-v="light">Light</button><button data-v="dark">Dark</button>
+    </div>
+
+    <h3>Accent</h3>
+    <div class="swatches" id="swatches">
+      <button class="swatch none" data-v="" title="Default (neutral)"></button>
+      <button class="swatch" data-v="#4f46e5" style="background:#4f46e5" title="Indigo"></button>
+      <button class="swatch" data-v="#0ea5e9" style="background:#0ea5e9" title="Sky"></button>
+      <button class="swatch" data-v="#16a34a" style="background:#16a34a" title="Green"></button>
+      <button class="swatch" data-v="#e11d48" style="background:#e11d48" title="Rose"></button>
+      <button class="swatch" data-v="#f59e0b" style="background:#f59e0b" title="Amber"></button>
+    </div>
+
+    <h3>Roundness</h3>
+    <input type="range" id="radius" min="0" max="24" step="2" value="16" style="width:100%">
+
+    <h3>Language</h3>
+    <div class="seg" id="lang-seg">
+      <button data-v="en">EN</button><button data-v="de">DE</button><button data-v="hu">HU</button>
+    </div>
+
+    <h3>Options</h3>
+    <div class="switchrow"><span class="small">Reject-all button</span><button class="uiswitch" role="switch" id="sw-reject" aria-checked="true"></button></div>
+    <div class="switchrow"><span class="small">Floating button</span><button class="uiswitch" role="switch" id="sw-fab" aria-checked="false"></button></div>
+    <div class="switchrow"><span class="small">US opt-out mode</span><button class="uiswitch" role="switch" id="sw-us" aria-checked="false"></button></div>
+  </aside>
+
+  <div class="pg-main">
+    <div class="pg-toolbar">
+      <button class="btn small" id="replay">↻ Replay banner</button>
+      <button class="btn small" id="open-prefs">Open preferences</button>
+      <span class="spacer" style="flex:1"></span>
+      <span class="pill small" id="cls-pill">CLS 0.000 · overlay-only</span>
+      <button class="btn small accent" id="export">Export code</button>
+    </div>
+    <div class="pg-stage">
+      <div class="stage-shell">
+        <div class="stage-bar">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <span class="addr">yoursite.com</span>
+          <span style="width:44px"></span>
+        </div>
+        <iframe id="frame" src="/assets/preview.html" title="Live preview"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<dialog class="export" id="export-dialog">
+  <div class="head">
+    <strong>Export</strong>
+    <button class="iconbtn" onclick="document.getElementById('export-dialog').close()" aria-label="Close">✕</button>
+  </div>
+  <div class="body">
+    <p class="small muted" style="margin:10px 0 4px">Drop-in HTML (CDN loader) — or take the same config into <a href="/docs/configuration">the interactive docs</a> for npm/React variants.</p>
+    <div class="codeblock"><pre><code id="export-code"></code></pre><button class="copy" id="export-copy">Copy</button></div>
+  </div>
+</dialog>
+
+<script src="/vendor/meta.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+(() => {
+  const state = {
+    layout: "box", position: "bottom-right", preferences: "modal",
+    theme: "light", accent: "", radius: 16, lang: "en",
+    showRejectAll: true, floatingButton: false, us: false,
+  };
+
+  const DE = { banner: { title: "Wir respektieren deine Privatsphäre", description: "Wir nutzen Cookies für Betrieb und Statistik — du entscheidest.", acceptAll: "Alle akzeptieren", rejectAll: "Alle ablehnen", preferences: "Einstellungen" }, preferences: { title: "Datenschutz-Einstellungen", save: "Speichern", acceptAll: "Alle akzeptieren", rejectAll: "Alle ablehnen", alwaysOn: "Immer aktiv" } };
+  const HU = { banner: { title: "Fontos nekünk az adatvédelem", description: "Sütiket használunk a működéshez és a méréshez — te döntesz.", acceptAll: "Összes elfogadása", rejectAll: "Elutasítás", preferences: "Beállítások" }, preferences: { title: "Adatvédelmi beállítások", save: "Mentés", acceptAll: "Összes elfogadása", rejectAll: "Elutasítás", alwaysOn: "Mindig aktív" } };
+
+  function buildConfig() {
+    const cfg = {
+      categories: {
+        necessary: { required: true },
+        analytics: { services: { ga4: { label: "Google Analytics 4" }, plausible: { label: "Plausible" } } },
+        marketing: {},
+      },
+      ui: { layout: state.layout, position: state.position, preferences: state.preferences, theme: state.theme },
+      googleConsentMode: true,
+    };
+    if (state.us) {
+      cfg.regulation = "us-optout";
+      cfg.categories.analytics.default = true;
+      cfg.categories.marketing.default = true;
+      cfg.content = { translations: { en: { banner: { links: [{ label: "Do Not Sell or Share My Personal Information", href: "/do-not-sell" }] } } } };
+    }
+    const tokens = {};
+    if (state.accent) { tokens.accent = state.accent; tokens["switch-on"] = state.accent; }
+    if (state.radius !== 16) tokens.radius = state.radius + "px";
+    if (Object.keys(tokens).length) cfg.ui.tokens = tokens;
+    if (!state.showRejectAll) cfg.ui.showRejectAll = false;
+    if (state.floatingButton) cfg.ui.floatingButton = true;
+    if (state.lang !== "en") {
+      cfg.content = cfg.content || {};
+      cfg.content.lang = state.lang;
+      cfg.content.translations = Object.assign(cfg.content.translations || {}, state.lang === "de" ? { de: DE } : { hu: HU });
+    }
+    return cfg;
+  }
+
+  const frame = document.getElementById("frame");
+  let lastMsg = null;
+  function push() {
+    lastMsg = { type: "run", config: buildConfig(), opts: { mockTheme: state.theme } };
+    frame.contentWindow?.postMessage(lastMsg, "*");
+  }
+  addEventListener("message", (e) => {
+    if (e.data?.type === "cl-frame-loaded" && lastMsg) frame.contentWindow.postMessage(lastMsg, "*");
+  });
+
+  /* generic segmented wiring */
+  function seg(id, key, after) {
+    const el = document.getElementById(id);
+    const sync = () => el.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b.dataset.v === state[key]));
+    el.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { state[key] = b.dataset.v; after && after(); sync(); push(); }));
+    sync();
+    return sync;
+  }
+  const syncLayout = (() => {
+    const el = document.getElementById("layout-thumbs");
+    const sync = () => el.querySelectorAll(".thumb").forEach((b) => b.classList.toggle("active", b.dataset.v === state.layout));
+    el.querySelectorAll(".thumb").forEach((b) => b.addEventListener("click", () => {
+      state.layout = b.dataset.v;
+      if (b.dataset.v !== "box") state.position = state.position === "middle-center" ? "bottom-center" : state.position;
+      if (b.dataset.v === "bar" && !/^(top|bottom)-center$/.test(state.position)) state.position = "bottom-center";
+      sync(); syncPos(); push();
+    }));
+    sync();
+    return sync;
+  })();
+  seg("prefs-seg", "preferences");
+  seg("theme-seg", "theme");
+  seg("lang-seg", "lang");
+
+  /* position grid */
+  const posEl = document.getElementById("posgrid");
+  posEl.className = "posgrid";
+  const CELLS = ["top-left","top-center","top-right","","middle-center","","bottom-left","bottom-center","bottom-right"];
+  posEl.innerHTML = CELLS.map((p) => p ? `<button data-v="${p}" title="${p}" aria-label="${p}"></button>` : "<span></span>").join("");
+  const syncPos = () => posEl.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b.dataset.v === state.position));
+  posEl.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { state.position = b.dataset.v; syncPos(); push(); }));
+  syncPos();
+
+  /* swatches + radius */
+  const swEl = document.getElementById("swatches");
+  const syncSw = () => swEl.querySelectorAll(".swatch").forEach((b) => b.classList.toggle("active", b.dataset.v === state.accent));
+  swEl.querySelectorAll(".swatch").forEach((b) => b.addEventListener("click", () => { state.accent = b.dataset.v; syncSw(); push(); }));
+  syncSw();
+  document.getElementById("radius").addEventListener("input", (e) => { state.radius = +e.target.value; push(); });
+
+  /* switches */
+  function uiswitch(id, key, after) {
+    const el = document.getElementById(id);
+    const sync = () => el.setAttribute("aria-checked", String(state[key]));
+    el.addEventListener("click", () => { state[key] = !state[key]; after && after(); sync(); push(); });
+    sync();
+    return sync;
+  }
+  uiswitch("sw-reject", "showRejectAll");
+  uiswitch("sw-fab", "floatingButton");
+  uiswitch("sw-us", "us");
+
+  /* presets */
+  const PRESETS = {
+    saas: { layout: "box", position: "bottom-right", preferences: "modal", theme: "light", accent: "", radius: 16, lang: "en", showRejectAll: true, floatingButton: false, us: false },
+    brand: { layout: "cloud", position: "bottom-center", preferences: "modal", theme: "light", accent: "#4f46e5", radius: 20, lang: "en", showRejectAll: true, floatingButton: true, us: false },
+    publisher: { layout: "bar", position: "top-center", preferences: "modal", theme: "light", accent: "", radius: 8, lang: "en", showRejectAll: true, floatingButton: false, us: false },
+    us: { layout: "box", position: "bottom-left", preferences: "modal", theme: "light", accent: "", radius: 16, lang: "en", showRejectAll: true, floatingButton: true, us: true },
+    dark: { layout: "box", position: "bottom-right", preferences: "drawer", theme: "dark", accent: "#818cf8", radius: 18, lang: "en", showRejectAll: true, floatingButton: false, us: false },
+  };
+  document.querySelectorAll(".preset").forEach((b) =>
+    b.addEventListener("click", () => {
+      Object.assign(state, PRESETS[b.dataset.preset]);
+      syncLayout(); syncPos(); syncSw();
+      document.getElementById("radius").value = state.radius;
+      ["prefs-seg","theme-seg","lang-seg"].forEach((id) => {
+        const el = document.getElementById(id);
+        const key = id === "prefs-seg" ? "preferences" : id === "theme-seg" ? "theme" : "lang";
+        el.querySelectorAll("button").forEach((x) => x.classList.toggle("active", x.dataset.v === state[key]));
+      });
+      ["sw-reject","sw-fab","sw-us"].forEach((id, i) => {
+        const keys = ["showRejectAll","floatingButton","us"];
+        document.getElementById(id).setAttribute("aria-checked", String(state[keys[i]]));
+      });
+      push();
+    })
+  );
+
+  /* toolbar */
+  document.getElementById("replay").addEventListener("click", () => frame.contentWindow.postMessage({ type: "reset" }, "*"));
+  document.getElementById("open-prefs").addEventListener("click", () => frame.contentWindow.postMessage({ type: "show-preferences" }, "*"));
+
+  /* export */
+  const dialog = document.getElementById("export-dialog");
+  document.getElementById("export").addEventListener("click", () => {
+    const cfg = buildConfig();
+    const code = `<script>\nwindow.consentloopConfig = ${JSON.stringify(cfg, null, 2)};\n<\/script>\n<script defer src="https://cdn.jsdelivr.net/npm/consentloop/dist/consentloop.loader.min.js"><\/script>`;
+    document.getElementById("export-code").innerHTML = clSite.highlight(code, "html");
+    document.getElementById("export-copy").onclick = (e) => navigator.clipboard.writeText(code).then(() => {
+      e.target.textContent = "Copied ✓"; setTimeout(() => (e.target.textContent = "Copy"), 1200);
+    });
+    dialog.showModal();
+  });
+
+  push();
+})();
+</script>
+</body>
+</html>

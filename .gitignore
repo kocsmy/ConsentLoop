@@ -1,0 +1,8 @@
+node_modules/
+packages/*/dist/
+*.log
+.DS_Store
+bench/results/*.raw.json
+coverage/
+.tmp/
+packages/core/schema.json

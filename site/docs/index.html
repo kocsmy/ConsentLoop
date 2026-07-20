@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Getting started — ConsentLoop docs</title>
+<meta name="description" content="Install ConsentLoop and ship a compliant, invisible-to-performance cookie banner in minutes.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<div class="layout">
+  <nav data-sidebar aria-label="Docs"></nav>
+  <main class="content">
+    <div class="breadcrumb">Docs / Getting started</div>
+    <h1>Getting started</h1>
+    <p class="lead">ConsentLoop is a consent layer that costs your site nothing: a <strong data-meta="gzip-loader">~1.4 KB</strong> loader on the critical path, the full widget (<span data-meta="gzip-full">~11.6 KB</span> gzip, UI + logic + styles) only when a banner actually needs to render. No dependencies, no network calls, no layout shift.</p>
+
+    <h2>1. Install</h2>
+    <div data-tabs>
+      <pre data-lang="bash" data-tab="npm">npm i consentloop</pre>
+      <pre data-lang="bash" data-tab="pnpm">pnpm add consentloop</pre>
+      <pre data-lang="bash" data-tab="React">npm i consentloop @consentloop/react</pre>
+      <pre data-lang="html" data-tab="CDN">
+&lt;!-- The smart loader: ~1.4 KB, handles returning visitors without downloading the UI --&gt;
+&lt;script defer src="https://cdn.jsdelivr.net/npm/consentloop/dist/consentloop.loader.min.js" data-gcm&gt;&lt;/script&gt;</pre>
+    </div>
+
+    <h2>2. Run it</h2>
+    <p>Declare your categories and start the loop. <code>necessary</code> is added automatically and always granted.</p>
+    <div data-tabs>
+      <pre data-lang="js" data-tab="JavaScript">
+import * as ConsentLoop from "consentloop";
+
+ConsentLoop.run({
+  categories: {
+    necessary: { required: true },
+    analytics: {
+      services: { ga4: { label: "Google Analytics 4" } },
+      autoClear: [/^_ga/, "_gid"], // cookies wiped if consent is withdrawn
+    },
+    marketing: {},
+  },
+  googleConsentMode: true,
+});</pre>
+      <pre data-lang="js" data-tab="React">
+import { ConsentProvider } from "@consentloop/react";
+
+export default function App() {
+  return (
+    &lt;ConsentProvider
+      config={{
+        categories: { analytics: {}, marketing: {} },
+        googleConsentMode: true,
+      }}
+    &gt;
+      &lt;YourApp /&gt;
+    &lt;/ConsentProvider&gt;
+  );
+}</pre>
+      <pre data-lang="html" data-tab="No-build HTML">
+&lt;script&gt;
+  window.consentloopConfig = {
+    categories: { necessary: { required: true }, analytics: {}, marketing: {} },
+    googleConsentMode: true,
+  };
+&lt;/script&gt;
+&lt;script defer src="https://cdn.jsdelivr.net/npm/consentloop/dist/consentloop.loader.min.js"&gt;&lt;/script&gt;</pre>
+    </div>
+
+    <h2>3. Gate your scripts</h2>
+    <p>Anything that sets cookies waits for its category. Change <code>type</code> to <code>text/plain</code>, move <code>src</code> to <code>data-consent-src</code>:</p>
+    <pre data-lang="html">
+&lt;!-- before --&gt;
+&lt;script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXX"&gt;&lt;/script&gt;
+
+&lt;!-- after: runs only once "analytics" is accepted --&gt;
+&lt;script type="text/plain" data-consent="analytics" async
+        data-consent-src="https://www.googletagmanager.com/gtag/js?id=G-XXXX"&gt;&lt;/script&gt;
+
+&lt;!-- embeds too: iframes, imgs, pixels --&gt;
+&lt;iframe data-consent="marketing" data-consent-src="https://www.youtube.com/embed/xyz"&gt;&lt;/iframe&gt;</pre>
+    <p>That’s the whole integration. Details and live demo: <a href="/docs/scripts">Script &amp; embed gating →</a></p>
+
+    <h2>What you get by default</h2>
+    <ul>
+      <li><strong>GDPR-correct behavior</strong> — opt-in, equal Accept/Reject buttons, preferences on the first layer, consent stored 182 days with an audit-ready record.</li>
+      <li><strong>Zero performance tax</strong> — deferred, renders after first paint, all surfaces overlay (CLS 0.000), styles injected in one shot. <a href="/docs/performance">Numbers →</a></li>
+      <li><strong>Accessibility</strong> — <code>role="dialog"</code>, focus trap in preferences, full keyboard support, <code>prefers-reduced-motion</code>, WCAG-friendly contrast.</li>
+      <li><strong>Isolation</strong> — rendered in Shadow DOM: your CSS can’t break the banner, the banner can’t break your CSS. Theme with <a href="/docs/configuration#opt-ui-tokens">tokens</a>.</li>
+    </ul>
+
+    <h2>Next steps</h2>
+    <ul>
+      <li><a href="/docs/configuration">Configuration</a> — the interactive reference; every option, live.</li>
+      <li><a href="/playground/">Playground</a> — design your banner visually, export the code.</li>
+      <li><a href="/docs/consent-mode">Google Consent Mode</a> — if you run Google tags, read this.</li>
+      <li><a href="/docs/ai">AI integration</a> — let Claude/Cursor/Copilot do all of the above for you.</li>
+    </ul>
+  </main>
+</div>
+<script src="/vendor/meta.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

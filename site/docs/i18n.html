@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Languages (i18n) — ConsentLoop docs</title>
+<meta name="description" content="Translations, auto-detection, lazy-loaded language files and RTL in ConsentLoop.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<div class="layout">
+  <nav data-sidebar aria-label="Docs"></nav>
+  <main class="content">
+    <div class="breadcrumb">Docs / Languages</div>
+    <h1>Languages (i18n)</h1>
+    <p class="lead">Ship one banner for every market: per-language translations with graceful fallback, auto-detection, lazy-loaded language files, RTL support and runtime switching.</p>
+
+    <h2>The shape</h2>
+    <pre data-lang="js">
+ConsentLoop.run({
+  content: {
+    autoDetect: "document",       // read <html lang>; "browser" uses navigator.language
+    fallback: "en",
+    translations: {
+      en: {
+        banner: {
+          title: "We value your privacy",
+          description: 'We use cookies. Read our <a href="/privacy">privacy policy</a>.',
+          acceptAll: "Accept all", rejectAll: "Reject all", preferences: "Preferences",
+          links: [{ label: "Privacy policy", href: "/privacy" }],
+        },
+        preferences: { title: "Privacy preferences", save: "Save preferences", alwaysOn: "Always on" },
+        categories: {
+          analytics: { title: "Analytics", description: "Helps us improve the site." },
+        },
+      },
+      de: { banner: { title: "Wir respektieren deine Privatsphäre", acceptAll: "Alle akzeptieren" } },
+      fr: "/i18n/fr.json",        // lazy: fetched only when needed, then cached
+      ar: { rtl: true, banner: { title: "نحن نحترم خصوصيتك" } },
+    },
+  },
+});</pre>
+    <ul>
+      <li><strong>Deep fallback:</strong> any missing key falls back to built-in English — partial translations are fine.</li>
+      <li><strong>Region collapse:</strong> <code>de-AT</code> matches <code>de</code> automatically.</li>
+      <li><strong>Escaping:</strong> titles, buttons and labels are HTML-escaped. Descriptions allow HTML (you author them) for inline policy links.</li>
+      <li><strong>RTL:</strong> set <code>rtl: true</code> on a translation to flip the widget’s direction.</li>
+    </ul>
+
+    <h2>Try it</h2>
+    <p>The widget on this page has three languages. Switch live:</p>
+    <p style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn small" onclick="demoLang('en')">English</button>
+      <button class="btn small" onclick="demoLang('de')">Deutsch</button>
+      <button class="btn small" onclick="demoLang('hu')">Magyar</button>
+      <button class="btn small" onclick="ConsentLoop.show()">Show banner</button>
+    </p>
+    <pre data-lang="js">await ConsentLoop.setLanguage("de"); // re-renders in place, keeps all state</pre>
+
+    <h2>Detection order</h2>
+    <ol>
+      <li><code>content.lang</code> — hard override (e.g. from your router or the managed adapter).</li>
+      <li><code>autoDetect: "document"</code> (default) — <code>&lt;html lang&gt;</code>, the SEO-correct source.</li>
+      <li><code>autoDetect: "browser"</code> — <code>navigator.language</code>.</li>
+      <li><code>fallback</code> — default <code>en</code>.</li>
+    </ol>
+
+    <h2>Translation workflow tip</h2>
+    <p>Ask your AI assistant: <em>“Translate this ConsentLoop <code>translations.en</code> object to French, German and Spanish; keep keys, translate values, keep HTML tags intact.”</em> The structure is flat and predictable on purpose — see <a href="/docs/ai">AI integration</a>.</p>
+  </main>
+</div>
+<script src="/vendor/meta.js"></script>
+<script src="/assets/site.js"></script>
+<script defer src="/vendor/consentloop.iife.min.js"></script>
+<script>
+addEventListener("DOMContentLoaded", () => {
+  ConsentLoop.run({
+    categories: {
+      necessary: { required: true },
+      analytics: { services: { plausible: { label: "Plausible" }, ga4: { label: "Google Analytics 4" } } },
+      marketing: {},
+    },
+    ui: { floatingButton: true },
+    content: {
+      translations: {
+        en: {},
+        de: { banner: { title: "Wir respektieren deine Privatsphäre", description: "Wir nutzen Cookies für Betrieb und Statistik — du entscheidest.", acceptAll: "Alle akzeptieren", rejectAll: "Alle ablehnen", preferences: "Einstellungen" }, preferences: { title: "Datenschutz-Einstellungen", save: "Speichern", acceptAll: "Alle akzeptieren", rejectAll: "Alle ablehnen", alwaysOn: "Immer aktiv" } },
+        hu: { banner: { title: "Fontos nekünk az adatvédelem", description: "Sütiket használunk a működéshez és a méréshez — te döntesz.", acceptAll: "Összes elfogadása", rejectAll: "Elutasítás", preferences: "Beállítások" }, preferences: { title: "Adatvédelmi beállítások", save: "Mentés", acceptAll: "Összes elfogadása", rejectAll: "Elutasítás", alwaysOn: "Mindig aktív" } },
+      },
+    },
+  });
+  window.demoLang = (l) => ConsentLoop.setLanguage(l).then(() => ConsentLoop.show());
+});
+</script>
+</body>
+</html>

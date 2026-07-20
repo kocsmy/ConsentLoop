@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Performance — ConsentLoop docs</title>
+<meta name="description" content="ConsentLoop's benchmark methodology and numbers: ~0 FCP impact, CLS 0.000, 0 TBT for returning visitors, ~1.4KB critical path.">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .bignum { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin: 24px 0; }
+  .bignum .card { text-align: center; padding: 22px 12px; }
+  .bignum .n { font-size: 30px; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .bignum .n small { font-size: 14px; color: var(--fg3); font-weight: 500; }
+  .bignum .l { font-size: 12px; color: var(--fg3); font-weight: 550; margin-top: 4px; }
+  .good { color: var(--green); }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav data-sidebar aria-label="Docs"></nav>
+  <main class="content">
+    <div class="breadcrumb">Docs / Performance</div>
+    <h1>Performance</h1>
+    <p class="lead">A consent banner exists to <em>stop</em> scripts from hurting users. It shouldn’t be the thing hurting them. ConsentLoop is engineered — and continuously measured — around the metrics <a href="https://cookiebench.com" target="_blank" rel="noopener">cookiebench.com</a> scores: FCP, LCP, CLS, TBT, bundle strategy and network impact.</p>
+
+    <div class="bignum">
+      <div class="card"><div class="n good">≈0<small>ms</small></div><div class="l">FCP / LCP impact¹</div></div>
+      <div class="card"><div class="n good">0.000</div><div class="l">CLS — by construction</div></div>
+      <div class="card"><div class="n good">0<small>ms</small></div><div class="l">TBT, returning visitors</div></div>
+      <div class="card"><div class="n good" data-meta="gzip-loader">1.49 KB</div><div class="l">critical-path JS (gzip)</div></div>
+      <div class="card"><div class="n good">0</div><div class="l">third-party requests</div></div>
+    </div>
+
+    <h2>Measured results</h2>
+    <p>From <code>pnpm bench</code> in this repo (Chromium, 4× CPU throttle, 7 runs, medians; local static server — a noise floor of roughly ±15 ms applies). Raw data: <a href="/bench-results.json">bench-results.json</a>.</p>
+    <div class="table-scroll"><table class="props">
+      <thead><tr><th>Scenario</th><th>ΔFCP</th><th>ΔLCP</th><th>CLS</th><th>TBT</th><th>Consent JS wire²</th><th>Requests</th><th>Banner visible</th></tr></thead>
+      <tbody>
+        <tr><td>Baseline (no consent tool)</td><td>—</td><td>—</td><td>0.000</td><td>0 ms</td><td>0</td><td>0</td><td>—</td></tr>
+        <tr><td><strong>Returning visitor</strong> (loader fast path)</td><td class="good">+12 ms¹</td><td class="good">+12 ms¹</td><td class="good">0.000</td><td class="good">0 ms</td><td class="good">2.8 KB raw / 1.49 KB gz</td><td>1</td><td>no banner needed</td></tr>
+        <tr><td><strong>First visit</strong> (loader + lazy widget)</td><td class="good">+4 ms¹</td><td class="good">+4 ms¹</td><td class="good">0.000</td><td>31 ms³</td><td>37.6 KB raw / ~13 KB gz</td><td>2</td><td>136 ms</td></tr>
+        <tr><td>Single-file widget (<code>data-auto</code>, worst case)</td><td class="good">+8 ms¹</td><td class="good">+8 ms¹</td><td class="good">0.000</td><td>31 ms³</td><td>34.5 KB raw / 11.6 KB gz</td><td>1</td><td>118 ms</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted">¹ Within the ±15 ms run-to-run noise of the measurement VM — some scenarios measured <em>faster</em> than baseline on other runs. Deferred scripts cannot block first paint. &nbsp;² Local server sends uncompressed; real CDNs serve the gzip/brotli sizes quoted. &nbsp;³ At 4× CPU throttle ≈ 8 ms real; this is the one-time evaluation of the full widget, scheduled after <code>load</code> + idle.</p>
+
+    <h2>Why the numbers stay this way</h2>
+    <ul>
+      <li><strong>The smart loader is the product.</strong> The only render-path JS is a <span data-meta="gzip-loader">1.49 KB</span> script that reads the consent cookie synchronously, activates gated scripts, pushes Consent Mode defaults — and for the majority of page views (returning visitors) <em>never downloads the UI at all</em>. <code>window.ConsentLoop</code> is a proxy that fetches the widget on demand.</li>
+      <li><strong>Banner after first paint.</strong> The full widget waits for <code>window.load</code> + <code>requestIdleCallback</code>; rendering is one <code>innerHTML</code> pass into an isolated Shadow DOM with a constructable stylesheet. No frameworks, no hydration.</li>
+      <li><strong>CLS 0.000 by construction.</strong> Every surface is <code>position: fixed</code>; the host element is <code>display: contents</code>. There is no geometry the page could re-flow around. Animations are opacity/transform only.</li>
+      <li><strong>Zero network by default.</strong> No fonts, no images (inline SVG), no config API, no telemetry. The optional managed adapter uses a non-blocking fetch with a hard timeout and <code>sendBeacon</code> receipts.</li>
+      <li><strong>Bundler-native path is even leaner.</strong> The ESM build is code-split: importing <code>consentloop</code> costs ~6.6 KB pre-minification (≈3 KB min+gz) on the critical path; the UI chunk loads only if a banner must render. <code>sideEffects: false</code>, tree-shakeable.</li>
+    </ul>
+
+    <h2>Scoring against the cookiebench pillars</h2>
+    <div class="table-scroll"><table class="props">
+      <tr><th>Pillar</th><th>Weight</th><th>ConsentLoop</th></tr>
+      <tr><td>Performance (FCP/LCP/CLS/TTI/TBT)</td><td>40%</td><td>Deferred + idle-scheduled; CLS 0; TBT ≈ 0 (0 on repeat views)</td></tr>
+      <tr><td>Bundle strategy</td><td>25%</td><td>~1.4 KB loader; lazy UI; ESM code-splitting; zero deps; self-hostable</td></tr>
+      <tr><td>Network impact</td><td>20%</td><td>0 third-party requests; 1 first-party file for returning visitors; no beacons unless configured</td></tr>
+      <tr><td>Transparency</td><td>10%</td><td>MIT, open methodology, reproducible bench in-repo (<code>pnpm bench</code>)</td></tr>
+      <tr><td>User experience</td><td>5%</td><td>Equal-weight buttons, full keyboard/screen-reader support, reduced motion, no dark patterns</td></tr>
+    </table></div>
+
+    <h2>Reproduce it</h2>
+    <pre data-lang="bash">
+git clone https://github.com/kocsmy/ConsentLoop && cd ConsentLoop
+pnpm install && pnpm build
+pnpm bench           # Chromium, 4x CPU throttle, medians of 7 runs
+pnpm size            # enforce gzip budgets (fails CI when exceeded)</pre>
+    <p>Size budgets are enforced, not aspirational: loader ≤ 1.6 KB gz, full widget ≤ 12.5 KB gz, ESM entry ≤ 7 KB gz. A PR that bloats the bundle fails.</p>
+  </main>
+</div>
+<script src="/vendor/meta.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

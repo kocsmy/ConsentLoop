@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JavaScript API — ConsentLoop docs</title>
+<meta name="description" content="ConsentLoop's full JavaScript API: methods, events, hooks and the consent record — runnable right on this page.">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .run { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); border-radius: 7px; padding: 3px 10px; }
+  .run:hover { background: var(--accent-soft); }
+  .api { border-bottom: 1px solid var(--border); padding: 14px 0; }
+  .api .sig { font-family: var(--mono); font-size: 13.5px; font-weight: 600; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .api p { margin: 6px 0 0; color: var(--fg2); font-size: 13.5px; }
+  .api .out { font-family: var(--mono); font-size: 12px; color: var(--green); margin-top: 6px; white-space: pre-wrap; }
+  #eventlog { font-family: var(--mono); font-size: 12px; max-height: 220px; overflow: auto; }
+  #eventlog div { padding: 3px 0; border-bottom: 1px solid var(--border); }
+  #eventlog .t { color: var(--fg3); margin-right: 8px; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav data-sidebar aria-label="Docs"></nav>
+  <main class="content">
+    <div class="breadcrumb">Docs / JavaScript API</div>
+    <h1>JavaScript API</h1>
+    <p class="lead">Everything below is live — this page runs ConsentLoop. Press <span class="run" style="pointer-events:none">▶ run</span> buttons and watch the widget and the event log react. The same API is available as ESM named exports and on <code>window.ConsentLoop</code> (CDN builds).</p>
+
+    <h2>Methods</h2>
+    <div class="api"><div class="sig">run(config?) → Promise&lt;API&gt; <button class="run" data-run="ConsentLoop.run()">▶ run</button></div>
+      <p>Boot the widget. Idempotent — safe to call from multiple entry points; SSR-safe (no-op without <code>window</code>). Resolves once consent is applied or the banner is up.</p></div>
+    <div class="api"><div class="sig">show() / hide() <button class="run" data-run="ConsentLoop.show()">▶ show()</button></div>
+      <p>Show or hide the first-layer banner.</p></div>
+    <div class="api"><div class="sig">showPreferences() / hidePreferences() <button class="run" data-run="ConsentLoop.showPreferences()">▶ showPreferences()</button></div>
+      <p>Open or close the second layer. Wire <code>showPreferences()</code> to your footer’s “Cookie settings” link — required by GDPR to make withdrawal as easy as consent.</p></div>
+    <div class="api"><div class="sig">acceptAll() / rejectAll() <button class="run" data-run="ConsentLoop.acceptAll()">▶ acceptAll()</button> <button class="run" data-run="ConsentLoop.rejectAll()">▶ rejectAll()</button></div>
+      <p>One-call decisions. Persist, activate/clear, fire hooks, update Consent Mode.</p></div>
+    <div class="api"><div class="sig">accept(categories, services?) <button class="run" data-run="ConsentLoop.accept(['analytics'], { analytics: ['plausible'] })">▶ accept(['analytics'], {analytics:['plausible']})</button></div>
+      <p>Fine-grained consent. Required categories are always included; services default to “all of the category” unless you pass a subset.</p></div>
+    <div class="api"><div class="sig">isAccepted(category) → boolean <button class="run" data-run="ConsentLoop.isAccepted('analytics')" data-show>▶ isAccepted('analytics')</button></div>
+      <p>Current effective state (includes implied consent under opt-out regimes).</p></div>
+    <div class="api"><div class="sig">isServiceAccepted(category, service) → boolean <button class="run" data-run="ConsentLoop.isServiceAccepted('analytics','ga4')" data-show>▶ try it</button></div></div>
+    <div class="api"><div class="sig">acceptedCategories() → string[] <button class="run" data-run="ConsentLoop.acceptedCategories()" data-show>▶ try it</button></div></div>
+    <div class="api"><div class="sig">getConsent() → ConsentRecord | null <button class="run" data-run="ConsentLoop.getConsent()" data-show>▶ try it</button></div>
+      <p>The full record: id, timestamps, revision, accepted/rejected, services, regulation, method (<code>explicit</code> vs <code>implied</code>), library version. This is what adapters receive for audit trails.</p></div>
+    <div class="api"><div class="sig">hasConsent() → boolean <button class="run" data-run="ConsentLoop.hasConsent()" data-show>▶ try it</button></div>
+      <p><code>true</code> only for a stored, non-expired, current-revision choice.</p></div>
+    <div class="api"><div class="sig">setLanguage(lang) → Promise <button class="run" data-run="ConsentLoop.setLanguage('de')">▶ setLanguage('de')</button> <button class="run" data-run="ConsentLoop.setLanguage('en')">▶ back to 'en'</button></div>
+      <p>Re-renders the widget live. URL-based translations are fetched on demand and cached.</p></div>
+    <div class="api"><div class="sig">rescan() <button class="run" data-run="ConsentLoop.rescan()">▶ rescan()</button></div>
+      <p>Re-scan the DOM for gated elements (SPA route changes).</p></div>
+    <div class="api"><div class="sig">reset(reprompt = true) <button class="run" data-run="ConsentLoop.reset(true)">▶ reset(true)</button></div>
+      <p>Erase stored consent (new consent id on next choice) and optionally re-show the banner.</p></div>
+    <div class="api"><div class="sig">on(event, cb) → unsubscribe</div>
+      <p>Subscribe to lifecycle events — see below. Also emitted as DOM events on <code>window</code> (<code>consentloop:*</code>) for analytics tools and tag managers.</p></div>
+    <div class="api"><div class="sig">destroy()</div>
+      <p>Remove the widget and all listeners. For tests and hard SPA teardowns.</p></div>
+
+    <h2>Events</h2>
+    <p>Names for <code>on()</code> and as DOM events (<code>consentloop:&lt;name&gt;</code>):</p>
+    <div class="table-scroll"><table class="props">
+      <tr><th>Event</th><th>Detail</th><th>When</th></tr>
+      <tr><td><code>ready</code></td><td>—</td><td>Boot finished (consent applied or banner shown).</td></tr>
+      <tr><td><code>consent</code></td><td><code>ConsentRecord</code></td><td>Consent is known: every load with valid consent + after every change.</td></tr>
+      <tr><td><code>first-consent</code></td><td><code>ConsentRecord</code></td><td>First explicit choice of this visitor.</td></tr>
+      <tr><td><code>change</code></td><td><code>{ record, changed }</code></td><td>An existing choice was modified.</td></tr>
+      <tr><td><code>banner-show/hide</code>, <code>preferences-show/hide</code></td><td>—</td><td>UI lifecycle.</td></tr>
+    </table></div>
+
+    <h3>Live event log</h3>
+    <div class="card" id="eventlog" aria-live="polite"><div class="muted">Interact with the widget to see events…</div></div>
+
+    <h2>Hooks (config)</h2>
+    <pre data-lang="js">
+ConsentLoop.run({
+  hooks: {
+    onFirstConsent: (record) => analytics.track("consent_given", record),
+    onConsent: (record) => bootServices(record),        // every load once known
+    onChange: (record, changed) => syncServices(changed),
+    onBannerShow: () => {},  onBannerHide: () => {},
+    onPreferencesShow: () => {},  onPreferencesHide: () => {},
+  },
+});</pre>
+
+    <h2>The consent record</h2>
+    <pre data-lang="js">
+{
+  id: "9f5c…",              // rotates on reset()
+  firstAt: "2026-07-20T12:00:00.000Z",
+  updatedAt: "2026-07-20T12:00:00.000Z",
+  revision: 0,
+  accepted: ["necessary", "analytics"],
+  rejected: ["marketing"],
+  services: { analytics: ["ga4", "plausible"] },
+  regulation: "gdpr",
+  method: "explicit",        // or "implied" (opt-out regimes)
+  v: "0.1.0"
+}</pre>
+    <p>Stored compactly (short keys) in a first-party cookie (default, server-readable) or <code>localStorage</code>. Server-side you can parse the cookie to make consent-aware rendering decisions.</p>
+  </main>
+</div>
+<script src="/vendor/meta.js"></script>
+<script src="/assets/site.js"></script>
+<script defer src="/vendor/consentloop.iife.min.js"></script>
+<script>
+addEventListener("DOMContentLoaded", () => {
+  ConsentLoop.run({
+    categories: {
+      necessary: { required: true },
+      analytics: { services: { plausible: { label: "Plausible" }, ga4: { label: "Google Analytics 4" } } },
+      marketing: {},
+    },
+    ui: { floatingButton: true },
+    content: { translations: { de: { banner: { title: "Wir respektieren deine Privatsphäre", acceptAll: "Alle akzeptieren", rejectAll: "Alle ablehnen", preferences: "Einstellungen" } } } },
+  });
+
+  const log = document.getElementById("eventlog");
+  const add = (name, detail) => {
+    if (log.firstChild?.classList?.contains("muted")) log.innerHTML = "";
+    const row = document.createElement("div");
+    const t = new Date().toLocaleTimeString();
+    row.innerHTML = `<span class="t">${t}</span><strong>${name}</strong> ${detail ? clSite.escapeHtml(JSON.stringify(detail).slice(0, 110)) : ""}`;
+    log.prepend(row);
+  };
+  ["ready", "consent", "first-consent", "change", "banner-show", "banner-hide", "preferences-show", "preferences-hide"]
+    .forEach((ev) => addEventListener("consentloop:" + ev, (e) => add(ev, e.detail)));
+
+  document.querySelectorAll("[data-run]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      let out;
+      try { out = eval(btn.dataset.run); } catch (e) { out = String(e); }
+      if (btn.hasAttribute("data-show")) {
+        let el = btn.parentElement.parentElement.querySelector(".out");
+        if (!el) { el = document.createElement("div"); el.className = "out"; btn.parentElement.parentElement.appendChild(el); }
+        el.textContent = "→ " + JSON.stringify(out, null, out && typeof out === "object" ? 1 : 0);
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

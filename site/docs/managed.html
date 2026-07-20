@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Managed &amp; regulations — ConsentLoop docs</title>
+<meta name="description" content="Regulation presets, the adapter contract, and ConsentLoop Cloud: geo-targeting, consent receipts, certified CMP.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<div class="layout">
+  <nav data-sidebar aria-label="Docs"></nav>
+  <main class="content">
+    <div class="breadcrumb">Docs / Managed &amp; regulations</div>
+    <h1>Managed &amp; regulations</h1>
+    <p class="lead">The open-source core is self-sufficient and offline by default — zero network calls. When you need per-country behavior, audit-grade consent receipts or a certified CMP, plug in a backend through the <strong>adapter</strong> interface: your own, or the upcoming <strong>ConsentLoop Cloud</strong>.</p>
+
+    <h2>Regulation presets (local, no backend)</h2>
+    <div class="table-scroll"><table class="props">
+      <tr><th>Preset</th><th>Model</th><th>Behavior</th></tr>
+      <tr><td><code>gdpr</code> <span class="muted">(default)</span></td><td>Opt-in</td><td>Nothing optional runs before consent. Equal Accept/Reject. Not dismissable. New categories re-prompt.</td></tr>
+      <tr><td><code>us-optout</code></td><td>Opt-out</td><td>Category <code>default: true</code> applies immediately (<code>method: "implied"</code>); banner offers opting out; <kbd>Esc</kbd>/dismiss persists the implied choice. CCPA/CPRA-style.</td></tr>
+      <tr><td><code>none</code></td><td>Opt-in UI</td><td>Like gdpr but dismissable without a choice.</td></tr>
+    </table></div>
+    <pre data-lang="js">
+ConsentLoop.run({
+  regulation: "us-optout",
+  categories: {
+    analytics: { default: true },
+    marketing: { default: true },   // visitors opt *out* of these
+  },
+  content: { translations: { en: { banner: {
+    title: "Your privacy choices",
+    description: 'We share some data with advertising partners. Opt out anytime — see "Do Not Sell or Share".',
+    links: [{ label: "Do Not Sell or Share My Personal Information", href: "/do-not-sell" }],
+  } } } },
+});</pre>
+
+    <h2>The adapter contract</h2>
+    <p>Two optional functions. Everything is fail-open: a slow or broken backend never blocks the banner or the page.</p>
+    <pre data-lang="js">
+ConsentLoop.run({
+  adapter: {
+    // Called once before the banner would show (skipped for returning visitors).
+    // Decide per-jurisdiction behavior server-side.
+    async init({ config, stored }) {
+      const res = await fetch("https://api.your.app/consent/decision");
+      const { show, regulation, lang } = await res.json();
+      return { show, regulation, lang };
+      // show: false  -> no banner needed here; defaults applied as implied consent
+      // regulation   -> override the preset for this visitor (e.g. "us-optout" for CA)
+      // lang         -> force a language
+    },
+    // Fire-and-forget consent receipt after every choice (uses sendBeacon when available).
+    persist(record) {
+      navigator.sendBeacon("https://api.your.app/consent/receipts", JSON.stringify(record));
+    },
+  },
+});</pre>
+    <p>Timeout: the banner waits at most <code>manage.timeout</code> (default 750 ms) for <code>init()</code>, then proceeds with local config. The consent <em>record</em> you receive is the full audit object — id, timestamps, revision, per-service choices, regulation, method.</p>
+
+    <h2>ConsentLoop Cloud <span class="pill" style="vertical-align:middle;margin-left:6px">coming soon</span></h2>
+    <p>Our managed plan is the same adapter, hosted: one line instead of a custom backend.</p>
+    <pre data-lang="js">
+ConsentLoop.run({
+  manage: {
+    endpoint: "https://api.consentloop.com/v1",
+    siteId: "site_123",
+  },
+});</pre>
+    <ul>
+      <li><strong>Geo rules</strong> — GDPR in the EEA, CCPA/CPRA in California, LGPD in Brazil, no banner where none is required. Decided at the edge via <code>GET /decision</code>.</li>
+      <li><strong>Consent receipts</strong> — tamper-evident audit trail via <code>POST /consent</code>, exportable for DPAs.</li>
+      <li><strong>Certified CMP</strong> — IAB TCF v2.2 string generation and Google CMP certification handled for you.</li>
+      <li><strong>Remote config &amp; translations</strong> — tweak texts and categories without deploys.</li>
+    </ul>
+    <div class="callout"><span>🔒</span><span>Open core promise: the npm package stays MIT and fully functional offline. Cloud is additive — the wire protocol above is public, so you can always self-host an adapter instead.</span></div>
+
+    <h2>Consent-aware rendering on your server</h2>
+    <p>Consent is a first-party cookie (<code>cl_consent</code>), so your server can read it too:</p>
+    <pre data-lang="js">
+// e.g. in middleware — short keys: a = accepted categories
+const raw = cookies.get("cl_consent");
+const consent = raw ? JSON.parse(raw) : null;
+const analyticsAllowed = consent?.a?.includes("analytics") ?? false;</pre>
+  </main>
+</div>
+<script src="/vendor/meta.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

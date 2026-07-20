@@ -1,0 +1,280 @@
+# ConsentLoop — complete documentation (single file for LLMs)
+# Version 0.1.0 · MIT · npm: consentloop, @consentloop/react
+# Repo: https://github.com/kocsmy/ConsentLoop
+
+ConsentLoop is an open-source cookie consent / consent-management layer built for performance:
+- ~1.4 KB gzip smart loader on the critical path; full widget (~11.6 KB gzip incl. UI+CSS+logic) loads lazily only when a banner must render.
+- Zero dependencies, zero third-party network calls, zero layout shift (all surfaces are position:fixed overlays), ~0 main-thread blocking (renders after first paint via requestIdleCallback).
+- Google Consent Mode v2, GDPR/CCPA presets, per-service consent, cookie auto-clear, i18n with lazy loading + RTL, Shadow-DOM isolation, full a11y, headless mode, React bindings, pluggable backend adapter.
+
+=====================================================================
+1. INSTALL
+=====================================================================
+
+npm:            npm i consentloop            (core, framework-agnostic)
+React bindings: npm i consentloop @consentloop/react
+CDN (best perf):
+  <script defer src="https://cdn.jsdelivr.net/npm/consentloop/dist/consentloop.loader.min.js" data-gcm></script>
+
+Files shipped in the consentloop package:
+  dist/index.js                 ESM entry (code-split; UI in a lazy chunk)
+  dist/index.min.js             single-file minified ESM
+  dist/consentloop.iife.min.js  classic build -> window.ConsentLoop (+ data-auto init)
+  dist/consentloop.loader.min.js  ~1.4 KB smart loader (see §9)
+  dist/index.d.ts               TypeScript types (JSDoc'd)
+
+=====================================================================
+2. QUICK START
+=====================================================================
+
+ESM:
+  import * as ConsentLoop from "consentloop";
+  ConsentLoop.run({
+    categories: {
+      necessary: { required: true },        // auto-added if omitted
+      analytics: {
+        services: { ga4: { label: "Google Analytics 4" } },
+        autoClear: [/^_ga/, "_gid"],        // cookies wiped on withdrawal
+      },
+      marketing: {},
+    },
+    googleConsentMode: true,
+  });
+
+Declarative HTML (no build):
+  <script>
+    window.consentloopConfig = { categories: { necessary: { required: true }, analytics: {} } };
+  </script>
+  <script defer src=".../consentloop.loader.min.js"></script>
+
+Gate scripts (the compliance mechanic):
+  <script type="text/plain" data-consent="analytics" async
+          data-consent-src="https://www.googletagmanager.com/gtag/js?id=G-XXXX"></script>
+  <script type="text/plain" data-consent="analytics">/* inline code runs after consent */</script>
+  <iframe data-consent="marketing" data-consent-src="https://www.youtube.com/embed/xyz"></iframe>
+  Optional service scoping: data-consent-service="ga4".
+  Activated elements get data-consent-activated and are never touched twice.
+  For SPA-injected elements call ConsentLoop.rescan().
+
+=====================================================================
+3. CONFIGURATION (ConsentLoopConfig)
+=====================================================================
+
+All keys optional. JSON-schema: https://consentloop.dev/consentloop.schema.json
+
+categories: Record<string, {
+  required?: boolean        // always granted; cannot be toggled (necessary)
+  default?: boolean         // UI preselect; under us-optout = granted until opted out
+  autoClear?: (string | RegExp | {name, domain?, path?})[]  // cleared on withdrawal
+  services?: Record<string, {
+    label?: string
+    onAccept?: () => void   // fires on every load while accepted (boot SDKs here)
+    onReject?: () => void   // fires on actual withdrawal
+    cookies?: matchers[]    // cleared when this service is rejected
+  }>
+}>
+
+ui: false | {               // false = headless (engine only)
+  layout?: "box" | "cloud" | "bar"                 // default "box"
+  position?: "top-left"|"top-center"|"top-right"|"middle-center"|
+             "bottom-left"|"bottom-center"|"bottom-right"   // default bottom-right (box) / bottom-center
+  preferences?: "modal" | "drawer"                 // default "modal"
+  theme?: "light" | "dark" | "auto"                // default "auto"
+  tokens?: Record<string,string>  // CSS vars w/o --cl- prefix, e.g. {accent:"#0ea5e9", radius:"8px"}
+  showRejectAll?: boolean         // default true (keep true for GDPR)
+  showPreferences?: boolean       // default true
+  floatingButton?: boolean        // reopen bubble after consent, default false
+  branding?: boolean              // small "Consent by ConsentLoop" link, default true
+  shadow?: boolean                // Shadow-DOM isolation, default true
+  container?: string | HTMLElement
+  disableTransitions?: boolean
+  zIndex?: number                 // default 2147483000
+}
+
+content: {
+  lang?: string                             // force language
+  autoDetect?: "document" | "browser" | false   // default "document" (<html lang>)
+  fallback?: string                         // default "en"
+  translations?: Record<string, Translation | string>  // string = URL fetched lazily
+}
+Translation = {
+  rtl?: boolean
+  banner?: { title, description /*HTML ok*/, acceptAll, rejectAll, preferences,
+             links?: [{label, href}] }
+  preferences?: { title, description?, acceptAll, rejectAll, save, close?, alwaysOn?, servicesLabel? }
+  categories?: Record<catName, { title?, description? /*HTML ok*/ }>
+}
+Missing keys fall back to built-in English. "de-AT" matches "de".
+
+storage: {
+  name?: string             // default "cl_consent"
+  type?: "cookie" | "localStorage"   // default cookie (server-readable)
+  expiresDays?: number      // default 182
+  domain?, path?, sameSite? // cookie attrs (default path "/", SameSite Lax, Secure on https)
+  revision?: number         // default 0; bump to re-prompt everyone
+}
+
+regulation: "gdpr" | "us-optout" | "none"    // default "gdpr"
+  gdpr:      opt-in; nothing optional runs pre-consent; not dismissable; new optional categories re-prompt.
+  us-optout: category defaults apply immediately as implied consent (method:"implied");
+             banner offers opting out; Esc persists the implied choice. CCPA/CPRA-style.
+  none:      opt-in UI, dismissable without choice.
+
+googleConsentMode: boolean | { map?: Record<category, gcmKey[]>, waitForUpdate?: number /*500*/ }
+  Default map: necessary→security_storage(always granted); functionality→functionality_storage,
+  personalization_storage; analytics→analytics_storage; marketing→ad_storage,ad_user_data,ad_personalization.
+  Behavior: gtag('consent','default',{all denied except security, wait_for_update}) at run()
+  (stored consent baked in for returning visitors), then gtag('consent','update',…) after every choice.
+  Load ConsentLoop BEFORE gtag/GTM in the document.
+
+autoScripts: boolean        // default true — scan & activate [data-consent] elements
+
+hooks: {
+  onFirstConsent?(record)   // first explicit choice
+  onConsent?(record)        // every load once consent known + after each change
+  onChange?(record, changedCategories)
+  onBannerShow/Hide?(), onPreferencesShow/Hide?()
+}
+
+adapter: {                   // custom consent backend; everything fail-open, never blocks UI
+  init?({config, stored}) -> { show?: boolean, regulation?, lang? } | Promise
+       // show:false = no banner needed in this jurisdiction; defaults applied as implied consent
+  persist?(record, ctx)      // fire-and-forget consent receipt after every choice
+}
+manage: { endpoint, siteId?, timeout? /*750ms*/ }   // built-in HTTP adapter (ConsentLoop Cloud):
+  GET  {endpoint}/decision?site=…  -> RemoteDecision
+  POST {endpoint}/consent          (sendBeacon/keepalive; body {site, record})
+
+debug: boolean              // default: true on localhost — warns on unknown config keys and
+                            // data-consent categories that aren't configured
+
+=====================================================================
+4. API (window.ConsentLoop / ESM named exports)
+=====================================================================
+
+run(config?) -> Promise<API>   idempotent; SSR no-op
+show() / hide()                first layer
+showPreferences() / hidePreferences()
+acceptAll() / rejectAll()
+accept(categories: string[], services?: Record<cat, string[]>)   // required cats always included
+isAccepted(cat) -> boolean     // includes implied consent
+isServiceAccepted(cat, svc) -> boolean
+acceptedCategories() -> string[]
+getConsent() -> ConsentRecord | null
+hasConsent() -> boolean        // explicit stored, unexpired, current revision
+setLanguage(lang) -> Promise   // live re-render
+rescan()                       // activate newly-added gated elements
+reset(reprompt = true)         // erase consent (+ new id), optionally re-show banner
+on(event, cb) -> unsubscribe   // events: ready, consent, first-consent, change,
+                               // banner-show/hide, preferences-show/hide
+destroy()                      // teardown (tests/SPA)
+version
+
+DOM events on window mirror on(): "consentloop:consent" (detail = record), etc.
+
+ConsentRecord = {
+  id, firstAt, updatedAt,      // ISO timestamps; id rotates on reset()
+  revision, accepted: string[], rejected: string[],
+  services: Record<cat, string[]>,
+  regulation, method: "explicit" | "implied", v
+}
+Cookie storage uses short keys: {id,t,u,r,a,j,s,g,m,v} — a=accepted, j=rejected.
+Server-side: parse cl_consent cookie, check .a.includes("analytics").
+
+=====================================================================
+5. REACT (@consentloop/react)
+=====================================================================
+
+<ConsentProvider config={ConsentLoopConfig}>…</ConsentProvider>
+  Runs core once in an effect. SSR-safe, strict-mode safe. No React in widget render path.
+
+useConsent() -> {
+  consent,            // ConsentRecord|null, re-renders on change (useSyncExternalStore)
+  hasConsent, isAccepted(cat), isServiceAccepted(cat,svc), acceptedCategories(),
+  accept(cats, services?), acceptAll(), rejectAll(), show(), showPreferences(), reset()
+}
+
+<ConsentGate category="marketing" service="youtube" fallback={<Placeholder/>}>
+  <iframe src="https://www.youtube.com/embed/xyz" />
+</ConsentGate>
+  Renders children only when accepted — the React alternative to data-consent-src.
+
+Next.js App Router: put ConsentProvider in a "use client" providers component in the root layout.
+
+=====================================================================
+6. THEMING
+=====================================================================
+
+Design tokens (override via ui.tokens or page CSS on #consentloop):
+  --cl-bg #fff | --cl-fg #18181b | --cl-muted #6b6b76 | --cl-border
+  --cl-accent #18181b | --cl-accent-fg #fff | --cl-btn-bg #f2f2f4 | --cl-btn-fg
+  --cl-switch-on (=accent) | --cl-switch-off | --cl-overlay | --cl-focus #2563eb
+  --cl-radius 16px | --cl-btn-radius 10px | --cl-shadow | --cl-width 24.5rem
+  --cl-font (system stack) | --cl-text 14px | --cl-gap 16px | --cl-z 2147483000
+Dark theme swaps values automatically (theme:"auto" follows prefers-color-scheme).
+ui.shadow:false disables Shadow DOM if you want to style with plain CSS selectors.
+
+=====================================================================
+7. ACCESSIBILITY & UX GUARANTEES
+=====================================================================
+
+- Banner: role="dialog" (non-modal), focused on open (no scroll), Esc behavior per regulation.
+- Preferences: aria-modal="true", focus trap, focus restore, Esc closes, <details> service lists.
+- Switches: role="switch" + aria-checked; :focus-visible outlines; prefers-reduced-motion honored.
+- Equal-weight Accept/Reject buttons; no dark patterns; mobile bottom-sheet under 640px.
+- Zero CLS by construction: every surface is position:fixed; animations are transform/opacity only.
+
+=====================================================================
+8. PERFORMANCE ARCHITECTURE (why it wins cookiebench-style tests)
+=====================================================================
+
+- Critical path: 0 bytes if you bundle (ESM entry defers UI chunk), or the ~1.4 KB loader on CDN.
+- Loader fast path: returning visitor with valid consent -> gated scripts activated immediately,
+  Consent Mode defaults pushed, FULL WIDGET NEVER DOWNLOADED (proxy API loads it on demand).
+- First visit: full widget fetched after window.load + requestIdleCallback; banner renders
+  post-first-paint -> FCP/LCP impact ≈ 0, TBT ≈ 0, CLS = 0.
+- Zero network: no fonts, no images (inline SVG), no API calls (unless manage/adapter configured).
+- CSS injected as constructable stylesheet (fallback <style>) in Shadow DOM; single style recalculation.
+- Performance mark "consentloop:banner-visible" emitted for your RUM.
+
+=====================================================================
+9. SMART LOADER (consentloop.loader.min.js)
+=====================================================================
+
+<script defer src=".../consentloop.loader.min.js"
+        data-gcm                 (enable Consent Mode defaults)
+        data-revision="0"        (must match storage.revision)
+        data-expires-days="182"
+        data-name="cl_consent"
+        data-storage="local"     (only if you use localStorage)
+        data-src="URL"           (full bundle override; default: sibling consentloop.iife.min.js)
+></script>
+Reads stored consent synchronously; valid -> activates gated elements + GCM, and only loads the
+full widget if window.consentloopConfig exists (for hooks) — otherwise never. Invalid/missing ->
+loads full widget lazily (after load+idle) which shows the banner. window.ConsentLoop is a proxy:
+any API call transparently loads the full widget first; sync getters (isAccepted, getConsent,
+acceptedCategories, hasConsent) answer straight from the stored record.
+
+=====================================================================
+10. TESTING / AGENT AUTOMATION
+=====================================================================
+
+- Host: #consentloop (open Shadow DOM). Stable selectors: [data-a="accept-all"], [data-a="reject-all"],
+  [data-a="open-prefs"], [data-a="save"], [data-a="close-prefs"], .cl-switch[data-cat="analytics"],
+  [data-svc="ga4"].
+- Or bypass UI: page.evaluate(() => ConsentLoop.acceptAll()).
+- Reset between tests: ConsentLoop.reset(false); ConsentLoop.destroy().
+- Dev warnings (console.warn "[consentloop] …") are actionable — fix config keys/categories they name.
+
+=====================================================================
+11. COMMON RECIPES
+=====================================================================
+
+Footer link:            <button onclick="ConsentLoop.showPreferences()">Cookie settings</button>
+Reload after withdrawal: hooks: { onChange: () => location.reload() }
+Consent-gated GTM:      gate the gtm.js script with data-consent="analytics" AND set googleConsentMode
+Per-country via backend: adapter.init returns { show:false } outside regulated regions
+CCPA:                   regulation:"us-optout", categories with default:true, add a
+                        "Do Not Sell or Share" link in content.translations.en.banner.links
+Re-prompt after policy change: storage: { revision: N+1 }
+Nuxt/Vue/Svelte:        call ConsentLoop.run() in client-side init (plugin/onMount); the core is framework-free.

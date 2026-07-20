@@ -1,0 +1,83 @@
+{
+  "date": "2026-07-20",
+  "runs": 7,
+  "cpuThrottle": 4,
+  "scenarios": {
+    "baseline": {
+      "fcp": 104,
+      "lcp": 104,
+      "cls": 0,
+      "tbt": 0,
+      "dcl": 83.7,
+      "load": 83.8,
+      "consentBytes": 0,
+      "consentRequests": 0,
+      "banner": null
+    },
+    "first": {
+      "fcp": 108,
+      "lcp": 108,
+      "cls": 0,
+      "tbt": 31,
+      "dcl": 92.8,
+      "load": 94.5,
+      "consentBytes": 38535,
+      "consentRequests": 2,
+      "banner": 135.8
+    },
+    "returning": {
+      "fcp": 116,
+      "lcp": 116,
+      "cls": 0,
+      "tbt": 0,
+      "dcl": 54.7,
+      "load": 101.4,
+      "consentBytes": 3199,
+      "consentRequests": 1,
+      "banner": null
+    },
+    "full": {
+      "fcp": 112,
+      "lcp": 112,
+      "cls": 0,
+      "tbt": 31,
+      "dcl": 57,
+      "load": 60.1,
+      "consentBytes": 35336,
+      "consentRequests": 1,
+      "banner": 118.3
+    }
+  },
+  "deltas": {
+    "first": {
+      "fcp": 4,
+      "lcp": 4,
+      "dcl": 9.1,
+      "load": 10.7,
+      "cls": 0,
+      "tbt": 31,
+      "consentKB": 37.63,
+      "banner": 135.8
+    },
+    "returning": {
+      "fcp": 12,
+      "lcp": 12,
+      "dcl": -29,
+      "load": 17.6,
+      "cls": 0,
+      "tbt": 0,
+      "consentKB": 3.12,
+      "banner": null
+    },
+    "full": {
+      "fcp": 8,
+      "lcp": 8,
+      "dcl": -26.7,
+      "load": -23.7,
+      "cls": 0,
+      "tbt": 31,
+      "consentKB": 34.51,
+      "banner": 118.3
+    }
+  }
+}

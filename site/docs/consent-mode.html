@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google Consent Mode v2 — ConsentLoop docs</title>
+<meta name="description" content="Correct gtag consent defaults and updates, mapped from your categories. With a live dataLayer inspector.">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .gcm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px; margin: 14px 0; }
+  .gcm-key { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px; font-family: var(--mono); font-size: 12px; }
+  .gcm-key .v { font-weight: 700; }
+  .gcm-key .v.granted { color: var(--green); }
+  .gcm-key .v.denied { color: var(--amber); }
+  #dl-log { font-family: var(--mono); font-size: 11.8px; max-height: 240px; overflow: auto; }
+  #dl-log > div { padding: 4px 0; border-bottom: 1px solid var(--border); white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav data-sidebar aria-label="Docs"></nav>
+  <main class="content">
+    <div class="breadcrumb">Docs / Google Consent Mode</div>
+    <h1>Google Consent Mode v2</h1>
+    <p class="lead">Since March 2024, Google requires Consent Mode v2 signals (<code>ad_user_data</code>, <code>ad_personalization</code>) for EEA traffic. ConsentLoop implements the whole dance — defaults before tags load, updates after every choice — with one flag.</p>
+
+    <pre data-lang="js">
+ConsentLoop.run({
+  categories: { analytics: {}, marketing: {} },
+  googleConsentMode: true,
+});</pre>
+
+    <h2>What happens</h2>
+    <ol>
+      <li><strong>Immediately at <code>run()</code></strong> (or the loader, with <code>data-gcm</code>): <code>gtag('consent', 'default', …)</code> is pushed with everything denied except <code>security_storage</code>, plus <code>wait_for_update: 500</code>. Returning visitors get their stored state baked into the default — no denied-window flicker.</li>
+      <li><strong>After every choice</strong>: <code>gtag('consent', 'update', …)</code> with the mapped state.</li>
+    </ol>
+    <div class="callout"><span>⚠️</span><span>Load ConsentLoop <em>before</em> your gtag/GTM snippet in the document so defaults win the race. With <code>defer</code> on both, order in HTML is the order of execution.</span></div>
+
+    <h2>Default mapping</h2>
+    <div class="table-scroll"><table class="props">
+      <tr><th>Category</th><th>Consent Mode keys</th></tr>
+      <tr><td><code>necessary</code></td><td><code>security_storage</code> (always granted)</td></tr>
+      <tr><td><code>functionality</code></td><td><code>functionality_storage</code>, <code>personalization_storage</code></td></tr>
+      <tr><td><code>analytics</code></td><td><code>analytics_storage</code></td></tr>
+      <tr><td><code>marketing</code></td><td><code>ad_storage</code>, <code>ad_user_data</code>, <code>ad_personalization</code></td></tr>
+    </table></div>
+    <p>Custom categories? Provide your own map (unmapped keys stay denied):</p>
+    <pre data-lang="js">
+googleConsentMode: {
+  map: {
+    analytics: ["analytics_storage"],
+    embeds: ["ad_storage"],
+    personalization: ["personalization_storage", "functionality_storage"],
+  },
+  waitForUpdate: 500,
+}</pre>
+
+    <h2>Live inspector</h2>
+    <p>This page runs ConsentLoop with <code>googleConsentMode: true</code>. Current state, straight from this page’s <code>dataLayer</code>:</p>
+    <div class="gcm-grid" id="gcm-state"></div>
+    <div class="row" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 18px">
+      <button class="btn small" onclick="ConsentLoop.acceptAll()">Accept all</button>
+      <button class="btn small" onclick="ConsentLoop.accept(['analytics'])">Analytics only</button>
+      <button class="btn small" onclick="ConsentLoop.rejectAll()">Reject all</button>
+      <button class="btn small" onclick="ConsentLoop.reset(true)">Reset</button>
+    </div>
+    <h3><code>dataLayer</code> pushes</h3>
+    <div class="card" id="dl-log" aria-live="polite"></div>
+
+    <h2>Putting it together with gtag</h2>
+    <pre data-lang="html">
+&lt;!-- 1. ConsentLoop first: pushes the consent default --&gt;
+&lt;script defer src="https://cdn.jsdelivr.net/npm/consentloop/dist/consentloop.loader.min.js" data-gcm&gt;&lt;/script&gt;
+
+&lt;!-- 2. Then Google — ungated: Consent Mode governs it cookielessly --&gt;
+&lt;script defer src="https://www.googletagmanager.com/gtag/js?id=G-XXXX"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag("js", new Date());
+  gtag("config", "G-XXXX");
+&lt;/script&gt;</pre>
+    <p class="muted small">Prefer no Google requests at all before consent? Gate the gtag script with <code>data-consent="analytics"</code> instead — Consent Mode then covers the case where it loads later. Both patterns are compliant; the gated one is stricter (no pings), Consent Mode-only preserves Google’s conversion modeling.</p>
+  </main>
+</div>
+<script src="/vendor/meta.js"></script>
+<script src="/assets/site.js"></script>
+<script defer src="/vendor/consentloop.iife.min.js"></script>
+<script>
+addEventListener("DOMContentLoaded", () => {
+  const KEYS = ["ad_storage","ad_user_data","ad_personalization","analytics_storage","functionality_storage","personalization_storage","security_storage"];
+  const stateEl = document.getElementById("gcm-state");
+  const logEl = document.getElementById("dl-log");
+  const state = {};
+
+  const renderState = () => {
+    stateEl.innerHTML = KEYS.map((k) => {
+      const v = state[k] || "denied";
+      return `<div class="gcm-key"><span>${k}</span><span class="v ${v}">${v}</span></div>`;
+    }).join("");
+  };
+  const inspect = (args) => {
+    if (args && args[0] === "consent") {
+      const payload = args[2] || {};
+      KEYS.forEach((k) => { if (payload[k]) state[k] = payload[k]; });
+      const row = document.createElement("div");
+      row.textContent = `gtag('consent', '${args[1]}', ${JSON.stringify(payload)})`;
+      logEl.prepend(row);
+      renderState();
+    }
+  };
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.forEach(inspect);
+  const origPush = window.dataLayer.push.bind(window.dataLayer);
+  window.dataLayer.push = (...args) => { args.forEach(inspect); return origPush(...args); };
+  renderState();
+
+  ConsentLoop.run({
+    categories: {
+      necessary: { required: true },
+      analytics: { services: { plausible: { label: "Plausible" }, ga4: { label: "Google Analytics 4" } } },
+      marketing: {},
+    },
+    ui: { floatingButton: true },
+    googleConsentMode: true,
+  });
+});
+</script>
+</body>
+</html>

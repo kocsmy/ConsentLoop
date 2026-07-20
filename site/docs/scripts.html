@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Script &amp; embed gating — ConsentLoop docs</title>
+<meta name="description" content="Block scripts, iframes and pixels until consent — declaratively with data-consent attributes, or programmatically.">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .demo { border: 1px dashed var(--border2); border-radius: 12px; padding: 18px; margin: 16px 0; }
+  .demo .row { display: flex; align-items: center; gap: 10px; margin: 8px 0; font-size: 13.5px; }
+  .state { font-family: var(--mono); font-size: 12px; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--border2); }
+  .state.blocked { color: var(--amber); }
+  .state.active { color: var(--green); border-color: color-mix(in srgb, var(--green) 40%, transparent); }
+  .fakeframe { width: 100%; height: 120px; border-radius: 10px; background: var(--bg2); border: 1px solid var(--border);
+    display: grid; place-items: center; color: var(--fg3); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav data-sidebar aria-label="Docs"></nav>
+  <main class="content">
+    <div class="breadcrumb">Docs / Script &amp; embed gating</div>
+    <h1>Script &amp; embed gating</h1>
+    <p class="lead">The core compliance mechanic: nothing that tracks runs before its category is accepted. ConsentLoop gates <em>scripts</em> (external and inline) and <em>embeds</em> (iframes, images, video) with three attributes.</p>
+
+    <h2>The attributes</h2>
+    <div class="table-scroll"><table class="props">
+      <tr><th>Attribute</th><th>On</th><th>Meaning</th></tr>
+      <tr><td><code>data-consent="analytics"</code></td><td>any element</td><td>Category that must be accepted.</td></tr>
+      <tr><td><code>data-consent-src="https://…"</code></td><td>script, iframe, img, video…</td><td>Real <code>src</code>, applied on acceptance.</td></tr>
+      <tr><td><code>data-consent-service="ga4"</code></td><td>any gated element</td><td>Optional: also require this service inside the category.</td></tr>
+    </table></div>
+    <p>For scripts, additionally set <code>type="text/plain"</code> so browsers never execute them prematurely. All other attributes (<code>async</code>, <code>defer</code>, ids…) are preserved on activation. Already-activated elements are marked <code>data-consent-activated</code> and never touched twice.</p>
+
+    <pre data-lang="html">
+&lt;!-- external script --&gt;
+&lt;script type="text/plain" data-consent="analytics" async
+        data-consent-src="https://plausible.io/js/script.js"&gt;&lt;/script&gt;
+
+&lt;!-- inline script --&gt;
+&lt;script type="text/plain" data-consent="analytics"&gt;
+  window.plausible = window.plausible || function () { (plausible.q = plausible.q || []).push(arguments) };
+&lt;/script&gt;
+
+&lt;!-- service-level: only when analytics AND the "ga4" service are accepted --&gt;
+&lt;script type="text/plain" data-consent="analytics" data-consent-service="ga4"
+        data-consent-src="https://www.googletagmanager.com/gtag/js?id=G-XXXX"&gt;&lt;/script&gt;
+
+&lt;!-- embeds: YouTube waits for marketing consent --&gt;
+&lt;iframe data-consent="marketing" data-consent-src="https://www.youtube.com/embed/xyz"
+        title="Video" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+
+    <h2>Live demo</h2>
+    <p>This page contains a gated inline script and a gated “embed”. Watch them flip as you change consent — this is the real engine, not a simulation.</p>
+    <div class="demo">
+      <div class="row"><span class="state blocked" id="d-script">blocked</span><span>inline script <code>data-consent="analytics"</code> — sets <code>window.__demoAnalytics</code></span></div>
+      <div class="row"><span class="state blocked" id="d-frame">blocked</span><span>iframe <code>data-consent="marketing"</code></span></div>
+      <div class="fakeframe" id="d-frame-box">iframe waits for marketing consent…</div>
+      <div class="row" style="margin-top:12px;gap:8px;flex-wrap:wrap">
+        <button class="btn small" onclick="ConsentLoop.accept(['analytics'])">Accept analytics only</button>
+        <button class="btn small" onclick="ConsentLoop.acceptAll()">Accept all</button>
+        <button class="btn small" onclick="ConsentLoop.reset(true)">Reset &amp; show banner</button>
+      </div>
+    </div>
+
+    <script type="text/plain" data-consent="analytics">window.__demoAnalytics = true; document.getElementById("d-script").textContent = "executed ✓"; document.getElementById("d-script").className = "state active";</script>
+    <iframe data-consent="marketing" data-consent-src="/assets/preview-embed.html" title="demo embed" hidden></iframe>
+
+    <h2>SPAs &amp; dynamically added elements</h2>
+    <p>Gating scans the DOM when consent is applied. If your framework injects gated elements later (route changes, lazy components), call:</p>
+    <pre data-lang="js">ConsentLoop.rescan(); // idempotent, cheap — activates anything newly eligible</pre>
+    <p>In React, prefer <a href="/docs/react"><code>&lt;ConsentGate&gt;</code></a> — it renders the real element only after consent, no rescan needed.</p>
+
+    <h2>Programmatic gating</h2>
+    <p>When an SDK must be booted from code, use service callbacks or events instead of attributes:</p>
+    <pre data-lang="js">
+ConsentLoop.run({
+  categories: {
+    analytics: {
+      services: {
+        posthog: {
+          label: "PostHog",
+          onAccept: () => import("./analytics").then((m) => m.boot()),
+          onReject: () => window.posthog?.opt_out_capturing(),
+          cookies: [/^ph_/],   // cleared automatically on withdrawal
+        },
+      },
+    },
+  },
+});</pre>
+    <p><code>onAccept</code> fires on every page load while accepted (that’s how you boot), <code>onReject</code> only on an actual withdrawal.</p>
+
+    <h2>Withdrawal &amp; auto-clear</h2>
+    <p>When a visitor turns a category off, ConsentLoop deletes the cookies you declared in <code>autoClear</code> (and in each service’s <code>cookies</code>) across current and parent domains. Already-running scripts can’t be un-run — if a vendor SDK has no opt-out API, reload after withdrawal:</p>
+    <pre data-lang="js">
+ConsentLoop.run({
+  categories: { analytics: { autoClear: [/^_ga/, "_gid"] } },
+  hooks: { onChange: (record, changed) => location.reload() },
+});</pre>
+  </main>
+</div>
+<script src="/vendor/meta.js"></script>
+<script src="/assets/site.js"></script>
+<script defer src="/vendor/consentloop.iife.min.js"></script>
+<script>
+addEventListener("DOMContentLoaded", () => {
+  ConsentLoop.run({
+    categories: {
+      necessary: { required: true },
+      analytics: { services: { plausible: { label: "Plausible" }, ga4: { label: "Google Analytics 4" } } },
+      marketing: {},
+    },
+    ui: { floatingButton: true },
+  });
+  const sync = () => {
+    if (ConsentLoop.isAccepted("marketing")) {
+      const f = document.getElementById("d-frame");
+      f.textContent = "loaded ✓"; f.className = "state active";
+      document.getElementById("d-frame-box").textContent = "iframe src applied — embed is live";
+    }
+  };
+  addEventListener("consentloop:consent", sync);
+  sync();
+});
+</script>
+</body>
+</html>
