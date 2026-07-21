@@ -317,6 +317,28 @@ describe("branding, legal links & UI behavior options", () => {
     expect(maybeQ(".cl-brand")).toBeNull();
   });
 
+  it("shows the credit inline in the links row for cloud and bar layouts", async () => {
+    for (const layout of ["cloud", "bar"] as const) {
+      await api.run({ categories: { necessary: { required: true } }, ui: { layout } });
+      expect(maybeQ(".cl-banner .cl-links .cl-brand")).toBeTruthy();
+      expect(maybeQ(".cl-banner > .cl-brand")).toBeNull();
+      api.destroy();
+    }
+    // box keeps the credit on its own line after the actions
+    await api.run({ categories: { necessary: { required: true } } });
+    expect(maybeQ(".cl-banner > .cl-brand")).toBeTruthy();
+    expect(maybeQ(".cl-banner .cl-links")).toBeNull();
+  });
+
+  it("cloud layout renders configured legal links (not suppressed)", async () => {
+    await api.run({
+      categories: { necessary: { required: true } },
+      ui: { layout: "cloud", branding: false },
+      content: { privacyPolicyUrl: "https://x.test/privacy" },
+    });
+    expect(maybeQ('.cl-banner .cl-links a[href="https://x.test/privacy"]')).toBeTruthy();
+  });
+
   it("renders localized privacy policy + terms links in banner and preferences", async () => {
     await api.run({
       categories: { necessary: { required: true }, analytics: {} },

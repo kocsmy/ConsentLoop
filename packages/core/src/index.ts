@@ -54,6 +54,7 @@ const KNOWN_KEYS = new Set([
   "storage",
   "regulation",
   "googleConsentMode",
+  "respectGPC",
   "autoScripts",
   "hooks",
   "adapter",

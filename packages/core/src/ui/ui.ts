@@ -145,6 +145,8 @@ export function createUi(
       ui.branding !== false
         ? `<a class="cl-brand" href="https://github.com/kocsmy/ConsentLoop" target="_blank" rel="noopener">Consent by <b>ConsentLoop</b></a>`
         : "";
+    // box: credit sits on its own line under the buttons; cloud/bar: it rides in the links row
+    const inlineBrand = ui.layout === "box" ? "" : brand;
 
     const bannerButtons = [
       `<button class="cl-btn cl-primary" data-a="accept-all">${esc(b.acceptAll!)}</button>`,
@@ -193,10 +195,10 @@ export function createUi(
         <div class="cl-banner-body">
           <h2 class="cl-title">${esc(b.title!)}</h2>
           <p class="cl-desc">${b.description || ""}</p>
-          ${links ? `<div class="cl-links">${links}</div>` : ""}
+          ${links || inlineBrand ? `<div class="cl-links">${links}${inlineBrand}</div>` : ""}
         </div>
         <div class="cl-actions">${bannerButtons}</div>
-        ${brand}
+        ${inlineBrand ? "" : brand}
       </div>
     </div>
     <div class="cl-layer cl-prefs-layer" data-l="prefs">
