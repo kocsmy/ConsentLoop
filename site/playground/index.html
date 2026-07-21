@@ -12,6 +12,27 @@
   .pg-side { border-right: 1px solid var(--border); overflow-y: auto; padding: 20px 18px 40px; }
   .pg-side h3 { font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--fg3); margin: 22px 0 10px; font-weight: 650; }
   .pg-side h3:first-child { margin-top: 0; }
+
+  /* collapsible sections: Layout / Style open, Content / Behavior tucked away */
+  .side-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+  .side-head h3 { margin: 0; }
+  #reset-btn { visibility: hidden; }
+  #reset-btn.on { visibility: visible; }
+  details.sec { border-top: 1px solid var(--border); }
+  details.sec:first-of-type { margin-top: 16px; }
+  details.sec:last-of-type { border-bottom: 1px solid var(--border); }
+  details.sec > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 13px 2px; font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--fg2); user-select: none; }
+  details.sec > summary::-webkit-details-marker { display: none; }
+  details.sec > summary:hover { color: var(--fg); }
+  .sec .car { color: var(--fg3); transition: transform .15s ease; flex: 0 0 auto; }
+  details[open].sec > summary .car { transform: rotate(90deg); }
+  .sec .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-left: 2px; opacity: 0; transition: opacity .15s; }
+  .sec.mod .dot { opacity: 1; }
+  .sec-body { padding: 2px 2px 18px; }
+  .sec-body > :first-child { margin-top: 2px; }
+  .pg-side h4 { font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--fg3); margin: 18px 0 9px; font-weight: 650; }
+  .pg-side h4.lab { display: flex; align-items: baseline; justify-content: space-between; }
+  .pg-side h4 output { font-family: var(--mono); font-size: 11px; color: var(--fg2); letter-spacing: 0; text-transform: none; }
   .pg-main { display: flex; flex-direction: column; min-width: 0; }
   .pg-toolbar { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
   .pg-stage { flex: 1; padding: 20px; min-height: 0; background:
@@ -69,7 +90,10 @@
 
 <div class="pg">
   <aside class="pg-side">
-    <h3>Presets</h3>
+    <div class="side-head">
+      <h3>Presets</h3>
+      <button class="btn small" id="reset-btn" type="button" title="Back to the default design">↺ Reset</button>
+    </div>
     <div class="presets">
       <button class="preset" data-preset="saas"><b>SaaS minimal</b><span>box · bottom-right · auto theme</span></button>
       <button class="preset" data-preset="brand"><b>Brand color</b><span>cloud · accent + rounded</span></button>
@@ -78,80 +102,88 @@
       <button class="preset" data-preset="dark"><b>Night mode</b><span>box · dark · drawer prefs</span></button>
     </div>
 
-    <h3>Layout</h3>
-    <div class="thumbs" id="layout-thumbs">
-      <button class="thumb" data-v="box"><span class="mini"><i></i></span><span class="lbl">Box</span></button>
-      <button class="thumb" data-v="cloud"><span class="mini"><i></i></span><span class="lbl">Cloud</span></button>
-      <button class="thumb" data-v="bar"><span class="mini"><i></i></span><span class="lbl">Bar</span></button>
-    </div>
+    <details class="sec" id="sec-layout" open>
+      <summary><svg class="car" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path d="M5.5 3.5 10 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Layout<span class="dot" title="modified"></span></summary>
+      <div class="sec-body">
+        <div class="thumbs" id="layout-thumbs">
+          <button class="thumb" data-v="box"><span class="mini"><i></i></span><span class="lbl">Box</span></button>
+          <button class="thumb" data-v="cloud"><span class="mini"><i></i></span><span class="lbl">Cloud</span></button>
+          <button class="thumb" data-v="bar"><span class="mini"><i></i></span><span class="lbl">Bar</span></button>
+        </div>
+        <h4>Position</h4>
+        <div id="posgrid"></div>
+        <h4>Preferences surface</h4>
+        <div class="seg" id="prefs-seg">
+          <button data-v="modal">Modal</button><button data-v="drawer">Drawer</button>
+        </div>
+      </div>
+    </details>
 
-    <h3>Position</h3>
-    <div id="posgrid"></div>
+    <details class="sec" id="sec-style" open>
+      <summary><svg class="car" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path d="M5.5 3.5 10 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Style<span class="dot" title="modified"></span></summary>
+      <div class="sec-body">
+        <h4>Theme</h4>
+        <div class="seg" id="theme-seg">
+          <button data-v="light">Light</button><button data-v="dark">Dark</button>
+        </div>
+        <h4>Accent</h4>
+        <div class="swatches" id="swatches">
+          <button class="swatch none" data-v="" title="Default (neutral)"></button>
+          <button class="swatch" data-v="#4f46e5" style="background:#4f46e5" title="Indigo"></button>
+          <button class="swatch" data-v="#0ea5e9" style="background:#0ea5e9" title="Sky"></button>
+          <button class="swatch" data-v="#16a34a" style="background:#16a34a" title="Green"></button>
+          <button class="swatch" data-v="#e11d48" style="background:#e11d48" title="Rose"></button>
+          <button class="swatch" data-v="#f59e0b" style="background:#f59e0b" title="Amber"></button>
+        </div>
+        <h4 class="lab">Roundness<output id="out-radius" for="radius">16px</output></h4>
+        <input type="range" id="radius" min="0" max="24" step="2" value="16" style="width:100%" aria-label="Corner roundness">
+        <h4 class="lab">Spacing<output id="out-pad" for="pad">20px</output></h4>
+        <input type="range" id="pad" min="12" max="28" step="2" value="20" style="width:100%" aria-label="Widget spacing">
+        <h4 class="lab">Border<output id="out-borderw" for="borderw">1px</output></h4>
+        <div class="swatches" id="border-swatches">
+          <button class="swatch none" data-v="" title="Auto (subtle)"></button>
+          <button class="swatch" data-v="strong" style="background:#9d9da5" title="Strong"></button>
+          <button class="swatch" data-v="black" style="background:#18181b" title="Black"></button>
+          <button class="swatch" data-v="accent" style="background:conic-gradient(#4f46e5,#0ea5e9,#16a34a,#e11d48,#4f46e5)" title="Match accent"></button>
+        </div>
+        <input type="range" id="borderw" min="0" max="4" step="1" value="1" style="width:100%;margin-top:10px" aria-label="Border width">
+        <h4>Shadow</h4>
+        <div class="seg" id="shadow-seg">
+          <button data-v="none">None</button><button data-v="subtle">Subtle</button><button data-v="">Soft</button><button data-v="strong">Strong</button>
+        </div>
+        <h4>Font</h4>
+        <div class="seg" id="font-seg">
+          <button data-v="">System</button><button data-v="serif">Serif</button><button data-v="mono">Mono</button>
+        </div>
+      </div>
+    </details>
 
-    <h3>Preferences surface</h3>
-    <div class="seg" id="prefs-seg">
-      <button data-v="modal">Modal</button><button data-v="drawer">Drawer</button>
-    </div>
+    <details class="sec" id="sec-content">
+      <summary><svg class="car" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path d="M5.5 3.5 10 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Content<span class="dot" title="modified"></span></summary>
+      <div class="sec-body">
+        <h4>Language <span class="muted" style="text-transform:none;letter-spacing:0">(58 built-in)</span></h4>
+        <select id="lang-select" style="width:100%" aria-label="Widget language"></select>
+        <h4>Copy <span class="muted" style="text-transform:none;letter-spacing:0">(English)</span></h4>
+        <input type="text" id="txt-title" placeholder="We value your privacy" style="width:100%" aria-label="Banner title">
+        <input type="text" id="txt-desc" placeholder="Banner description…" style="width:100%;margin-top:6px" aria-label="Banner description">
+        <h4>Legal links</h4>
+        <input type="url" id="url-privacy" placeholder="Privacy policy URL, e.g. /privacy" style="width:100%" aria-label="Privacy policy URL">
+        <input type="url" id="url-cookies" placeholder="Cookie policy URL" style="width:100%;margin-top:6px" aria-label="Cookie policy URL">
+        <input type="url" id="url-terms" placeholder="Terms &amp; conditions URL" style="width:100%;margin-top:6px" aria-label="Terms and conditions URL">
+        <p class="small muted" style="margin:6px 0 0">Labels auto-translate in all 58 languages.</p>
+      </div>
+    </details>
 
-    <h3>Theme</h3>
-    <div class="seg" id="theme-seg">
-      <button data-v="light">Light</button><button data-v="dark">Dark</button>
-    </div>
-
-    <h3>Accent</h3>
-    <div class="swatches" id="swatches">
-      <button class="swatch none" data-v="" title="Default (neutral)"></button>
-      <button class="swatch" data-v="#4f46e5" style="background:#4f46e5" title="Indigo"></button>
-      <button class="swatch" data-v="#0ea5e9" style="background:#0ea5e9" title="Sky"></button>
-      <button class="swatch" data-v="#16a34a" style="background:#16a34a" title="Green"></button>
-      <button class="swatch" data-v="#e11d48" style="background:#e11d48" title="Rose"></button>
-      <button class="swatch" data-v="#f59e0b" style="background:#f59e0b" title="Amber"></button>
-    </div>
-
-    <h3>Border</h3>
-    <div class="swatches" id="border-swatches">
-      <button class="swatch none" data-v="" title="Auto (subtle)"></button>
-      <button class="swatch" data-v="strong" style="background:#9d9da5" title="Strong"></button>
-      <button class="swatch" data-v="black" style="background:#18181b" title="Black"></button>
-      <button class="swatch" data-v="accent" style="background:conic-gradient(#4f46e5,#0ea5e9,#16a34a,#e11d48,#4f46e5)" title="Match accent"></button>
-    </div>
-    <input type="range" id="borderw" min="0" max="4" step="1" value="1" style="width:100%;margin-top:10px" aria-label="Border width">
-
-    <h3>Shadow</h3>
-    <div class="seg" id="shadow-seg">
-      <button data-v="none">None</button><button data-v="subtle">Subtle</button><button data-v="">Soft</button><button data-v="strong">Strong</button>
-    </div>
-
-    <h3>Roundness</h3>
-    <input type="range" id="radius" min="0" max="24" step="2" value="16" style="width:100%">
-
-    <h3>Spacing</h3>
-    <input type="range" id="pad" min="12" max="28" step="2" value="20" style="width:100%" aria-label="Widget spacing">
-
-    <h3>Font</h3>
-    <div class="seg" id="font-seg">
-      <button data-v="">System</button><button data-v="serif">Serif</button><button data-v="mono">Mono</button>
-    </div>
-
-    <h3>Language <span class="muted" style="text-transform:none;letter-spacing:0">(58 built-in)</span></h3>
-    <select id="lang-select" style="width:100%" aria-label="Widget language"></select>
-
-    <h3>Copy <span class="muted" style="text-transform:none;letter-spacing:0">(English)</span></h3>
-    <input type="text" id="txt-title" placeholder="We value your privacy" style="width:100%" aria-label="Banner title">
-    <input type="text" id="txt-desc" placeholder="Banner description…" style="width:100%;margin-top:6px" aria-label="Banner description">
-
-    <h3>Legal links</h3>
-    <input type="url" id="url-privacy" placeholder="Privacy policy URL, e.g. /privacy" style="width:100%" aria-label="Privacy policy URL">
-    <input type="url" id="url-cookies" placeholder="Cookie policy URL" style="width:100%;margin-top:6px" aria-label="Cookie policy URL">
-    <input type="url" id="url-terms" placeholder="Terms &amp; conditions URL" style="width:100%;margin-top:6px" aria-label="Terms and conditions URL">
-    <p class="small muted" style="margin:6px 0 0">Labels auto-translate in all 58 languages.</p>
-
-    <h3>Options</h3>
-    <div class="switchrow"><span class="small">Reject-all button</span><button class="uiswitch" role="switch" id="sw-reject" aria-checked="true"></button></div>
-    <div class="switchrow"><span class="small">Preferences button</span><button class="uiswitch" role="switch" id="sw-prefsbtn" aria-checked="true"></button></div>
-    <div class="switchrow"><span class="small">Floating button</span><button class="uiswitch" role="switch" id="sw-fab" aria-checked="false"></button></div>
-    <div class="switchrow"><span class="small">US opt-out mode</span><button class="uiswitch" role="switch" id="sw-us" aria-checked="false"></button></div>
-    <div class="switchrow"><span class="small">ConsentLoop branding</span><button class="uiswitch" role="switch" id="sw-brand" aria-checked="true"></button></div>
+    <details class="sec" id="sec-behavior">
+      <summary><svg class="car" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path d="M5.5 3.5 10 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Behavior<span class="dot" title="modified"></span></summary>
+      <div class="sec-body">
+        <div class="switchrow"><span class="small">Reject-all button</span><button class="uiswitch" role="switch" id="sw-reject" aria-checked="true"></button></div>
+        <div class="switchrow"><span class="small">Preferences button</span><button class="uiswitch" role="switch" id="sw-prefsbtn" aria-checked="true"></button></div>
+        <div class="switchrow"><span class="small">Floating button</span><button class="uiswitch" role="switch" id="sw-fab" aria-checked="false"></button></div>
+        <div class="switchrow"><span class="small">US opt-out mode</span><button class="uiswitch" role="switch" id="sw-us" aria-checked="false"></button></div>
+        <div class="switchrow"><span class="small">ConsentLoop branding</span><button class="uiswitch" role="switch" id="sw-brand" aria-checked="true"></button></div>
+      </div>
+    </details>
   </aside>
 
   <div class="pg-main">
@@ -204,6 +236,14 @@
 
   /* ---- shareable, refresh-proof state (#c= hash, also read by /docs/configuration) ---- */
   const DEFAULTS = JSON.stringify(state);
+  const DEFAULT_OBJ = JSON.parse(DEFAULTS);
+  const SECTIONS = {
+    "sec-layout": ["layout", "position", "preferences"],
+    "sec-style": ["theme", "accent", "radius", "pad", "font", "borderW", "borderColor", "shadow"],
+    "sec-content": ["lang", "title", "desc", "privacyUrl", "cookieUrl", "termsUrl"],
+    "sec-behavior": ["showRejectAll", "showPreferences", "floatingButton", "us", "branding"],
+  };
+  const secModified = (keys) => keys.some((k) => JSON.stringify(state[k]) !== JSON.stringify(DEFAULT_OBJ[k]));
   const encodeState = (o) => btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
   const decodeState = (s) => JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g, "+").replace(/_/g, "/")))));
   let restoredFromHash = false;
@@ -217,6 +257,9 @@
         document.getElementById(id).value = v;
       for (const [id, k] of [["txt-title", "title"], ["txt-desc", "desc"], ["url-privacy", "privacyUrl"], ["url-cookies", "cookieUrl"], ["url-terms", "termsUrl"]])
         document.getElementById(id).value = state[k];
+      // a shared design should show its customizations: open every section it touched
+      for (const [id, keys] of Object.entries(SECTIONS))
+        if (secModified(keys)) document.getElementById(id).open = true;
     }
   } catch {}
 
@@ -313,6 +356,18 @@
     hashTimer = setTimeout(() => {
       history.replaceState(null, "", JSON.stringify(state) === DEFAULTS ? location.pathname : "#c=" + encodeState(state));
     }, 250);
+    syncMeta();
+  }
+  function syncMeta() {
+    let any = false;
+    for (const [id, keys] of Object.entries(SECTIONS)) {
+      const mod = secModified(keys);
+      document.getElementById(id).classList.toggle("mod", mod);
+      any = any || mod;
+    }
+    document.getElementById("reset-btn").classList.toggle("on", any);
+    for (const [sid, oid] of [["radius", "out-radius"], ["pad", "out-pad"], ["borderw", "out-borderw"]])
+      document.getElementById(oid).textContent = document.getElementById(sid).value + "px";
   }
   addEventListener("message", (e) => {
     if (e.data?.type === "cl-frame-loaded" && lastMsg) frame.contentWindow.postMessage(lastMsg, "*");
@@ -416,25 +471,33 @@
   };
   // options every preset resets to defaults (presets only override the keys they list)
   const PRESET_BASE = { showPreferences: true, pad: 20, font: "", borderW: 1, borderColor: "", shadow: "", title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "" };
+  function applyControls() {
+    syncLayout(); syncPos(); syncSw(); syncBorderSw(); syncTextInputs();
+    document.getElementById("radius").value = state.radius;
+    document.getElementById("pad").value = state.pad;
+    document.getElementById("borderw").value = state.borderW;
+    langSel.value = state.lang;
+    [["prefs-seg","preferences"],["theme-seg","theme"],["font-seg","font"],["shadow-seg","shadow"]].forEach(([id, key]) => {
+      document.getElementById(id).querySelectorAll("button")
+        .forEach((x) => x.classList.toggle("active", x.dataset.v === state[key]));
+    });
+    ["sw-reject","sw-prefsbtn","sw-fab","sw-us","sw-brand"].forEach((id, i) => {
+      const keys = ["showRejectAll","showPreferences","floatingButton","us","branding"];
+      document.getElementById(id).setAttribute("aria-checked", String(state[keys[i]]));
+    });
+  }
   document.querySelectorAll(".preset").forEach((b) =>
     b.addEventListener("click", () => {
       Object.assign(state, PRESET_BASE, PRESETS[b.dataset.preset]);
-      syncLayout(); syncPos(); syncSw(); syncBorderSw(); syncTextInputs();
-      document.getElementById("radius").value = state.radius;
-      document.getElementById("pad").value = state.pad;
-      document.getElementById("borderw").value = state.borderW;
-      langSel.value = state.lang;
-      [["prefs-seg","preferences"],["theme-seg","theme"],["font-seg","font"],["shadow-seg","shadow"]].forEach(([id, key]) => {
-        document.getElementById(id).querySelectorAll("button")
-          .forEach((x) => x.classList.toggle("active", x.dataset.v === state[key]));
-      });
-      ["sw-reject","sw-prefsbtn","sw-fab","sw-us","sw-brand"].forEach((id, i) => {
-        const keys = ["showRejectAll","showPreferences","floatingButton","us","branding"];
-        document.getElementById(id).setAttribute("aria-checked", String(state[keys[i]]));
-      });
+      applyControls();
       push();
     })
   );
+  document.getElementById("reset-btn").addEventListener("click", () => {
+    Object.assign(state, JSON.parse(DEFAULTS));
+    applyControls();
+    push();
+  });
 
   /* toolbar */
   document.getElementById("replay").addEventListener("click", () => frame.contentWindow.postMessage({ type: "reset" }, "*"));
@@ -476,6 +539,7 @@
   });
 
   if (restoredFromHash) push();
+  syncMeta();
 
   push();
 })();
