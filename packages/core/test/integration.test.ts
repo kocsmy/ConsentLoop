@@ -330,6 +330,16 @@ describe("branding, legal links & UI behavior options", () => {
     expect(maybeQ(".cl-banner .cl-links")).toBeNull();
   });
 
+  it("hiding reject-all marks the actions row solo so the accept button hugs its label", async () => {
+    await api.run({ categories: { necessary: { required: true } }, ui: { showRejectAll: false } });
+    expect(maybeQ(".cl-actions.cl-solo")).toBeTruthy();
+    api.destroy();
+    // with both buttons present they share the row — no solo sizing
+    await api.run({ categories: { necessary: { required: true } } });
+    expect(maybeQ(".cl-actions.cl-solo")).toBeNull();
+    expect(maybeQ(".cl-actions")).toBeTruthy();
+  });
+
   it("reset(true) while preferences are open closes them before re-prompting", async () => {
     await api.run({ categories: { necessary: { required: true }, analytics: {} } });
     click('[data-a="open-prefs"]');

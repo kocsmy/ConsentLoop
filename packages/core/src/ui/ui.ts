@@ -153,6 +153,8 @@ export function createUi(
       ui.showRejectAll !== false ? `<button class="cl-btn" data-a="reject-all">${esc(b.rejectAll!)}</button>` : "",
       ui.showPreferences !== false ? `<button class="cl-btn cl-ghost" data-a="open-prefs">${esc(b.preferences!)}</button>` : "",
     ].join("");
+    // with no reject button the primary would stretch across the whole row — let it hug its label instead
+    const soloActions = ui.showRejectAll === false ? " cl-solo" : "";
 
     const cats = Object.entries(cfg.categories)
       .map(([name, cat]) => {
@@ -197,7 +199,7 @@ export function createUi(
           <p class="cl-desc">${b.description || ""}</p>
           ${links || inlineBrand ? `<div class="cl-links">${links}${inlineBrand}</div>` : ""}
         </div>
-        <div class="cl-actions">${bannerButtons}</div>
+        <div class="cl-actions${soloActions}">${bannerButtons}</div>
         ${inlineBrand ? "" : brand}
       </div>
     </div>
