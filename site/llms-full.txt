@@ -295,7 +295,8 @@ Footer link:            <button onclick="ConsentLoop.showPreferences()">Cookie s
 Reload after withdrawal: hooks: { onChange: () => location.reload() }
 Consent-gated GTM:      gate the gtm.js script with data-consent="analytics" AND set googleConsentMode
 Per-country via backend: adapter.init returns { show:false } outside regulated regions
-CCPA:                   regulation:"us-optout", categories with default:true, add a
-                        "Do Not Sell or Share" link in content.translations.en.banner.links
+CCPA:                   regulation:"us-optout", categories with default:true. Optionally add a
+                        "Do Not Sell or Share" link in content.translations.en.banner.links —
+                        the law wants that link somewhere on the site; a footer link works too.
 Re-prompt after policy change: storage: { revision: N+1 }
 Nuxt/Vue/Svelte:        call ConsentLoop.run() in client-side init (plugin/onMount); the core is framework-free.

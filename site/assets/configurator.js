@@ -9,7 +9,7 @@
       theme: "auto",
       accent: "",
       radius: 16,
-      borderW: 1,
+      borderW: 0,
       borderColor: "",
       shadow: "",
       showRejectAll: true,
@@ -127,7 +127,7 @@
       tokens["accent-fg"] = bestFg(state.ui.accent);
     }
     if (+state.ui.radius !== 16) tokens.radius = state.ui.radius + "px";
-    if (+state.ui.borderW !== 1) tokens["border-w"] = state.ui.borderW + "px";
+    if (+state.ui.borderW !== 0) tokens["border-w"] = state.ui.borderW + "px";
     if (state.ui.borderColor) tokens.border = state.ui.borderColor;
     if (state.ui.shadow) tokens.shadow = SHADOWS[state.ui.shadow];
     if (Object.keys(tokens).length) ui.tokens = tokens;

@@ -10,7 +10,7 @@ export const CSS = `
   --cl-fg:#18181b;
   --cl-muted:#6b6b76;
   --cl-border:rgba(9,9,11,.1);
-  --cl-border-w:1px;
+  --cl-border-w:0px;
   --cl-accent:#18181b;
   --cl-accent-fg:#ffffff;
   --cl-btn-bg:#f2f2f4;
@@ -78,7 +78,7 @@ export const CSS = `
 .cl-title{font-size:15px;font-weight:600;letter-spacing:-.01em}
 .cl-desc{color:var(--cl-muted);margin-top:6px}
 .cl-links{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin-top:10px}
-.cl-links a{color:var(--cl-muted);font-size:12.5px;text-decoration:underline;text-underline-offset:2px}
+.cl-links a{color:var(--cl-muted);text-decoration:underline;text-underline-offset:2px}
 .cl-links a:hover{color:var(--cl-fg)}
 .cl-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:calc(var(--cl-pad)*.8)}
 .cl-root .cl-btn{
@@ -93,10 +93,10 @@ export const CSS = `
 .cl-root .cl-btn.cl-ghost{background:transparent;color:var(--cl-muted);flex-grow:0}
 .cl-root .cl-btn.cl-ghost:hover{color:var(--cl-fg);filter:none}
 .cl-root .cl-actions.cl-solo .cl-btn:not(.cl-ghost){flex:0 1 auto;padding:8px 18px}
-.cl-brand{display:block;margin-top:12px;font-size:11px;color:var(--cl-muted);opacity:.75;text-decoration:none}
+.cl-brand{display:block;margin-top:12px;color:var(--cl-muted);opacity:.75;text-decoration:underline;text-underline-offset:2px}
 .cl-brand:hover{opacity:1}
 .cl-brand b{font-weight:600}
-.cl-links .cl-brand{display:inline;margin:0;font-size:11.5px;text-decoration:none}
+.cl-links .cl-brand{display:inline;margin:0}
 
 /* cloud: one horizontal pill */
 [data-layout=cloud] .cl-banner{max-width:46rem;display:flex;align-items:center;gap:20px;padding:calc(var(--cl-pad)*.7) calc(var(--cl-pad)*.7) calc(var(--cl-pad)*.7) calc(var(--cl-pad)*1.1);border-radius:calc(var(--cl-radius)*1.5)}
@@ -105,8 +105,7 @@ export const CSS = `
 [data-layout=cloud] .cl-desc{margin-top:2px;font-size:13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 [data-layout=cloud] .cl-actions{margin-top:0;flex-wrap:nowrap}
 [data-layout=cloud] .cl-btn{flex:0 0 auto}
-[data-layout=cloud] .cl-links{margin-top:5px;gap:4px 12px}
-[data-layout=cloud] .cl-links a{font-size:11.5px}
+[data-layout=cloud] .cl-links{margin-top:5px;gap:4px 12px;font-size:13px}
 
 /* bar: full-width strip */
 [data-layout=bar] .cl-banner-layer{padding:0}
@@ -140,7 +139,7 @@ export const CSS = `
 .cl-root .cl-x:hover{background:var(--cl-btn-bg);color:var(--cl-fg)}
 .cl-prefs>.cl-desc{padding:6px var(--cl-pad) 0}
 .cl-cats{overflow-y:auto;padding:calc(var(--cl-pad)*.8) var(--cl-pad);display:flex;flex-direction:column;gap:calc(var(--cl-pad)*.5);overscroll-behavior:contain}
-.cl-cat{border:var(--cl-border-w) solid var(--cl-border);border-radius:calc(var(--cl-radius)*.75);padding:calc(var(--cl-pad)*.7) calc(var(--cl-pad)*.8)}
+.cl-cat{border:1px solid var(--cl-border);border-radius:calc(var(--cl-radius)*.75);padding:calc(var(--cl-pad)*.7) calc(var(--cl-pad)*.8)}
 .cl-cat-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
 .cl-cat-title{font-size:14px;font-weight:600}
 .cl-cat-desc{color:var(--cl-muted);font-size:13px;margin-top:2px}
