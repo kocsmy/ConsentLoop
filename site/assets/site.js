@@ -181,7 +181,21 @@
     });
   }
 
-  window.clSite = { highlight, escapeHtml };
+  // custom range styling (site.css) paints the rail's filled portion via --fill
+  function syncRangeFills() {
+    document.querySelectorAll('input[type="range"]').forEach((el) => {
+      const min = +el.min || 0;
+      const max = +el.max || 100;
+      el.style.setProperty("--fill", ((+el.value - min) / (max - min || 1)) * 100 + "%");
+    });
+  }
+  document.addEventListener("input", (e) => {
+    if (e.target instanceof HTMLInputElement && e.target.type === "range") syncRangeFills();
+  });
+  // presets/reset set slider values programmatically without input events — resync after any click
+  document.addEventListener("click", () => requestAnimationFrame(syncRangeFills));
+
+  window.clSite = { highlight, escapeHtml, syncRangeFills };
 
   // favicon for pages that don't declare one
   if (!document.querySelector("link[rel~='icon']")) {
@@ -198,6 +212,7 @@
     upgradeCode();
     upgradeTabs();
     footer();
+    syncRangeFills();
     const meta = window.CL_META;
     if (meta) {
       const pill = document.getElementById("version-pill");
