@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Pinahahalagahan namin ang iyong privacy",
+  "description": "Gumagamit kami ng cookies para patakbuhin ang site at maunawaan ang paggamit nito. Ikaw ang pipili — maaaring baguhin anumang oras.",
+  "acceptAll": "Tanggapin lahat",
+  "rejectAll": "Tanggihan lahat",
+  "preferences": "Mga kagustuhan"
+ },
+ "preferences": {
+  "title": "Mga kagustuhan sa privacy",
+  "description": "Magpasya ayon sa kategorya. Ang mga kinakailangang cookies ay nagpapatakbo ng site at laging naka-on.",
+  "acceptAll": "Tanggapin lahat",
+  "rejectAll": "Tanggihan lahat",
+  "save": "I-save ang mga kagustuhan",
+  "close": "Isara",
+  "alwaysOn": "Laging naka-on",
+  "servicesLabel": "Mga serbisyo"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Talagang kinakailangan",
+   "description": "Kailangan para sa pangunahing gawain tulad ng seguridad at pamamahala ng network."
+  },
+  "functionality": {
+   "title": "Functionality",
+   "description": "Tinatandaan ang iyong mga setting at kagustuhan."
+  },
+  "analytics": {
+   "title": "Analytics",
+   "description": "Tumutulong maunawaan kung paano ginagamit ng mga bisita ang site."
+  },
+  "marketing": {
+   "title": "Marketing",
+   "description": "Ginagamit para magpakita ng kaugnay na nilalaman at sukatin ang mga ad."
+  }
+ }
+}

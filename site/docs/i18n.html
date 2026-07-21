@@ -47,6 +47,20 @@ ConsentLoop.run({
       <li><strong>RTL:</strong> set <code>rtl: true</code> on a translation to flip the widget’s direction.</li>
     </ul>
 
+    <h2>50 ready-made languages</h2>
+    <p>Every install ships 50 locale packs — <code>consentloop/locales/&lt;code&gt;.json</code>, from Arabic to Vietnamese (<a href="/locales/index.json">full list</a>, RTL flags included). They plug into the URL-translation mechanism and lazy-load only when that language is actually needed:</p>
+    <pre data-lang="js">
+ConsentLoop.run({
+  content: {
+    translations: {
+      de: "https://cdn.jsdelivr.net/npm/consentloop/locales/de.json",
+      ja: "https://cdn.jsdelivr.net/npm/consentloop/locales/ja.json",
+      ar: "https://cdn.jsdelivr.net/npm/consentloop/locales/ar.json", // rtl handled automatically
+    },
+  },
+});</pre>
+    <p class="small muted">Self-hosting? Copy them from <code>node_modules/consentloop/locales/</code> into your assets and point the URLs there. The packs are maintained in-repo — native-speaker corrections are very welcome as PRs.</p>
+
     <h2>Try it</h2>
     <p>The widget on this page has three languages. Switch live:</p>
     <p style="display:flex;gap:8px;flex-wrap:wrap">

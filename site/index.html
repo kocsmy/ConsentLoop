@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ConsentLoop — the fastest open-source cookie consent</title>
+<title>ConsentLoop — cookie consent that costs your site nothing</title>
 <meta name="description" content="A ~1KB cookie consent that never slows your site down. Zero dependencies, zero layout shift, Google Consent Mode v2, GDPR & CCPA presets, React bindings, AI-ready docs.">
 <link rel="stylesheet" href="/assets/site.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='7' fill='%2317171b'/%3E%3Cpath d='M18 12a6 6 0 1 1-1.76-4.24' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M18 5.5v3.2h-3.2' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E">
@@ -64,7 +64,7 @@
   <div class="hero">
     <div class="eyebrow">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8L21 9h-7l-1-7z"/></svg>
-      Open source · MIT · built to top cookiebench.com
+      Fair source · free for any site
     </div>
     <h1>Cookie consent that<br><span class="dim">costs your site nothing.</span></h1>
     <p class="sub">
@@ -127,7 +127,7 @@
 
 &lt;!-- gate anything on consent --&gt;
 &lt;script type="text/plain" data-consent="analytics" data-consent-src="https://plausible.io/js/script.js"&gt;&lt;/script&gt;
-&lt;iframe data-consent="marketing" data-consent-src="https://www.youtube.com/embed/dQw4w9WgXcQ"&gt;&lt;/iframe&gt;</pre>
+&lt;iframe data-consent="marketing" data-consent-src="https://www.youtube.com/embed/VIDEO_ID"&gt;&lt;/iframe&gt;</pre>
       <pre data-lang="js" data-tab="npm">
 import * as ConsentLoop from "consentloop";
 
@@ -147,7 +147,7 @@ export default function App() {
     &lt;ConsentProvider config={{ categories: { analytics: {}, marketing: {} } }}&gt;
       &lt;Site /&gt;
       &lt;ConsentGate category="marketing" fallback={&lt;Placeholder /&gt;}&gt;
-        &lt;YouTubeEmbed id="dQw4w9WgXcQ" /&gt;
+        &lt;YouTubeEmbed id="VIDEO_ID" /&gt;
       &lt;/ConsentGate&gt;
     &lt;/ConsentProvider&gt;
   );
@@ -161,14 +161,14 @@ export default function App() {
     <div class="compare-wrap table-scroll">
       <table class="compare">
         <thead>
-          <tr><th>Tool</th><th>Initial JS (gzip)</th><th>Extra requests</th><th>Layout shift</th><th>Consent Mode v2</th><th>Open source</th></tr>
+          <tr><th>Tool</th><th>Initial JS (gzip)</th><th>Extra requests</th><th>Layout shift</th><th>Consent Mode v2</th><th>License</th></tr>
         </thead>
         <tbody>
-          <tr class="us"><td>ConsentLoop</td><td><strong data-meta="gzip-loader">1.4 KB</strong> loader · <span data-meta="gzip-full">11.6 KB</span> full</td><td class="yes">0</td><td class="yes">0.000</td><td class="yes">Built-in</td><td class="yes">MIT</td></tr>
+          <tr class="us"><td>ConsentLoop</td><td><strong data-meta="gzip-loader">1.4 KB</strong> loader · <span data-meta="gzip-full">11.6 KB</span> full</td><td class="yes">0</td><td class="yes">0.000</td><td class="yes">Built-in</td><td class="yes">Fair source</td></tr>
           <tr><td>vanilla-cookieconsent</td><td>~14 KB + CSS file</td><td>1–2</td><td class="yes">0</td><td class="no">manual</td><td class="yes">MIT</td></tr>
-          <tr><td>c15t</td><td>~0.6 KB + React chunks</td><td>2+ (API)</td><td class="yes">0</td><td class="yes">Built-in</td><td class="yes">Yes</td></tr>
-          <tr><td>CookieYes</td><td>~0.5 KB + ~100 KB follow-up</td><td>4+</td><td class="no">varies</td><td class="yes">Yes</td><td class="no">No</td></tr>
-          <tr><td>OneTrust</td><td>150–400 KB</td><td>10+</td><td class="no">common</td><td class="yes">Yes</td><td class="no">No</td></tr>
+          <tr><td>c15t</td><td>~0.6 KB + React chunks</td><td>2+ (API)</td><td class="yes">0</td><td class="yes">Built-in</td><td class="yes">OSS</td></tr>
+          <tr><td>CookieYes</td><td>~0.5 KB + ~100 KB follow-up</td><td>4+</td><td class="no">varies</td><td class="yes">Yes</td><td class="no">Proprietary</td></tr>
+          <tr><td>OneTrust</td><td>150–400 KB</td><td>10+</td><td class="no">common</td><td class="yes">Yes</td><td class="no">Proprietary</td></tr>
         </tbody>
       </table>
     </div>

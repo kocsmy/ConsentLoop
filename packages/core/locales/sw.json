@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Tunathamini faragha yako",
+  "description": "Tunatumia vidakuzi kuendesha tovuti hii na kuelewa jinsi inavyotumika. Wewe ndiye unayechagua — unaweza kubadilisha wakati wowote.",
+  "acceptAll": "Kubali zote",
+  "rejectAll": "Kataa zote",
+  "preferences": "Mapendeleo"
+ },
+ "preferences": {
+  "title": "Mapendeleo ya faragha",
+  "description": "Amua kwa kila kundi. Vidakuzi muhimu huifanya tovuti ifanye kazi na huwa hai kila wakati.",
+  "acceptAll": "Kubali zote",
+  "rejectAll": "Kataa zote",
+  "save": "Hifadhi mapendeleo",
+  "close": "Funga",
+  "alwaysOn": "Daima hai",
+  "servicesLabel": "Huduma"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Muhimu kabisa",
+   "description": "Zinahitajika kwa utendaji wa msingi kama usalama na usimamizi wa mtandao."
+  },
+  "functionality": {
+   "title": "Utendaji",
+   "description": "Hukumbuka mipangilio na mapendeleo yako."
+  },
+  "analytics": {
+   "title": "Uchanganuzi",
+   "description": "Hutusaidia kuelewa jinsi wageni wanavyotumia tovuti."
+  },
+  "marketing": {
+   "title": "Masoko",
+   "description": "Hutumika kuonyesha maudhui yanayofaa na kupima utendaji wa matangazo."
+  }
+ }
+}

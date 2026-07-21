@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "プライバシーを大切にしています",
+  "description": "当サイトの運営と利用状況の把握のために Cookie を使用します。許可する内容はあなたが選択でき、いつでも変更できます。",
+  "acceptAll": "すべて同意",
+  "rejectAll": "すべて拒否",
+  "preferences": "設定"
+ },
+ "preferences": {
+  "title": "プライバシー設定",
+  "description": "カテゴリごとに選択できます。必須 Cookie はサイトの動作に必要なため常に有効です。",
+  "acceptAll": "すべて同意",
+  "rejectAll": "すべて拒否",
+  "save": "設定を保存",
+  "close": "閉じる",
+  "alwaysOn": "常に有効",
+  "servicesLabel": "サービス"
+ },
+ "categories": {
+  "necessary": {
+   "title": "必須",
+   "description": "セキュリティやネットワーク管理など、サイトの基本機能に必要です。"
+  },
+  "functionality": {
+   "title": "機能",
+   "description": "設定や環境設定を記憶し、訪問を最適化します。"
+  },
+  "analytics": {
+   "title": "分析",
+   "description": "サイトの利用状況を把握し、改善に役立てます。"
+  },
+  "marketing": {
+   "title": "マーケティング",
+   "description": "関連性の高いコンテンツ表示と広告効果の測定に使用します。"
+  }
+ }
+}

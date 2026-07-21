@@ -19,7 +19,7 @@ export const CSS = `
   --cl-overlay:rgba(9,9,11,.42);
   --cl-focus:#2563eb;
   --cl-radius:16px;
-  --cl-btn-radius:10px;
+  --cl-btn-radius:calc(var(--cl-radius)*.625);
   --cl-shadow:0 12px 48px rgba(9,9,11,.16),0 2px 8px rgba(9,9,11,.05);
   --cl-text:14px;
   --cl-width:24.5rem;
@@ -44,7 +44,7 @@ export const CSS = `
 }
 .cl-root *,.cl-root *::before,.cl-root *::after{box-sizing:border-box;margin:0;padding:0}
 .cl-root button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-.cl-root :focus-visible{outline:2px solid var(--cl-focus);outline-offset:2px;border-radius:4px}
+.cl-root :focus-visible{outline:2px solid var(--cl-focus);outline-offset:2px}
 .cl-root .cl-banner:focus,.cl-root .cl-prefs:focus{outline:none}
 .cl-root a{color:inherit}
 
@@ -95,7 +95,7 @@ export const CSS = `
 .cl-brand b{font-weight:600}
 
 /* cloud: one horizontal pill */
-[data-layout=cloud] .cl-banner{max-width:46rem;display:flex;align-items:center;gap:20px;padding:14px 14px 14px 22px;border-radius:calc(var(--cl-radius) + 8px)}
+[data-layout=cloud] .cl-banner{max-width:46rem;display:flex;align-items:center;gap:20px;padding:14px 14px 14px 22px;border-radius:calc(var(--cl-radius)*1.5)}
 [data-layout=cloud] .cl-banner-body{flex:1 1 auto;min-width:0}
 [data-layout=cloud] .cl-title{font-size:14px}
 [data-layout=cloud] .cl-desc{margin-top:2px;font-size:13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -132,11 +132,11 @@ export const CSS = `
 [data-prefs=drawer] .cl-on .cl-prefs{transform:none}
 .cl-prefs-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px 0}
 .cl-prefs-head .cl-title{font-size:16px}
-.cl-root .cl-x{width:32px;height:32px;border-radius:8px;color:var(--cl-muted);display:grid;place-items:center;flex:0 0 auto}
+.cl-root .cl-x{width:32px;height:32px;border-radius:calc(var(--cl-radius)*.5);color:var(--cl-muted);display:grid;place-items:center;flex:0 0 auto}
 .cl-root .cl-x:hover{background:var(--cl-btn-bg);color:var(--cl-fg)}
 .cl-prefs>.cl-desc{padding:6px 20px 0}
 .cl-cats{overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
-.cl-cat{border:1px solid var(--cl-border);border-radius:12px;padding:14px 16px}
+.cl-cat{border:1px solid var(--cl-border);border-radius:calc(var(--cl-radius)*.75);padding:14px 16px}
 .cl-cat-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
 .cl-cat-title{font-size:14px;font-weight:600}
 .cl-cat-desc{color:var(--cl-muted);font-size:13px;margin-top:2px}
@@ -152,11 +152,11 @@ export const CSS = `
 
 /* ---- switch ------------------------------------------------------------ */
 .cl-root .cl-switch{
-  flex:0 0 auto;width:40px;height:24px;border-radius:999px;background:var(--cl-switch-off);
+  flex:0 0 auto;width:40px;height:24px;border-radius:calc(var(--cl-radius)*62);background:var(--cl-switch-off);
   position:relative;transition:background .16s ease;
 }
 .cl-root .cl-switch::after{
-  content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;
+  content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:calc(var(--cl-radius)*62);
   background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.35);transition:transform .16s ease;
 }
 .cl-root .cl-switch[aria-checked=true]{background:var(--cl-switch-on)}
@@ -167,7 +167,7 @@ export const CSS = `
 /* ---- floating button --------------------------------------------------- */
 .cl-fab-layer{align-items:flex-end;justify-content:flex-start}
 .cl-root .cl-fab{
-  pointer-events:auto;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+  pointer-events:auto;width:44px;height:44px;border-radius:calc(var(--cl-radius)*62);display:grid;place-items:center;
   background:var(--cl-bg);color:var(--cl-fg);border:1px solid var(--cl-border);box-shadow:var(--cl-shadow);
   opacity:0;transform:scale(.85);transition:opacity .18s ease,transform .18s ease;
 }

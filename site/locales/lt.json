@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Vertiname jūsų privatumą",
+  "description": "Slapukus naudojame svetainės veikimui ir jos naudojimui suprasti. Jūs pasirenkate, ką leisti — nuomonę galite pakeisti bet kada.",
+  "acceptAll": "Priimti visus",
+  "rejectAll": "Atmesti visus",
+  "preferences": "Nuostatos"
+ },
+ "preferences": {
+  "title": "Privatumo nuostatos",
+  "description": "Spręskite pagal kategorijas. Būtini slapukai palaiko svetainės veikimą ir visada įjungti.",
+  "acceptAll": "Priimti visus",
+  "rejectAll": "Atmesti visus",
+  "save": "Išsaugoti nuostatas",
+  "close": "Uždaryti",
+  "alwaysOn": "Visada įjungta",
+  "servicesLabel": "Paslaugos"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Griežtai būtini",
+   "description": "Reikalingi pagrindinėms funkcijoms, pvz., saugumui ir tinklo valdymui."
+  },
+  "functionality": {
+   "title": "Funkciniai",
+   "description": "Įsimena jūsų nustatymus ir pasirinkimus."
+  },
+  "analytics": {
+   "title": "Analitika",
+   "description": "Padeda suprasti, kaip lankytojai naudojasi svetaine."
+  },
+  "marketing": {
+   "title": "Rinkodara",
+   "description": "Naudojama aktualiam turiniui rodyti ir reklamos efektyvumui matuoti."
+  }
+ }
+}

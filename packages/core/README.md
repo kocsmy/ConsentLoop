@@ -41,4 +41,4 @@ React bindings: [`@consentloop/react`](https://www.npmjs.com/package/@consentloo
 
 Docs, interactive configurator, playground and benchmark methodology: https://github.com/kocsmy/ConsentLoop
 
-MIT
+Licensed under FSL-1.1-MIT (fair source): free to use, modify and self-host on any site — personal or commercial. Building a competing consent product or managed consent service with it is not permitted. Each release automatically converts to MIT two years after publication. See LICENSE in the repository.

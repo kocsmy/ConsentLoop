@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Fontos nekünk az adatvédelem",
+  "description": "Sütiket használunk az oldal működtetéséhez és a használat megértéséhez. Te döntesz, mit engedélyezel — bármikor meggondolhatod magad.",
+  "acceptAll": "Összes elfogadása",
+  "rejectAll": "Összes elutasítása",
+  "preferences": "Beállítások"
+ },
+ "preferences": {
+  "title": "Adatvédelmi beállítások",
+  "description": "Kategóriánként dönthetsz. A szükséges sütik az oldal működéséhez kellenek, mindig aktívak.",
+  "acceptAll": "Összes elfogadása",
+  "rejectAll": "Összes elutasítása",
+  "save": "Beállítások mentése",
+  "close": "Bezárás",
+  "alwaysOn": "Mindig aktív",
+  "servicesLabel": "Szolgáltatások"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Feltétlenül szükséges",
+   "description": "Az alapvető működéshez, például a biztonsághoz és a hálózatkezeléshez szükséges."
+  },
+  "functionality": {
+   "title": "Funkcionális",
+   "description": "Megjegyzi a beállításaidat és preferenciáidat."
+  },
+  "analytics": {
+   "title": "Analitika",
+   "description": "Segít megérteni, hogyan használják a látogatók az oldalt."
+  },
+  "marketing": {
+   "title": "Marketing",
+   "description": "Releváns tartalmak megjelenítésére és a hirdetések mérésére szolgál."
+  }
+ }
+}

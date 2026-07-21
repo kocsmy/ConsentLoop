@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "We value your privacy",
+  "description": "We use cookies to run this site and to understand how it is used. You choose what we may use — change your mind any time.",
+  "acceptAll": "Accept all",
+  "rejectAll": "Reject all",
+  "preferences": "Preferences"
+ },
+ "preferences": {
+  "title": "Privacy preferences",
+  "description": "Decide per category. Required cookies keep the site working and are always on.",
+  "acceptAll": "Accept all",
+  "rejectAll": "Reject all",
+  "save": "Save preferences",
+  "close": "Close",
+  "alwaysOn": "Always on",
+  "servicesLabel": "Services"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Strictly necessary",
+   "description": "Required for core site functionality like security and network management."
+  },
+  "functionality": {
+   "title": "Functionality",
+   "description": "Remembers your settings and preferences to personalize your visit."
+  },
+  "analytics": {
+   "title": "Analytics",
+   "description": "Helps us understand how visitors use the site so we can improve it."
+  },
+  "marketing": {
+   "title": "Marketing",
+   "description": "Used to show relevant content and measure ad performance."
+  }
+ }
+}

@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Vážime si vaše súkromie",
+  "description": "Cookies používame na prevádzku webu a pochopenie jeho používania. Vy rozhodujete, čo povolíte — kedykoľvek to môžete zmeniť.",
+  "acceptAll": "Prijať všetko",
+  "rejectAll": "Odmietnuť všetko",
+  "preferences": "Predvoľby"
+ },
+ "preferences": {
+  "title": "Predvoľby súkromia",
+  "description": "Rozhodujte podľa kategórií. Nevyhnutné cookies udržiavajú web funkčný a sú vždy zapnuté.",
+  "acceptAll": "Prijať všetko",
+  "rejectAll": "Odmietnuť všetko",
+  "save": "Uložiť predvoľby",
+  "close": "Zavrieť",
+  "alwaysOn": "Vždy zapnuté",
+  "servicesLabel": "Služby"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Nevyhnutne potrebné",
+   "description": "Vyžadované pre základné funkcie ako bezpečnosť a správa siete."
+  },
+  "functionality": {
+   "title": "Funkčné",
+   "description": "Pamätá si vaše nastavenia a preferencie."
+  },
+  "analytics": {
+   "title": "Analytické",
+   "description": "Pomáhajú nám pochopiť, ako návštevníci web používajú."
+  },
+  "marketing": {
+   "title": "Marketing",
+   "description": "Slúži na zobrazovanie relevantného obsahu a meranie výkonu reklamy."
+  }
+ }
+}

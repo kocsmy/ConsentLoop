@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Mēs cienām jūsu privātumu",
+  "description": "Sīkdatnes izmantojam vietnes darbībai un lietojuma izpratnei. Jūs izvēlaties, ko atļaut — lēmumu varat mainīt jebkurā brīdī.",
+  "acceptAll": "Pieņemt visas",
+  "rejectAll": "Noraidīt visas",
+  "preferences": "Iestatījumi"
+ },
+ "preferences": {
+  "title": "Privātuma iestatījumi",
+  "description": "Izlemiet pa kategorijām. Nepieciešamās sīkdatnes nodrošina vietnes darbību un vienmēr ir ieslēgtas.",
+  "acceptAll": "Pieņemt visas",
+  "rejectAll": "Noraidīt visas",
+  "save": "Saglabāt iestatījumus",
+  "close": "Aizvērt",
+  "alwaysOn": "Vienmēr ieslēgts",
+  "servicesLabel": "Pakalpojumi"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Strikti nepieciešamās",
+   "description": "Vajadzīgas pamatfunkcijām, piemēram, drošībai un tīkla pārvaldībai."
+  },
+  "functionality": {
+   "title": "Funkcionālās",
+   "description": "Atceras jūsu iestatījumus un izvēles."
+  },
+  "analytics": {
+   "title": "Analītika",
+   "description": "Palīdz saprast, kā apmeklētāji lieto vietni."
+  },
+  "marketing": {
+   "title": "Mārketings",
+   "description": "Izmanto atbilstoša satura rādīšanai un reklāmu snieguma mērīšanai."
+  }
+ }
+}

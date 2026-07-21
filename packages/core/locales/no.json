@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Vi verner om personvernet ditt",
+  "description": "Vi bruker informasjonskapsler for å drive nettstedet og forstå hvordan det brukes. Du velger hva vi kan bruke — ombestem deg når som helst.",
+  "acceptAll": "Godta alle",
+  "rejectAll": "Avvis alle",
+  "preferences": "Innstillinger"
+ },
+ "preferences": {
+  "title": "Personverninnstillinger",
+  "description": "Bestem per kategori. Nødvendige informasjonskapsler holder nettstedet i gang og er alltid på.",
+  "acceptAll": "Godta alle",
+  "rejectAll": "Avvis alle",
+  "save": "Lagre innstillinger",
+  "close": "Lukk",
+  "alwaysOn": "Alltid på",
+  "servicesLabel": "Tjenester"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Strengt nødvendige",
+   "description": "Kreves for kjernefunksjoner som sikkerhet og nettverksadministrasjon."
+  },
+  "functionality": {
+   "title": "Funksjonelle",
+   "description": "Husker innstillingene og preferansene dine."
+  },
+  "analytics": {
+   "title": "Analyse",
+   "description": "Hjelper oss å forstå hvordan besøkende bruker nettstedet."
+  },
+  "marketing": {
+   "title": "Markedsføring",
+   "description": "Brukes til relevant innhold og måling av annonseytelse."
+  }
+ }
+}

@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Hindame teie privaatsust",
+  "description": "Kasutame küpsiseid saidi toimimiseks ja kasutuse mõistmiseks. Teie valite, mida lubada — otsust saab alati muuta.",
+  "acceptAll": "Nõustu kõigiga",
+  "rejectAll": "Keeldu kõigist",
+  "preferences": "Eelistused"
+ },
+ "preferences": {
+  "title": "Privaatsuseelistused",
+  "description": "Otsustage kategooriate kaupa. Vajalikud küpsised hoiavad saidi töös ja on alati sees.",
+  "acceptAll": "Nõustu kõigiga",
+  "rejectAll": "Keeldu kõigist",
+  "save": "Salvesta eelistused",
+  "close": "Sulge",
+  "alwaysOn": "Alati sees",
+  "servicesLabel": "Teenused"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Rangelt vajalikud",
+   "description": "Vajalikud põhifunktsioonideks nagu turvalisus ja võrguhaldus."
+  },
+  "functionality": {
+   "title": "Funktsionaalsed",
+   "description": "Jätab meelde teie seaded ja eelistused."
+  },
+  "analytics": {
+   "title": "Analüütika",
+   "description": "Aitab mõista, kuidas külastajad saiti kasutavad."
+  },
+  "marketing": {
+   "title": "Turundus",
+   "description": "Kasutatakse asjakohase sisu näitamiseks ja reklaami mõõtmiseks."
+  }
+ }
+}

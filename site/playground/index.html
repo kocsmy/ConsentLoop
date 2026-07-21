@@ -48,7 +48,8 @@
   .preset span { font-size: 11.5px; color: var(--fg2); }
 
   dialog.export { border: 1px solid var(--border2); border-radius: var(--radius); background: var(--bg); color: var(--fg);
-    max-width: 720px; width: 92vw; padding: 0; box-shadow: var(--shadow); }
+    max-width: 720px; width: 92vw; padding: 0; box-shadow: var(--shadow);
+    margin: 8vh auto auto; /* the global `* { margin: 0 }` reset kills the UA's dialog centering — restore it */ }
   dialog.export::backdrop { background: rgba(0,0,0,.45); }
   dialog.export .head { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--border); }
   dialog.export .body { padding: 4px 18px 18px; max-height: 70vh; overflow: auto; }
@@ -101,10 +102,8 @@
     <h3>Roundness</h3>
     <input type="range" id="radius" min="0" max="24" step="2" value="16" style="width:100%">
 
-    <h3>Language</h3>
-    <div class="seg" id="lang-seg">
-      <button data-v="en">EN</button><button data-v="de">DE</button><button data-v="hu">HU</button>
-    </div>
+    <h3>Language <span class="muted" style="text-transform:none;letter-spacing:0">(50 built-in)</span></h3>
+    <select id="lang-select" style="width:100%" aria-label="Widget language"></select>
 
     <h3>Options</h3>
     <div class="switchrow"><span class="small">Reject-all button</span><button class="uiswitch" role="switch" id="sw-reject" aria-checked="true"></button></div>
@@ -145,6 +144,7 @@
 </dialog>
 
 <script src="/vendor/meta.js"></script>
+<script src="/assets/locales.js"></script>
 <script src="/assets/site.js"></script>
 <script>
 (() => {
@@ -154,10 +154,11 @@
     showRejectAll: true, floatingButton: false, us: false,
   };
 
-  const DE = { banner: { title: "Wir respektieren deine Privatsphäre", description: "Wir nutzen Cookies für Betrieb und Statistik — du entscheidest.", acceptAll: "Alle akzeptieren", rejectAll: "Alle ablehnen", preferences: "Einstellungen" }, preferences: { title: "Datenschutz-Einstellungen", save: "Speichern", acceptAll: "Alle akzeptieren", rejectAll: "Alle ablehnen", alwaysOn: "Immer aktiv" } };
-  const HU = { banner: { title: "Fontos nekünk az adatvédelem", description: "Sütiket használunk a működéshez és a méréshez — te döntesz.", acceptAll: "Összes elfogadása", rejectAll: "Elutasítás", preferences: "Beállítások" }, preferences: { title: "Adatvédelmi beállítások", save: "Mentés", acceptAll: "Összes elfogadása", rejectAll: "Elutasítás", alwaysOn: "Mindig aktív" } };
+  // locale packs ship with the npm package; the preview uses this site's copy
+  const localeUrl = (code, forExport) =>
+    forExport ? `https://cdn.jsdelivr.net/npm/consentloop/locales/${code}.json` : `/locales/${code}.json`;
 
-  function buildConfig() {
+  function buildConfig(forExport) {
     const cfg = {
       categories: {
         necessary: { required: true },
@@ -182,7 +183,9 @@
     if (state.lang !== "en") {
       cfg.content = cfg.content || {};
       cfg.content.lang = state.lang;
-      cfg.content.translations = Object.assign(cfg.content.translations || {}, state.lang === "de" ? { de: DE } : { hu: HU });
+      cfg.content.translations = Object.assign(cfg.content.translations || {}, {
+        [state.lang]: localeUrl(state.lang, forExport),
+      });
     }
     return cfg;
   }
@@ -219,7 +222,12 @@
   })();
   seg("prefs-seg", "preferences");
   seg("theme-seg", "theme");
-  seg("lang-seg", "lang");
+
+  /* language dropdown — all 50 locale packs */
+  const langSel = document.getElementById("lang-select");
+  langSel.innerHTML = window.CL_LOCALES.map((l) => `<option value="${l.code}">${l.name} · ${l.code}</option>`).join("");
+  langSel.value = state.lang;
+  langSel.addEventListener("input", () => { state.lang = langSel.value; push(); });
 
   /* position grid */
   const posEl = document.getElementById("posgrid");
@@ -262,9 +270,10 @@
       Object.assign(state, PRESETS[b.dataset.preset]);
       syncLayout(); syncPos(); syncSw();
       document.getElementById("radius").value = state.radius;
-      ["prefs-seg","theme-seg","lang-seg"].forEach((id) => {
+      langSel.value = state.lang;
+      ["prefs-seg","theme-seg"].forEach((id) => {
         const el = document.getElementById(id);
-        const key = id === "prefs-seg" ? "preferences" : id === "theme-seg" ? "theme" : "lang";
+        const key = id === "prefs-seg" ? "preferences" : "theme";
         el.querySelectorAll("button").forEach((x) => x.classList.toggle("active", x.dataset.v === state[key]));
       });
       ["sw-reject","sw-fab","sw-us"].forEach((id, i) => {
@@ -282,7 +291,7 @@
   /* export */
   const dialog = document.getElementById("export-dialog");
   document.getElementById("export").addEventListener("click", () => {
-    const cfg = buildConfig();
+    const cfg = buildConfig(true);
     const code = `<script>\nwindow.consentloopConfig = ${JSON.stringify(cfg, null, 2)};\n<\/script>\n<script defer src="https://cdn.jsdelivr.net/npm/consentloop/dist/consentloop.loader.min.js"><\/script>`;
     document.getElementById("export-code").innerHTML = clSite.highlight(code, "html");
     document.getElementById("export-copy").onclick = (e) => navigator.clipboard.writeText(code).then(() => {

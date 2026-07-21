@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Valorizamos a sua privacidade",
+  "description": "Usamos cookies para operar este site e entender como ele é usado. Você escolhe o que permitir — e pode mudar quando quiser.",
+  "acceptAll": "Aceitar tudo",
+  "rejectAll": "Rejeitar tudo",
+  "preferences": "Preferências"
+ },
+ "preferences": {
+  "title": "Preferências de privacidade",
+  "description": "Decida por categoria. Os cookies necessários mantêm o site funcionando e ficam sempre ativos.",
+  "acceptAll": "Aceitar tudo",
+  "rejectAll": "Rejeitar tudo",
+  "save": "Salvar preferências",
+  "close": "Fechar",
+  "alwaysOn": "Sempre ativo",
+  "servicesLabel": "Serviços"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Estritamente necessários",
+   "description": "Necessários para funções essenciais como segurança e gestão de rede."
+  },
+  "functionality": {
+   "title": "Funcionalidade",
+   "description": "Lembra suas configurações e preferências para personalizar sua visita."
+  },
+  "analytics": {
+   "title": "Análise",
+   "description": "Ajuda-nos a entender como os visitantes usam o site para melhorá-lo."
+  },
+  "marketing": {
+   "title": "Marketing",
+   "description": "Usado para exibir conteúdo relevante e medir o desempenho de anúncios."
+  }
+ }
+}

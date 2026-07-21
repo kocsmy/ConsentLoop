@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Îți respectăm confidențialitatea",
+  "description": "Folosim cookie-uri pentru funcționarea site-ului și pentru a înțelege cum este utilizat. Tu alegi ce permitem — poți schimba oricând.",
+  "acceptAll": "Acceptă tot",
+  "rejectAll": "Respinge tot",
+  "preferences": "Preferințe"
+ },
+ "preferences": {
+  "title": "Preferințe de confidențialitate",
+  "description": "Decide pe categorii. Cookie-urile necesare mențin site-ul funcțional și sunt mereu active.",
+  "acceptAll": "Acceptă tot",
+  "rejectAll": "Respinge tot",
+  "save": "Salvează preferințele",
+  "close": "Închide",
+  "alwaysOn": "Mereu activ",
+  "servicesLabel": "Servicii"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Strict necesare",
+   "description": "Necesare pentru funcții esențiale precum securitatea și gestionarea rețelei."
+  },
+  "functionality": {
+   "title": "Funcționalitate",
+   "description": "Îți reține setările și preferințele."
+  },
+  "analytics": {
+   "title": "Analiză",
+   "description": "Ne ajută să înțelegem cum folosesc vizitatorii site-ul."
+  },
+  "marketing": {
+   "title": "Marketing",
+   "description": "Folosit pentru conținut relevant și măsurarea performanței reclamelor."
+  }
+ }
+}

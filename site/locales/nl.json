@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "We respecteren je privacy",
+  "description": "We gebruiken cookies om deze site te laten werken en het gebruik te begrijpen. Jij kiest wat we mogen gebruiken — altijd aan te passen.",
+  "acceptAll": "Alles accepteren",
+  "rejectAll": "Alles weigeren",
+  "preferences": "Voorkeuren"
+ },
+ "preferences": {
+  "title": "Privacyvoorkeuren",
+  "description": "Beslis per categorie. Noodzakelijke cookies houden de site werkend en staan altijd aan.",
+  "acceptAll": "Alles accepteren",
+  "rejectAll": "Alles weigeren",
+  "save": "Voorkeuren opslaan",
+  "close": "Sluiten",
+  "alwaysOn": "Altijd aan",
+  "servicesLabel": "Diensten"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Strikt noodzakelijk",
+   "description": "Vereist voor kernfuncties zoals beveiliging en netwerkbeheer."
+  },
+  "functionality": {
+   "title": "Functioneel",
+   "description": "Onthoudt je instellingen en voorkeuren."
+  },
+  "analytics": {
+   "title": "Analytisch",
+   "description": "Helpt ons te begrijpen hoe bezoekers de site gebruiken."
+  },
+  "marketing": {
+   "title": "Marketing",
+   "description": "Wordt gebruikt om relevante content te tonen en advertentieprestaties te meten."
+  }
+ }
+}

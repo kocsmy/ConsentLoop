@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Kami menghargai privasi anda",
+  "description": "Kami menggunakan kuki untuk menjalankan laman ini dan memahami penggunaannya. Anda yang memilih — boleh ubah bila-bila masa.",
+  "acceptAll": "Terima semua",
+  "rejectAll": "Tolak semua",
+  "preferences": "Keutamaan"
+ },
+ "preferences": {
+  "title": "Keutamaan privasi",
+  "description": "Tentukan mengikut kategori. Kuki yang diperlukan memastikan laman berfungsi dan sentiasa aktif.",
+  "acceptAll": "Terima semua",
+  "rejectAll": "Tolak semua",
+  "save": "Simpan keutamaan",
+  "close": "Tutup",
+  "alwaysOn": "Sentiasa aktif",
+  "servicesLabel": "Perkhidmatan"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Amat diperlukan",
+   "description": "Diperlukan untuk fungsi teras seperti keselamatan dan pengurusan rangkaian."
+  },
+  "functionality": {
+   "title": "Kefungsian",
+   "description": "Mengingati tetapan dan keutamaan anda."
+  },
+  "analytics": {
+   "title": "Analitik",
+   "description": "Membantu kami memahami cara pelawat menggunakan laman."
+  },
+  "marketing": {
+   "title": "Pemasaran",
+   "description": "Digunakan untuk memaparkan kandungan relevan dan mengukur prestasi iklan."
+  }
+ }
+}

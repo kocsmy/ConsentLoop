@@ -1,8 +1,8 @@
 {
   "name": "consentloop",
   "version": "0.1.0",
-  "description": "The fastest open-source cookie consent. Zero dependencies, zero layout shift, ~7KB, Google Consent Mode v2, script gating, i18n, headless mode. Built for developers, designers and founders — and for AI agents.",
-  "license": "MIT",
+  "description": "The fastest cookie consent for the web. Zero dependencies, zero layout shift, ~7KB, Google Consent Mode v2, script gating, i18n, headless mode. Built for developers, designers and founders — and for AI agents.",
+  "license": "FSL-1.1-MIT",
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.js",
@@ -24,11 +24,13 @@
     "./iife": "./dist/consentloop.iife.min.js",
     "./loader": "./dist/consentloop.loader.min.js",
     "./schema.json": "./schema.json",
+    "./locales/*": "./locales/*",
     "./package.json": "./package.json"
   },
   "files": [
     "dist",
     "schema.json",
+    "locales",
     "README.md"
   ],
   "scripts": {

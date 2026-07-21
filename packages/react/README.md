@@ -1,6 +1,6 @@
 # @consentloop/react
 
-React bindings for [ConsentLoop](https://www.npmjs.com/package/consentloop) — the fastest open-source cookie consent. The widget stays vanilla (no React in the render path, no hydration cost); these bindings add a provider, a live hook and a gate component.
+React bindings for [ConsentLoop](https://www.npmjs.com/package/consentloop) — the fastest cookie consent on the web. The widget stays vanilla (no React in the render path, no hydration cost); these bindings add a provider, a live hook and a gate component.
 
 ```bash
 npm i consentloop @consentloop/react
@@ -37,4 +37,4 @@ function CookieSettingsLink() {
 
 All core types re-exported. Docs: https://github.com/kocsmy/ConsentLoop
 
-MIT
+Licensed under FSL-1.1-MIT (fair source): free to use, modify and self-host on any site — personal or commercial. Building a competing consent product or managed consent service with it is not permitted. Each release automatically converts to MIT two years after publication. See LICENSE in the repository.

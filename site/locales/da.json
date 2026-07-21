@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Vi værner om dit privatliv",
+  "description": "Vi bruger cookies til at drive sitet og forstå, hvordan det bruges. Du vælger, hvad vi må bruge — og kan altid ombestemme dig.",
+  "acceptAll": "Accepter alle",
+  "rejectAll": "Afvis alle",
+  "preferences": "Præferencer"
+ },
+ "preferences": {
+  "title": "Privatlivspræferencer",
+  "description": "Beslut pr. kategori. Nødvendige cookies holder sitet kørende og er altid slået til.",
+  "acceptAll": "Accepter alle",
+  "rejectAll": "Afvis alle",
+  "save": "Gem præferencer",
+  "close": "Luk",
+  "alwaysOn": "Altid til",
+  "servicesLabel": "Tjenester"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Strengt nødvendige",
+   "description": "Kræves til kernefunktioner som sikkerhed og netværksstyring."
+  },
+  "functionality": {
+   "title": "Funktionelle",
+   "description": "Husker dine indstillinger og præferencer."
+  },
+  "analytics": {
+   "title": "Analyse",
+   "description": "Hjælper os med at forstå, hvordan besøgende bruger sitet."
+  },
+  "marketing": {
+   "title": "Marketing",
+   "description": "Bruges til relevant indhold og måling af annonceydelse."
+  }
+ }
+}

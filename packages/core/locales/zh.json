@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "我们重视您的隐私",
+  "description": "我们使用 Cookie 来运行本网站并了解其使用情况。您可以自主选择允许的内容，并随时更改。",
+  "acceptAll": "全部接受",
+  "rejectAll": "全部拒绝",
+  "preferences": "偏好设置"
+ },
+ "preferences": {
+  "title": "隐私偏好设置",
+  "description": "按类别进行选择。必要的 Cookie 用于维持网站正常运行，始终启用。",
+  "acceptAll": "全部接受",
+  "rejectAll": "全部拒绝",
+  "save": "保存设置",
+  "close": "关闭",
+  "alwaysOn": "始终启用",
+  "servicesLabel": "服务"
+ },
+ "categories": {
+  "necessary": {
+   "title": "严格必要",
+   "description": "网站核心功能（如安全和网络管理）所必需。"
+  },
+  "functionality": {
+   "title": "功能",
+   "description": "记住您的设置和偏好，为您提供个性化体验。"
+  },
+  "analytics": {
+   "title": "分析",
+   "description": "帮助我们了解访客如何使用网站，以便改进。"
+  },
+  "marketing": {
+   "title": "营销",
+   "description": "用于展示相关内容并衡量广告效果。"
+  }
+ }
+}

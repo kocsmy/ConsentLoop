@@ -10,7 +10,7 @@ await build({
   format: "esm",
   target: ["es2019"],
   external: ["react", "react/jsx-runtime", "consentloop"],
-  banner: { js: "/*! @consentloop/react v0.1.0 | MIT */" },
+  banner: { js: "/*! @consentloop/react v0.1.0 | FSL-1.1-MIT */" },
   legalComments: "none",
 });
 console.log("@consentloop/react built");

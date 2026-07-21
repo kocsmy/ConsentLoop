@@ -4,9 +4,9 @@
 
 **Cookie consent that costs your site nothing.**
 
-A ~1.4 KB consent layer for developers, designers and founders — zero dependencies, zero layout shift, zero network calls. Google Consent Mode v2, GDPR & CCPA presets, granular services, i18n, React bindings, headless mode. Built (and benchmarked) to top [cookiebench.com](https://cookiebench.com).
+A ~1.4 KB consent layer for developers, designers and founders — zero dependencies, zero layout shift, zero network calls. Google Consent Mode v2, GDPR & CCPA presets, granular services, i18n, React bindings, headless mode. Continuously benchmarked with a reproducible, cookiebench-style harness (`pnpm bench`).
 
-`npm i consentloop` · MIT · [Docs & Playground](site/) · [llms.txt](site/llms.txt)
+`npm i consentloop` · Fair source (FSL-1.1-MIT) · [Docs & Playground](site/) · [llms.txt](site/llms.txt)
 
 </div>
 
@@ -23,7 +23,7 @@ The banner asking permission to load scripts is routinely the heaviest script on
 | Layout shift | **0.000** | 0 | 0 | varies | common |
 | Consent Mode v2 | **built-in** | manual | built-in | yes | yes |
 | Dependencies | **0** | 0 | React | — | — |
-| License | **MIT** | MIT | OSS | proprietary | proprietary |
+| License | **Fair source (FSL)** | MIT | OSS | proprietary | proprietary |
 
 Measured locally, reproducibly: `pnpm bench` (Chromium, 4× CPU throttle, medians of 7 runs) — **ΔFCP ≈ 0 ms (within ±15 ms noise), CLS 0.000, TBT 0 ms for returning visitors, 2.8 KB total wire for the returning-visitor fast path.** Full data: [`bench/results/results.json`](bench/results/results.json), methodology in [site/docs/performance.html](site/docs/performance.html).
 
@@ -80,7 +80,7 @@ import { ConsentProvider, ConsentGate, useConsent } from "@consentloop/react";
 - **Google Consent Mode v2** — correct `default` before Google tags, `update` after every choice, category→key mapping configurable.
 - **Regulation presets** — `gdpr` (opt-in), `us-optout` (CCPA-style implied consent + opt-out), `none`; consent `revision` bumping to re-prompt after policy changes.
 - **Granular consent** — categories *and* per-service toggles; auto-clear cookies (string/regex matchers) on withdrawal.
-- **i18n** — per-language translations with deep English fallback, `<html lang>`/browser detection, lazy URL-loaded language files, RTL, live `setLanguage()`.
+- **i18n** — per-language translations with deep English fallback, `<html lang>`/browser detection, lazy URL-loaded language files, RTL, live `setLanguage()`. **50 ready-made locale packs** ship in the package (`consentloop/locales/*.json`).
 - **Minimal, themeable UI** — box/cloud/bar layouts, 7 positions, modal/drawer preferences, light/dark/auto, `--cl-*` design tokens, Shadow-DOM isolation (opt-out-able), full a11y (dialog semantics, focus trap, switches).
 - **Headless mode** — `ui: false` keeps the whole engine (storage, gating, GCM, events) under your own UI.
 - **Managed-ready** — a two-call adapter contract (`init` → jurisdiction decision, `persist` → consent receipts) powers the upcoming **ConsentLoop Cloud** (geo rules, audit trail, certified CMP) and any self-hosted backend. Offline and networkless by default.
@@ -125,4 +125,6 @@ pnpm site         # serve the docs site on :4173
 - Vue/Svelte bindings, Nuxt/Next drop-in modules
 - CLI: `npx consentloop init` — detect trackers, generate config
 
-MIT © 2026 ConsentLoop contributors
+**License:** [FSL-1.1-MIT](LICENSE) (Functional Source License, "fair source"). Free to use, modify and self-host on any site — personal or commercial. What it forbids: re-selling ConsentLoop itself as a competing consent product or managed consent service. Each release automatically becomes MIT two years after publication.
+
+© 2026 ConsentLoop contributors

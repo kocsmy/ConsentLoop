@@ -95,12 +95,12 @@
     const el = document.createElement("footer");
     el.className = "footer";
     el.innerHTML = `
-      <span>MIT © 2026 ConsentLoop</span>
+      <span>FSL-1.1-MIT © 2026 ConsentLoop</span>
       <a href="/docs/">Docs</a>
       <a href="/playground/">Playground</a>
       <a href="/llms.txt">llms.txt</a>
       <a href="https://github.com/kocsmy/ConsentLoop" target="_blank" rel="noopener">GitHub</a>
-      <span class="muted">Built to win <a href="https://cookiebench.com" target="_blank" rel="noopener">cookiebench.com</a></span>`;
+      <span class="muted">Benchmarked on <a href="https://cookiebench.com" target="_blank" rel="noopener">cookiebench.com</a></span>`;
     document.body.appendChild(el);
   }
 
@@ -110,13 +110,17 @@
   function highlight(code, lang) {
     let s = escapeHtml(code);
     if (lang === "html") {
-      // order matters: strings first (only escaped quotes exist in source), then tags;
-      // never touch plain '"' so injected span markup stays intact
+      // Matched fragments are swapped for \x00N\x00 placeholders so later regexes can
+      // never re-match markup we injected (e.g. the `class=` inside our own spans).
+      const store = [];
+      const put = (html) => "\u0000" + (store.push(html) - 1) + "\u0000";
       s = s
-        .replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="tok-c">$1</span>')
-        .replace(/(&quot;[^&]*?&quot;|&#39;[^&]*?&#39;)/g, '<span class="tok-s">$1</span>')
-        .replace(/(&lt;\/?)([\w-]+)/g, '$1<span class="tok-t">$2</span>')
-        .replace(/\s(defer|async|hidden|data-[\w-]+|type|src|id|class|title|loading)(?=[\s=&>])/g, ' <span class="tok-a">$1</span>');
+        .replace(/(&lt;!--[\s\S]*?--&gt;)/g, (m) => put(`<span class="tok-c">${m}</span>`))
+        .replace(/(&quot;(?:[^&]|&(?!quot;))*?&quot;|&#39;[^&]*?&#39;)/g, (m) => put(`<span class="tok-s">${m}</span>`))
+        .replace(/(&lt;\/?)([\w-]+)/g, (m, open, name) => open + put(`<span class="tok-t">${name}</span>`))
+        .replace(/([\s\u0000])([\w-]+)(?==)/g, (m, sp, name) => sp + put(`<span class="tok-a">${name}</span>`))
+        .replace(/\s(defer|async|hidden|data-[\w-]+)(?=[\s\u0000]|&gt;|$)/gm, (m, name) => " " + put(`<span class="tok-a">${name}</span>`));
+      s = s.replace(/\u0000(\d+)\u0000/g, (m, i) => store[+i]);
     } else if (lang === "bash") {
       s = s.replace(/^(\$ )?/gm, '<span class="tok-c">$1</span>').replace(/(#.*)$/gm, '<span class="tok-c">$1</span>');
     } else {

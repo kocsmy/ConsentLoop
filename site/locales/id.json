@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Kami menghargai privasi Anda",
+  "description": "Kami menggunakan cookie untuk menjalankan situs ini dan memahami penggunaannya. Anda yang memilih — dapat diubah kapan saja.",
+  "acceptAll": "Terima semua",
+  "rejectAll": "Tolak semua",
+  "preferences": "Preferensi"
+ },
+ "preferences": {
+  "title": "Preferensi privasi",
+  "description": "Tentukan per kategori. Cookie yang diperlukan menjaga situs tetap berfungsi dan selalu aktif.",
+  "acceptAll": "Terima semua",
+  "rejectAll": "Tolak semua",
+  "save": "Simpan preferensi",
+  "close": "Tutup",
+  "alwaysOn": "Selalu aktif",
+  "servicesLabel": "Layanan"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Sangat diperlukan",
+   "description": "Diperlukan untuk fungsi inti seperti keamanan dan pengelolaan jaringan."
+  },
+  "functionality": {
+   "title": "Fungsionalitas",
+   "description": "Mengingat pengaturan dan preferensi Anda."
+  },
+  "analytics": {
+   "title": "Analitik",
+   "description": "Membantu kami memahami cara pengunjung menggunakan situs."
+  },
+  "marketing": {
+   "title": "Pemasaran",
+   "description": "Digunakan untuk menampilkan konten relevan dan mengukur kinerja iklan."
+  }
+ }
+}

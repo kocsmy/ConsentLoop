@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Gizliliğinize değer veriyoruz",
+  "description": "Bu siteyi çalıştırmak ve nasıl kullanıldığını anlamak için çerezler kullanıyoruz. Neye izin vereceğinizi siz seçersiniz — istediğiniz zaman değiştirebilirsiniz.",
+  "acceptAll": "Tümünü kabul et",
+  "rejectAll": "Tümünü reddet",
+  "preferences": "Tercihler"
+ },
+ "preferences": {
+  "title": "Gizlilik tercihleri",
+  "description": "Kategoriye göre karar verin. Gerekli çerezler siteyi çalışır tutar ve her zaman açıktır.",
+  "acceptAll": "Tümünü kabul et",
+  "rejectAll": "Tümünü reddet",
+  "save": "Tercihleri kaydet",
+  "close": "Kapat",
+  "alwaysOn": "Her zaman açık",
+  "servicesLabel": "Hizmetler"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Kesinlikle gerekli",
+   "description": "Güvenlik ve ağ yönetimi gibi temel işlevler için gereklidir."
+  },
+  "functionality": {
+   "title": "İşlevsellik",
+   "description": "Ayarlarınızı ve tercihlerinizi hatırlar."
+  },
+  "analytics": {
+   "title": "Analitik",
+   "description": "Ziyaretçilerin siteyi nasıl kullandığını anlamamıza yardımcı olur."
+  },
+  "marketing": {
+   "title": "Pazarlama",
+   "description": "İlgili içerik göstermek ve reklam performansını ölçmek için kullanılır."
+  }
+ }
+}

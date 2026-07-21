@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Arvostamme yksityisyyttäsi",
+  "description": "Käytämme evästeitä sivuston toimintaan ja käytön ymmärtämiseen. Sinä valitset, mitä sallitaan — voit muuttaa valintaa milloin tahansa.",
+  "acceptAll": "Hyväksy kaikki",
+  "rejectAll": "Hylkää kaikki",
+  "preferences": "Asetukset"
+ },
+ "preferences": {
+  "title": "Yksityisyysasetukset",
+  "description": "Päätä kategorioittain. Välttämättömät evästeet pitävät sivuston toiminnassa ja ovat aina käytössä.",
+  "acceptAll": "Hyväksy kaikki",
+  "rejectAll": "Hylkää kaikki",
+  "save": "Tallenna asetukset",
+  "close": "Sulje",
+  "alwaysOn": "Aina käytössä",
+  "servicesLabel": "Palvelut"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Ehdottoman välttämättömät",
+   "description": "Tarvitaan ydintoimintoihin, kuten turvallisuuteen ja verkonhallintaan."
+  },
+  "functionality": {
+   "title": "Toiminnalliset",
+   "description": "Muistaa asetuksesi ja valintasi."
+  },
+  "analytics": {
+   "title": "Analytiikka",
+   "description": "Auttaa ymmärtämään, miten kävijät käyttävät sivustoa."
+  },
+  "marketing": {
+   "title": "Markkinointi",
+   "description": "Käytetään olennaisen sisällön näyttämiseen ja mainonnan mittaamiseen."
+  }
+ }
+}

@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Məxfiliyinizə dəyər veririk",
+  "description": "Bu saytı işlətmək və istifadəsini anlamaq üçün kukilərdən istifadə edirik. Nəyə icazə verəcəyinizi siz seçirsiniz — istənilən vaxt dəyişə bilərsiniz.",
+  "acceptAll": "Hamısını qəbul et",
+  "rejectAll": "Hamısını rədd et",
+  "preferences": "Seçimlər"
+ },
+ "preferences": {
+  "title": "Məxfilik seçimləri",
+  "description": "Kateqoriya üzrə qərar verin. Zəruri kukilər saytın işləməsini təmin edir və həmişə aktivdir.",
+  "acceptAll": "Hamısını qəbul et",
+  "rejectAll": "Hamısını rədd et",
+  "save": "Seçimləri yadda saxla",
+  "close": "Bağla",
+  "alwaysOn": "Həmişə aktiv",
+  "servicesLabel": "Xidmətlər"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Mütləq zəruri",
+   "description": "Təhlükəsizlik və şəbəkə idarəetməsi kimi əsas funksiyalar üçün lazımdır."
+  },
+  "functionality": {
+   "title": "Funksionallıq",
+   "description": "Parametrlərinizi və seçimlərinizi yadda saxlayır."
+  },
+  "analytics": {
+   "title": "Analitika",
+   "description": "Ziyarətçilərin saytdan necə istifadə etdiyini anlamağa kömək edir."
+  },
+  "marketing": {
+   "title": "Marketinq",
+   "description": "Uyğun məzmun göstərmək və reklam performansını ölçmək üçün."
+  }
+ }
+}

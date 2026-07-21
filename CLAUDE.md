@@ -1,6 +1,6 @@
 # ConsentLoop — agent guide
 
-Monorepo (pnpm workspaces) for ConsentLoop, an open-source, performance-first cookie consent layer.
+Monorepo (pnpm workspaces) for ConsentLoop, a source-available (FSL-1.1-MIT), performance-first cookie consent layer.
 
 ## Commands (run from repo root)
 

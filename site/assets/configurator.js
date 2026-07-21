@@ -18,9 +18,12 @@
     content: { lang: "en", title: "", description: "" },
   };
 
-  const HU = { banner: { title: "Fontos nekünk az adatvédelem", description: "Sütiket használunk a működéshez és méréshez — te döntesz.", acceptAll: "Összes elfogadása", rejectAll: "Elutasítás", preferences: "Beállítások" }, preferences: { title: "Adatvédelmi beállítások", save: "Mentés", acceptAll: "Összes elfogadása", rejectAll: "Elutasítás" } };
-  const DE = { banner: { title: "Wir respektieren deine Privatsphäre", description: "Wir nutzen Cookies für Betrieb und Statistik — du entscheidest.", acceptAll: "Alle akzeptieren", rejectAll: "Alle ablehnen", preferences: "Einstellungen" }, preferences: { title: "Datenschutz-Einstellungen", save: "Speichern", acceptAll: "Alle akzeptieren", rejectAll: "Alle ablehnen" } };
-  const LANGS = { en: null, de: DE, hu: HU };
+  // 50 locale packs ship in the npm package; the preview swaps the CDN URL for this site's copy
+  const cdnLocale = (code) => `https://cdn.jsdelivr.net/npm/consentloop/locales/${code}.json`;
+  const langSelect = document.getElementById("cfg-lang");
+  if (langSelect && window.CL_LOCALES) {
+    langSelect.innerHTML = window.CL_LOCALES.map((l) => `<option value="${l.code}">${l.name} · ${l.code}</option>`).join("");
+  }
 
   /* ---------------- config generation ---------------- */
   function buildConfig() {
@@ -65,7 +68,7 @@
     if (Object.keys(storage).length) c.storage = storage;
 
     const translations = {};
-    if (state.content.lang !== "en" && LANGS[state.content.lang]) translations[state.content.lang] = LANGS[state.content.lang];
+    if (state.content.lang !== "en") translations[state.content.lang] = cdnLocale(state.content.lang);
     const en = {};
     if (state.content.title) en.banner = { ...(en.banner || {}), title: state.content.title };
     if (state.content.description) en.banner = { ...(en.banner || {}), description: state.content.description };
@@ -118,7 +121,11 @@
   let lastMsg = null;
 
   function pushPreview() {
-    lastMsg = { type: "run", config: buildConfig() };
+    const config = buildConfig();
+    // preview loads locale packs from this site instead of the CDN
+    const tr = config.content && config.content.translations;
+    if (tr) for (const k of Object.keys(tr)) if (typeof tr[k] === "string") tr[k] = `/locales/${k}.json`;
+    lastMsg = { type: "run", config };
     // Optimistic post; the frame re-requests via cl-frame-loaded if it wasn't ready yet.
     frame.contentWindow?.postMessage(lastMsg, "*");
   }

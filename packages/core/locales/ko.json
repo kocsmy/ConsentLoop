@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "개인정보를 소중히 다룹니다",
+  "description": "사이트 운영과 이용 현황 파악을 위해 쿠키를 사용합니다. 허용 여부는 직접 선택하며 언제든 변경할 수 있습니다.",
+  "acceptAll": "모두 동의",
+  "rejectAll": "모두 거부",
+  "preferences": "설정"
+ },
+ "preferences": {
+  "title": "개인정보 설정",
+  "description": "카테고리별로 선택하세요. 필수 쿠키는 사이트 작동에 필요하여 항상 켜져 있습니다.",
+  "acceptAll": "모두 동의",
+  "rejectAll": "모두 거부",
+  "save": "설정 저장",
+  "close": "닫기",
+  "alwaysOn": "항상 켜짐",
+  "servicesLabel": "서비스"
+ },
+ "categories": {
+  "necessary": {
+   "title": "필수",
+   "description": "보안, 네트워크 관리 등 핵심 기능에 필요합니다."
+  },
+  "functionality": {
+   "title": "기능",
+   "description": "설정과 환경설정을 기억해 방문을 맞춤화합니다."
+  },
+  "analytics": {
+   "title": "분석",
+   "description": "방문자의 사이트 이용 방식을 파악해 개선에 활용합니다."
+  },
+  "marketing": {
+   "title": "마케팅",
+   "description": "관련 콘텐츠 표시와 광고 성과 측정에 사용됩니다."
+  }
+ }
+}

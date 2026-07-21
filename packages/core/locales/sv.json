@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Vi värnar om din integritet",
+  "description": "Vi använder cookies för att driva webbplatsen och förstå hur den används. Du väljer vad vi får använda — ändra när du vill.",
+  "acceptAll": "Acceptera alla",
+  "rejectAll": "Avvisa alla",
+  "preferences": "Inställningar"
+ },
+ "preferences": {
+  "title": "Integritetsinställningar",
+  "description": "Bestäm per kategori. Nödvändiga cookies håller webbplatsen igång och är alltid på.",
+  "acceptAll": "Acceptera alla",
+  "rejectAll": "Avvisa alla",
+  "save": "Spara inställningar",
+  "close": "Stäng",
+  "alwaysOn": "Alltid på",
+  "servicesLabel": "Tjänster"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Strikt nödvändiga",
+   "description": "Krävs för kärnfunktioner som säkerhet och nätverkshantering."
+  },
+  "functionality": {
+   "title": "Funktionella",
+   "description": "Kommer ihåg dina inställningar och preferenser."
+  },
+  "analytics": {
+   "title": "Analys",
+   "description": "Hjälper oss förstå hur besökare använder webbplatsen."
+  },
+  "marketing": {
+   "title": "Marknadsföring",
+   "description": "Används för relevant innehåll och för att mäta annonsprestanda."
+  }
+ }
+}

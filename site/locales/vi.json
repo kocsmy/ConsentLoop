@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Chúng tôi tôn trọng quyền riêng tư của bạn",
+  "description": "Chúng tôi dùng cookie để vận hành trang web và hiểu cách nó được sử dụng. Bạn quyết định cho phép gì — có thể thay đổi bất cứ lúc nào.",
+  "acceptAll": "Chấp nhận tất cả",
+  "rejectAll": "Từ chối tất cả",
+  "preferences": "Tùy chọn"
+ },
+ "preferences": {
+  "title": "Tùy chọn quyền riêng tư",
+  "description": "Quyết định theo từng nhóm. Cookie cần thiết giúp trang hoạt động và luôn được bật.",
+  "acceptAll": "Chấp nhận tất cả",
+  "rejectAll": "Từ chối tất cả",
+  "save": "Lưu tùy chọn",
+  "close": "Đóng",
+  "alwaysOn": "Luôn bật",
+  "servicesLabel": "Dịch vụ"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Thực sự cần thiết",
+   "description": "Cần cho các chức năng cốt lõi như bảo mật và quản lý mạng."
+  },
+  "functionality": {
+   "title": "Chức năng",
+   "description": "Ghi nhớ cài đặt và tùy chọn của bạn."
+  },
+  "analytics": {
+   "title": "Phân tích",
+   "description": "Giúp chúng tôi hiểu cách khách truy cập sử dụng trang web."
+  },
+  "marketing": {
+   "title": "Tiếp thị",
+   "description": "Dùng để hiển thị nội dung phù hợp và đo hiệu quả quảng cáo."
+  }
+ }
+}

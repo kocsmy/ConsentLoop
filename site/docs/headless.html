@@ -65,7 +65,7 @@ ConsentLoop.run({
       <tr><td><code>--cl-bg / --cl-fg / --cl-muted</code></td><td><code>#fff / #18181b / #6b6b76</code></td><td>Surfaces &amp; text</td></tr>
       <tr><td><code>--cl-accent / --cl-accent-fg</code></td><td><code>#18181b / #fff</code></td><td>Primary button, switches (via <code>--cl-switch-on</code>)</td></tr>
       <tr><td><code>--cl-btn-bg / --cl-btn-fg</code></td><td><code>#f2f2f4 / #18181b</code></td><td>Secondary buttons</td></tr>
-      <tr><td><code>--cl-radius / --cl-btn-radius</code></td><td><code>16px / 10px</code></td><td>Corners</td></tr>
+      <tr><td><code>--cl-radius / --cl-btn-radius</code></td><td><code>16px / derived (radius × .625)</code></td><td>One radius knob scales everything: cards, buttons, category rows (× .75); switch &amp; floating-button pills go square at <code>0</code></td></tr>
       <tr><td><code>--cl-width</code></td><td><code>24.5rem</code></td><td>Box banner width</td></tr>
       <tr><td><code>--cl-shadow / --cl-border / --cl-overlay</code></td><td>soft</td><td>Elevation, hairlines, modal backdrop</td></tr>
       <tr><td><code>--cl-font / --cl-text / --cl-z</code></td><td>system / 14px / 2147483000</td><td>Typography &amp; stacking</td></tr>

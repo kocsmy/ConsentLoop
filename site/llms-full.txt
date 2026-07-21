@@ -1,8 +1,8 @@
 # ConsentLoop — complete documentation (single file for LLMs)
-# Version 0.1.0 · MIT · npm: consentloop, @consentloop/react
+# Version 0.1.0 · FSL-1.1-MIT (fair source; converts to MIT after 2 years) · npm: consentloop, @consentloop/react
 # Repo: https://github.com/kocsmy/ConsentLoop
 
-ConsentLoop is an open-source cookie consent / consent-management layer built for performance:
+ConsentLoop is a source-available cookie consent / consent-management layer built for performance:
 - ~1.4 KB gzip smart loader on the critical path; full widget (~11.6 KB gzip incl. UI+CSS+logic) loads lazily only when a banner must render.
 - Zero dependencies, zero third-party network calls, zero layout shift (all surfaces are position:fixed overlays), ~0 main-thread blocking (renders after first paint via requestIdleCallback).
 - Google Consent Mode v2, GDPR/CCPA presets, per-service consent, cookie auto-clear, i18n with lazy loading + RTL, Shadow-DOM isolation, full a11y, headless mode, React bindings, pluggable backend adapter.
@@ -105,6 +105,9 @@ Translation = {
   categories?: Record<catName, { title?, description? /*HTML ok*/ }>
 }
 Missing keys fall back to built-in English. "de-AT" matches "de".
+50 ready-made locale packs ship with the package: consentloop/locales/<code>.json (locales/index.json
+lists codes + names + rtl). Use them as lazy URLs:
+  translations: { de: "https://cdn.jsdelivr.net/npm/consentloop/locales/de.json" }
 
 storage: {
   name?: string             // default "cl_consent"
@@ -209,7 +212,8 @@ Design tokens (override via ui.tokens or page CSS on #consentloop):
   --cl-bg #fff | --cl-fg #18181b | --cl-muted #6b6b76 | --cl-border
   --cl-accent #18181b | --cl-accent-fg #fff | --cl-btn-bg #f2f2f4 | --cl-btn-fg
   --cl-switch-on (=accent) | --cl-switch-off | --cl-overlay | --cl-focus #2563eb
-  --cl-radius 16px | --cl-btn-radius 10px | --cl-shadow | --cl-width 24.5rem
+  --cl-radius 16px (one knob: buttons ×.625, category cards ×.75, switch/fab pills — square at 0)
+  --cl-btn-radius (derived from radius, overridable) | --cl-shadow | --cl-width 24.5rem
   --cl-font (system stack) | --cl-text 14px | --cl-gap 16px | --cl-z 2147483000
 Dark theme swaps values automatically (theme:"auto" follows prefers-color-scheme).
 ui.shadow:false disables Shadow DOM if you want to style with plain CSS selectors.

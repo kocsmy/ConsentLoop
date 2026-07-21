@@ -173,10 +173,10 @@
           <div class="opt-head">
             <div>
               <div class="opt-title">Language &amp; texts <code>content</code></div>
-              <p class="opt-desc">Auto-detected from <code>&lt;html lang&gt;</code>, overridable per visitor. Any missing key falls back to built-in English. Full guide: <a href="/docs/i18n">Languages →</a></p>
+              <p class="opt-desc">Auto-detected from <code>&lt;html lang&gt;</code>, overridable per visitor. 50 ready-made locale packs ship with the npm package (<code>consentloop/locales/*.json</code>) and lazy-load on demand. Any missing key falls back to built-in English. Full guide: <a href="/docs/i18n">Languages →</a></p>
             </div>
-            <div class="opt-control seg" data-seg="content.lang">
-              <button data-v="en">en</button><button data-v="de">de</button><button data-v="hu">hu</button>
+            <div class="opt-control">
+              <select id="cfg-lang" data-input="content.lang" aria-label="Language"></select>
             </div>
           </div>
           <label class="field" for="title-input">banner.title (English)</label>
@@ -220,6 +220,7 @@
 </div>
 
 <script src="/vendor/meta.js"></script>
+<script src="/assets/locales.js"></script>
 <script src="/assets/site.js"></script>
 <script>
   addEventListener("DOMContentLoaded", () => {

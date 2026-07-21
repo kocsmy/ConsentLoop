@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Szanujemy Twoją prywatność",
+  "description": "Używamy plików cookie do działania tej strony i zrozumienia sposobu jej użytkowania. Ty decydujesz — możesz zmienić zdanie w każdej chwili.",
+  "acceptAll": "Zaakceptuj wszystkie",
+  "rejectAll": "Odrzuć wszystkie",
+  "preferences": "Preferencje"
+ },
+ "preferences": {
+  "title": "Preferencje prywatności",
+  "description": "Decyduj według kategorii. Niezbędne pliki cookie utrzymują działanie strony i są zawsze włączone.",
+  "acceptAll": "Zaakceptuj wszystkie",
+  "rejectAll": "Odrzuć wszystkie",
+  "save": "Zapisz preferencje",
+  "close": "Zamknij",
+  "alwaysOn": "Zawsze włączone",
+  "servicesLabel": "Usługi"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Ściśle niezbędne",
+   "description": "Wymagane do podstawowych funkcji, takich jak bezpieczeństwo i zarządzanie siecią."
+  },
+  "functionality": {
+   "title": "Funkcjonalne",
+   "description": "Zapamiętuje Twoje ustawienia i preferencje."
+  },
+  "analytics": {
+   "title": "Analityczne",
+   "description": "Pomagają nam zrozumieć, jak odwiedzający korzystają ze strony."
+  },
+  "marketing": {
+   "title": "Marketing",
+   "description": "Służą do wyświetlania trafnych treści i mierzenia skuteczności reklam."
+  }
+ }
+}

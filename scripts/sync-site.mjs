@@ -1,5 +1,5 @@
-// Copies built bundles + schema into site/vendor so the static site is self-contained.
-import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+// Copies built bundles + schema + locale packs into site/ so the static site is self-contained.
+import { copyFileSync, cpSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -12,6 +12,7 @@ for (const f of ["consentloop.iife.min.js", "consentloop.loader.min.js", "index.
   copyFileSync(join(dist, f), join(vendor, f));
 }
 copyFileSync(join(root, "schema/consentloop.schema.json"), join(root, "site/consentloop.schema.json"));
+cpSync(join(root, "packages/core/locales"), join(root, "site/locales"), { recursive: true });
 
 // keep the version badge in site pages honest
 const size = JSON.parse(readFileSync(join(dist, "size-report.json"), "utf8"));

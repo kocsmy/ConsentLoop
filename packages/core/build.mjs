@@ -2,7 +2,7 @@ import { build } from "esbuild";
 import { gzipSync } from "node:zlib";
 import { readFileSync, writeFileSync, mkdirSync, rmSync, readdirSync, copyFileSync } from "node:fs";
 
-const banner = `/*! consentloop v0.1.0 | MIT | https://github.com/kocsmy/ConsentLoop */`;
+const banner = `/*! consentloop v0.1.0 | FSL-1.1-MIT | https://github.com/kocsmy/ConsentLoop */`;
 
 rmSync("dist", { recursive: true, force: true });
 mkdirSync("dist", { recursive: true });

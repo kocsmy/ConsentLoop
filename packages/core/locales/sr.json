@@ -1,0 +1,37 @@
+{
+ "banner": {
+  "title": "Cenimo vašu privatnost",
+  "description": "Kolačiće koristimo za rad sajta i razumevanje njegove upotrebe. Vi birate šta dozvoljavate — odluku možete promeniti bilo kada.",
+  "acceptAll": "Prihvati sve",
+  "rejectAll": "Odbij sve",
+  "preferences": "Podešavanja"
+ },
+ "preferences": {
+  "title": "Podešavanja privatnosti",
+  "description": "Odlučite po kategorijama. Neophodni kolačići održavaju sajt u radu i uvek su uključeni.",
+  "acceptAll": "Prihvati sve",
+  "rejectAll": "Odbij sve",
+  "save": "Sačuvaj podešavanja",
+  "close": "Zatvori",
+  "alwaysOn": "Uvek uključeno",
+  "servicesLabel": "Usluge"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Strogo neophodni",
+   "description": "Potrebni za osnovne funkcije poput bezbednosti i upravljanja mrežom."
+  },
+  "functionality": {
+   "title": "Funkcionalni",
+   "description": "Pamte vaša podešavanja i preferencije."
+  },
+  "analytics": {
+   "title": "Analitika",
+   "description": "Pomaže nam da razumemo kako posetioci koriste sajt."
+  },
+  "marketing": {
+   "title": "Marketing",
+   "description": "Koristi se za relevantan sadržaj i merenje učinka oglasa."
+  }
+ }
+}
