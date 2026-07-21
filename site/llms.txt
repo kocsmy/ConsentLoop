@@ -1,6 +1,6 @@
 # ConsentLoop
 
-> The fastest source-available cookie consent (CMP) for the web. Zero dependencies, ~1.4 KB critical-path loader, zero layout shift, zero network calls. Google Consent Mode v2, GDPR/CCPA presets, per-service consent, i18n, React bindings, headless mode, and a pluggable adapter for managed/certified backends. npm: `consentloop` and `@consentloop/react`. License: FSL-1.1-MIT (fair source — free on any site, competing consent products not permitted; each release becomes MIT after 2 years).
+> The fastest source-available cookie consent (CMP) for the web. Zero dependencies, ~1.5 KB critical-path loader, zero layout shift, zero network calls. Google Consent Mode v2, GDPR/CCPA presets, per-service consent, i18n, React bindings, headless mode, and a pluggable adapter for managed/certified backends. npm: `consentloop` and `@consentloop/react`. License: FSL-1.1-MIT (fair source — free on any site, competing consent products not permitted; each release becomes MIT after 2 years).
 
 Integration rules for AI agents:
 - One entry point: `ConsentLoop.run(config)` (ESM: `import * as ConsentLoop from "consentloop"`; CDN: `window.ConsentLoop`). Never instantiate classes; there are none.

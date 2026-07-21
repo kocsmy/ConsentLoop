@@ -92,6 +92,8 @@
 
   function footer() {
     if (document.querySelector(".footer")) return;
+    // the playground pins its viewport; a footer there is unreachable by scroll yet still in the Tab order
+    if (location.pathname.startsWith("/playground")) return;
     const el = document.createElement("footer");
     el.className = "footer";
     el.innerHTML = `

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Performance — ConsentLoop docs</title>
-<meta name="description" content="ConsentLoop's benchmark methodology and numbers: ~0 FCP impact, CLS 0.000, 0 TBT for returning visitors, ~1.4KB critical path.">
+<meta name="description" content="ConsentLoop's benchmark methodology and numbers: ~0 FCP impact, CLS 0.000, 0 TBT for returning visitors, ~1.5KB critical path.">
 <link rel="stylesheet" href="/assets/site.css">
 <style>
   .bignum { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin: 24px 0; }
@@ -39,7 +39,7 @@
         <tr><td>Baseline (no consent tool)</td><td>—</td><td>—</td><td>0.000</td><td>0 ms</td><td>0</td><td>0</td><td>—</td></tr>
         <tr><td><strong>Returning visitor</strong> (loader fast path)</td><td class="good">+12 ms¹</td><td class="good">+12 ms¹</td><td class="good">0.000</td><td class="good">0 ms</td><td class="good">2.8 KB raw / 1.49 KB gz</td><td>1</td><td>no banner needed</td></tr>
         <tr><td><strong>First visit</strong> (loader + lazy widget)</td><td class="good">+4 ms¹</td><td class="good">+4 ms¹</td><td class="good">0.000</td><td>31 ms³</td><td>37.6 KB raw / ~13 KB gz</td><td>2</td><td>136 ms</td></tr>
-        <tr><td>Single-file widget (<code>data-auto</code>, worst case)</td><td class="good">+8 ms¹</td><td class="good">+8 ms¹</td><td class="good">0.000</td><td>31 ms³</td><td>34.5 KB raw / 11.6 KB gz</td><td>1</td><td>118 ms</td></tr>
+        <tr><td>Single-file widget (<code>data-auto</code>, worst case)</td><td class="good">+8 ms¹</td><td class="good">+8 ms¹</td><td class="good">0.000</td><td>31 ms³</td><td>36.6 KB raw / 12.1 KB gz</td><td>1</td><td>118 ms</td></tr>
       </tbody>
     </table></div>
     <p class="small muted">¹ Within the ±15 ms run-to-run noise of the measurement VM — some scenarios measured <em>faster</em> than baseline on other runs. Deferred scripts cannot block first paint. &nbsp;² Local server sends uncompressed; real CDNs serve the gzip/brotli sizes quoted. &nbsp;³ At 4× CPU throttle ≈ 8 ms real; this is the one-time evaluation of the full widget, scheduled after <code>load</code> + idle.</p>
@@ -57,7 +57,7 @@
     <div class="table-scroll"><table class="props">
       <tr><th>Pillar</th><th>Weight</th><th>ConsentLoop</th></tr>
       <tr><td>Performance (FCP/LCP/CLS/TTI/TBT)</td><td>40%</td><td>Deferred + idle-scheduled; CLS 0; TBT ≈ 0 (0 on repeat views)</td></tr>
-      <tr><td>Bundle strategy</td><td>25%</td><td>~1.4 KB loader; lazy UI; ESM code-splitting; zero deps; self-hostable</td></tr>
+      <tr><td>Bundle strategy</td><td>25%</td><td>~1.5 KB loader; lazy UI; ESM code-splitting; zero deps; self-hostable</td></tr>
       <tr><td>Network impact</td><td>20%</td><td>0 third-party requests; 1 first-party file for returning visitors; no beacons unless configured</td></tr>
       <tr><td>Transparency</td><td>10%</td><td>Source-available (FSL), open methodology, reproducible bench in-repo (<code>pnpm bench</code>)</td></tr>
       <tr><td>User experience</td><td>5%</td><td>Equal-weight buttons, full keyboard/screen-reader support, reduced motion, no dark patterns</td></tr>

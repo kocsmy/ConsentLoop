@@ -16,7 +16,7 @@ export const CSS = `
   --cl-btn-bg:#f2f2f4;
   --cl-btn-fg:#18181b;
   --cl-switch-on:var(--cl-accent);
-  --cl-switch-off:#d4d4d8;
+  --cl-switch-off:#8e8e97;
   --cl-overlay:rgba(9,9,11,.42);
   --cl-focus:#2563eb;
   --cl-radius:16px;
@@ -33,14 +33,14 @@ export const CSS = `
 .cl-root[data-theme=dark]{
   --cl-bg:#1c1c21;--cl-fg:#f4f4f5;--cl-muted:#9d9da8;--cl-border:rgba(255,255,255,.11);
   --cl-accent:#f4f4f5;--cl-accent-fg:#18181b;--cl-btn-bg:#2b2b31;--cl-btn-fg:#f4f4f5;
-  --cl-switch-off:#47474f;--cl-overlay:rgba(0,0,0,.55);
+  --cl-switch-off:#75757f;--cl-overlay:rgba(0,0,0,.55);--cl-focus:#60a5fa;
   --cl-shadow:0 12px 48px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.3);
 }
 @media (prefers-color-scheme:dark){
   .cl-root[data-theme=auto]{
     --cl-bg:#1c1c21;--cl-fg:#f4f4f5;--cl-muted:#9d9da8;--cl-border:rgba(255,255,255,.11);
     --cl-accent:#f4f4f5;--cl-accent-fg:#18181b;--cl-btn-bg:#2b2b31;--cl-btn-fg:#f4f4f5;
-    --cl-switch-off:#47474f;--cl-overlay:rgba(0,0,0,.55);
+    --cl-switch-off:#75757f;--cl-overlay:rgba(0,0,0,.55);--cl-focus:#60a5fa;
     --cl-shadow:0 12px 48px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.3);
   }
 }
@@ -71,7 +71,7 @@ export const CSS = `
   border-radius:var(--cl-radius);box-shadow:var(--cl-shadow);
   width:100%;max-width:var(--cl-width);padding:var(--cl-pad);
   opacity:0;transform:translateY(10px);
-  transition:opacity .18s ease,transform .24s cubic-bezier(.2,.9,.3,1.2);
+  transition:opacity .18s ease,transform .24s cubic-bezier(.16,.84,.28,1);
 }
 [data-position^=top] .cl-banner{transform:translateY(-10px)}
 .cl-on .cl-banner{opacity:1;transform:none}
@@ -127,7 +127,7 @@ export const CSS = `
   background:var(--cl-bg);border:var(--cl-border-w) solid var(--cl-border);border-radius:var(--cl-radius);
   box-shadow:var(--cl-shadow);width:100%;max-width:34rem;max-height:min(85vh,44rem);
   opacity:0;transform:translateY(14px) scale(.98);
-  transition:opacity .18s ease,transform .24s cubic-bezier(.2,.9,.3,1.2);
+  transition:opacity .18s ease,transform .24s cubic-bezier(.16,.84,.28,1);
 }
 .cl-on .cl-prefs{opacity:1;transform:none}
 [data-prefs=drawer] .cl-prefs-layer{justify-content:flex-end;padding:0}
@@ -194,7 +194,7 @@ export const CSS = `
   .cl-prefs-layer{padding:0;align-items:flex-end}
   .cl-prefs{max-width:none;max-height:92vh;border-radius:var(--cl-radius) var(--cl-radius) 0 0;border-bottom:0}
   [data-prefs=drawer] .cl-prefs{height:auto;max-height:92vh;border:var(--cl-border-w) solid var(--cl-border);border-bottom:0}
-  .cl-btn{min-height:42px}
+  .cl-root .cl-btn{min-height:42px}
 }
 
 /* ---- motion / transitions off ------------------------------------------ */

@@ -25,9 +25,14 @@
   .preview-actions { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--border); background: var(--bg2); }
   #consent-inspector { margin-top: 14px; }
   #consent-inspector pre { max-height: 180px; overflow: auto; font-size: 11.5px; }
-  h2.section { margin-top: 36px; display: flex; align-items: center; gap: 10px; }
-  h2.section .n { font-size: 11px; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; padding: 2px 8px; letter-spacing: .05em; }
-  @media (max-width: 1150px) { .cfg-grid { grid-template-columns: 1fr; } .cfg-right { position: static; } }
+  h2.section { margin-top: 36px; }
+  @media (max-width: 1150px) {
+    .cfg-grid { grid-template-columns: minmax(0, 1fr); }
+    /* preview pins above the controls so the live feedback loop survives on small screens */
+    .cfg-right { order: -1; position: sticky; top: var(--topbar-h); z-index: 30; background: var(--bg); padding-bottom: 10px; }
+    #preview-frame { height: min(40vh, 360px); }
+    #consent-inspector { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -41,7 +46,7 @@
     <div class="cfg-grid">
       <div class="cfg-left">
 
-        <h2 class="section"><span class="n">01</span>Categories</h2>
+        <h2 class="section">Categories</h2>
         <div class="opt" id="opt-categories">
           <div class="opt-head">
             <div>
@@ -63,7 +68,7 @@
           </div>
         </div>
 
-        <h2 class="section"><span class="n">02</span>Appearance</h2>
+        <h2 class="section">Appearance</h2>
         <div class="opt" id="opt-ui-layout">
           <div class="opt-head">
             <div>
@@ -117,6 +122,7 @@
               <button class="btn small" id="accent-clear" type="button">Default</button>
             </div>
           </div>
+          <p class="small" id="accent-contrast-warn" hidden style="color:var(--fg2);font-weight:600;margin:6px 0 0"></p>
           <label class="field" for="radius-input">radius: <span class="mono" id="radius-out"></span></label>
           <input type="range" id="radius-input" data-input="ui.radius" min="0" max="24" step="2" style="width:100%">
           <label class="field" for="borderw-input">border-w: <span class="mono" id="borderw-out"></span></label>
@@ -135,7 +141,7 @@
           <div class="opt-head">
             <div>
               <div class="opt-title">Buttons &amp; extras</div>
-              <p class="opt-desc"><code>ui.showRejectAll</code> keeps Accept and Reject equally weighted (keep it on under GDPR — it’s the law, and it’s the decent thing). <code>ui.floatingButton</code> shows a reopen bubble after consent. <code>ui.branding</code> toggles the small credit in the banner and preferences. <code>ui.scrollLock</code> freezes page scrolling while a layer is open. <code>ui.trapFocus</code> keeps keyboard focus inside the preferences dialog (leave on for WCAG).</p>
+              <p class="opt-desc"><code>ui.showRejectAll</code> keeps a one-click Reject right next to Accept — no hunting through settings (keep it on under GDPR — it’s the law, and it’s the decent thing). <code>ui.floatingButton</code> shows a reopen bubble after consent. <code>ui.branding</code> toggles the small credit in the banner and preferences. <code>ui.scrollLock</code> freezes page scrolling while a layer is open. <code>ui.trapFocus</code> keeps keyboard focus inside the preferences dialog (leave on for WCAG).</p>
             </div>
           </div>
           <div class="switchrow"><span>showRejectAll</span><button data-switch="ui.showRejectAll" aria-label="showRejectAll"></button></div>
@@ -146,7 +152,7 @@
           <div class="switchrow"><span>trapFocus</span><button data-switch="ui.trapFocus" aria-label="trapFocus"></button></div>
         </div>
 
-        <h2 class="section"><span class="n">03</span>Behavior</h2>
+        <h2 class="section">Behavior</h2>
         <div class="opt" id="opt-regulation">
           <div class="opt-head">
             <div>
@@ -181,12 +187,12 @@
           <label class="field">revision <input type="number" data-input="behavior.revision" min="0" max="99" style="width:90px;margin-left:8px"></label>
         </div>
 
-        <h2 class="section"><span class="n">04</span>Content</h2>
+        <h2 class="section">Content</h2>
         <div class="opt" id="opt-content">
           <div class="opt-head">
             <div>
               <div class="opt-title">Language &amp; texts <code>content</code></div>
-              <p class="opt-desc">Auto-detected from <code>&lt;html lang&gt;</code>, overridable per visitor. 50 ready-made locale packs ship with the npm package (<code>consentloop/locales/*.json</code>) and lazy-load on demand. Any missing key falls back to built-in English. Full guide: <a href="/docs/i18n">Languages →</a></p>
+              <p class="opt-desc">Auto-detected from <code>&lt;html lang&gt;</code>, overridable per visitor. 58 ready-made locale packs ship with the npm package (<code>consentloop/locales/*.json</code>) and lazy-load on demand. Any missing key falls back to built-in English. Full guide: <a href="/docs/i18n">Languages →</a></p>
             </div>
             <div class="opt-control">
               <select id="cfg-lang" data-input="content.lang" aria-label="Language"></select>

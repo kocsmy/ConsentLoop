@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ConsentLoop preview</title>
+<link rel="icon" href="data:,">
 <style>
   :root { color-scheme: light; }
   [data-mock-theme="dark"] { color-scheme: dark; }
@@ -100,7 +101,12 @@
       flash((rec.method === "implied" ? "implied: " : "consent: ") + (rec.accepted || []).join(", "));
       parent.postMessage({ type: "cl-consent", record: JSON.parse(JSON.stringify(rec)) }, "*");
     });
-    addEventListener("consentloop:banner-show", () => parent.postMessage({ type: "cl-banner-show" }, "*"));
+    addEventListener("consentloop:banner-show", () => {
+      // the banner autofocuses for real-page a11y; embedded here that would hijack the host page's tab order
+      const host = document.getElementById("consentloop");
+      (host?.shadowRoot?.activeElement || document.activeElement)?.blur?.();
+      parent.postMessage({ type: "cl-banner-show" }, "*");
+    });
 
     // default boot so the frame is never empty
     boot({ categories: { necessary: { required: true }, analytics: {}, marketing: {} } });

@@ -377,6 +377,7 @@ export const api: ConsentLoopAPI = {
     inst.firstDone = false;
     inst.applied = { accepted: [], services: {} };
     updateFab();
+    inst.ui?.hidePrefs();
     if (reprompt) api.show();
   },
   on(event: ConsentEvent, cb) {

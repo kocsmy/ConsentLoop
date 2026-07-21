@@ -5,7 +5,7 @@
   --bg3: #f0f0f2;
   --fg: #17171b;
   --fg2: #55555e;
-  --fg3: #8a8a94;
+  --fg3: #6d6d78;
   --border: rgba(23, 23, 27, 0.09);
   --border2: rgba(23, 23, 27, 0.14);
   --accent: #4f46e5;
@@ -29,7 +29,7 @@
   --bg3: #222228;
   --fg: #f2f2f4;
   --fg2: #a6a6b0;
-  --fg3: #71717c;
+  --fg3: #8f8f9a;
   --border: rgba(242, 242, 244, 0.1);
   --border2: rgba(242, 242, 244, 0.16);
   --accent: #818cf8;
@@ -185,10 +185,10 @@ h3 { font-size: 17px; margin: 28px 0 8px; }
 
 .card { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; background: var(--bg); }
 .callout {
-  display: flex; gap: 10px; border: 1px solid var(--border); border-left: 3px solid var(--accent);
+  display: flex; gap: 10px; border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
   background: var(--accent-soft); padding: 12px 16px; border-radius: 10px; margin: 16px 0; font-size: 14px;
 }
-.callout.warn { border-left-color: var(--amber); background: color-mix(in srgb, var(--amber) 7%, transparent); }
+.callout.warn { border-color: color-mix(in srgb, var(--amber) 38%, transparent); background: color-mix(in srgb, var(--amber) 7%, transparent); }
 
 table.props { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 16px 0; }
 table.props th {

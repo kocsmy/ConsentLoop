@@ -330,6 +330,16 @@ describe("branding, legal links & UI behavior options", () => {
     expect(maybeQ(".cl-banner .cl-links")).toBeNull();
   });
 
+  it("reset(true) while preferences are open closes them before re-prompting", async () => {
+    await api.run({ categories: { necessary: { required: true }, analytics: {} } });
+    click('[data-a="open-prefs"]');
+    expect(prefsVisible()).toBe(true);
+    api.reset(true);
+    await new Promise((r) => setTimeout(r, 5));
+    expect(prefsVisible()).toBe(false);
+    expect(bannerVisible()).toBe(true);
+  });
+
   it("cloud layout renders configured legal links (not suppressed)", async () => {
     await api.run({
       categories: { necessary: { required: true } },

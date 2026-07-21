@@ -53,7 +53,16 @@
   dialog.export::backdrop { background: rgba(0,0,0,.45); }
   dialog.export .head { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--border); }
   dialog.export .body { padding: 4px 18px 18px; max-height: 70vh; overflow: auto; }
-  @media (max-width: 900px) { body { overflow: auto; } .pg { grid-template-columns: 1fr; height: auto; } .pg-stage { min-height: 480px; } }
+  @media (max-width: 900px) {
+    body { overflow: auto; }
+    .pg { grid-template-columns: 1fr; height: auto; }
+    /* preview + toolbar pin to the top; controls scroll underneath so every change stays visible */
+    .pg-main { order: -1; position: sticky; top: var(--topbar-h); z-index: 30; background: var(--bg); border-bottom: 1px solid var(--border2); }
+    .pg-stage { padding: 12px; }
+    .stage-shell { height: auto; }
+    #frame { flex: none; height: min(44vh, 380px); }
+    .pg-side { border-right: 0; }
+  }
 </style>
 </head>
 <body>
@@ -150,7 +159,7 @@
       <button class="btn small" id="replay">↻ Replay banner</button>
       <button class="btn small" id="open-prefs">Open preferences</button>
       <span class="spacer" style="flex:1"></span>
-      <span class="pill small" id="cls-pill">CLS 0.000 · overlay-only</span>
+      <span class="pill small" id="cls-pill">Widget CLS 0.000 · overlay-only</span>
       <button class="btn small accent" id="export">Export code</button>
     </div>
     <div class="pg-stage">
@@ -172,8 +181,12 @@
     <button class="iconbtn" onclick="document.getElementById('export-dialog').close()" aria-label="Close">✕</button>
   </div>
   <div class="body">
-    <p class="small muted" style="margin:10px 0 4px">Drop-in HTML (CDN loader) — or take the same config into <a href="/docs/configuration">the interactive docs</a> for npm/React variants.</p>
+    <div class="seg" id="export-tabs" style="margin:12px 0 8px">
+      <button data-v="html" class="active">HTML</button><button data-v="js">npm / ESM</button><button data-v="react">React</button>
+    </div>
+    <p class="small muted" id="export-hint" style="margin:0 0 6px"></p>
     <div class="codeblock"><pre><code id="export-code"></code></pre><button class="copy" id="export-copy">Copy</button></div>
+    <p class="small muted" style="margin:8px 0 2px">Same design in the <a id="export-cfg-link" href="/docs/configuration">interactive docs</a> — the link carries your setup. Your work also survives refresh: the page URL is the design.</p>
   </div>
 </dialog>
 
@@ -189,18 +202,50 @@
     title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "",
   };
 
+  /* ---- shareable, refresh-proof state (#c= hash, also read by /docs/configuration) ---- */
+  const DEFAULTS = JSON.stringify(state);
+  const encodeState = (o) => btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  const decodeState = (s) => JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g, "+").replace(/_/g, "/")))));
+  let restoredFromHash = false;
+  try {
+    const m = location.hash.match(/#c=([A-Za-z0-9_-]+)/);
+    if (m) {
+      const s = decodeState(m[1]);
+      for (const k of Object.keys(state)) if (k in s) state[k] = s[k];
+      restoredFromHash = true;
+      for (const [id, v] of [["radius", state.radius], ["pad", state.pad], ["borderw", state.borderW]])
+        document.getElementById(id).value = v;
+      for (const [id, k] of [["txt-title", "title"], ["txt-desc", "desc"], ["url-privacy", "privacyUrl"], ["url-cookies", "cookieUrl"], ["url-terms", "termsUrl"]])
+        document.getElementById(id).value = state[k];
+    }
+  } catch {}
+
   const FONTS = {
     serif: 'Georgia, "Times New Roman", serif',
     mono: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace',
   };
   const BORDER_COLORS = { strong: "rgba(9,9,11,.35)", black: "#18181b" };
   const borderColor = () =>
-    state.borderColor === "accent" ? state.accent || "#18181b" : BORDER_COLORS[state.borderColor];
+    state.borderColor === "accent" ? state.accent || "#18181b" : BORDER_COLORS[state.borderColor] || state.borderColor;
   const SHADOWS = {
     none: "none",
     subtle: "0 4px 16px rgba(9,9,11,.08)",
     strong: "0 24px 64px rgba(9,9,11,.28), 0 4px 12px rgba(9,9,11,.1)",
   };
+
+  /* button text follows the accent's luminance so exports stay WCAG AA */
+  const lum = (hex) => {
+    const c = hex.replace("#", "");
+    const [r, g, b] = [0, 2, 4]
+      .map((i) => parseInt(c.slice(i, i + 2), 16) / 255)
+      .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const contrast = (a, b) => {
+    const [h, l] = [lum(a), lum(b)].sort((x, y) => y - x);
+    return (h + 0.05) / (l + 0.05);
+  };
+  const bestFg = (accent) => (contrast(accent, "#ffffff") >= contrast(accent, "#18181b") ? "#ffffff" : "#18181b");
 
   // locale packs ship with the npm package; the preview uses this site's copy
   const localeUrl = (code, forExport) =>
@@ -223,7 +268,7 @@
       cfg.content = { translations: { en: { banner: { links: [{ label: "Do Not Sell or Share My Personal Information", href: "/do-not-sell" }] } } } };
     }
     const tokens = {};
-    if (state.accent) { tokens.accent = state.accent; tokens["switch-on"] = state.accent; }
+    if (state.accent) { tokens.accent = state.accent; tokens["switch-on"] = state.accent; tokens["accent-fg"] = bestFg(state.accent); }
     if (state.radius !== 16) tokens.radius = state.radius + "px";
     if (state.pad !== 20) tokens.pad = state.pad + "px";
     if (state.font) tokens.font = FONTS[state.font];
@@ -260,12 +305,19 @@
 
   const frame = document.getElementById("frame");
   let lastMsg = null;
+  let hashTimer;
   function push() {
     lastMsg = { type: "run", config: buildConfig(), opts: { mockTheme: state.theme } };
     frame.contentWindow?.postMessage(lastMsg, "*");
+    clearTimeout(hashTimer);
+    hashTimer = setTimeout(() => {
+      history.replaceState(null, "", JSON.stringify(state) === DEFAULTS ? location.pathname : "#c=" + encodeState(state));
+    }, 250);
   }
   addEventListener("message", (e) => {
     if (e.data?.type === "cl-frame-loaded" && lastMsg) frame.contentWindow.postMessage(lastMsg, "*");
+    // widget focus pulled the browser's focus into the preview frame; hand it back to the page
+    if (e.data?.type === "cl-banner-show" && document.activeElement === frame) frame.blur();
   });
 
   /* generic segmented wiring */
@@ -388,17 +440,42 @@
   document.getElementById("replay").addEventListener("click", () => frame.contentWindow.postMessage({ type: "reset" }, "*"));
   document.getElementById("open-prefs").addEventListener("click", () => frame.contentWindow.postMessage({ type: "show-preferences" }, "*"));
 
-  /* export */
+  /* export — three targets generated from the same config */
   const dialog = document.getElementById("export-dialog");
-  document.getElementById("export").addEventListener("click", () => {
-    const cfg = buildConfig(true);
-    const code = `<script>\nwindow.consentloopConfig = ${JSON.stringify(cfg, null, 2)};\n<\/script>\n<script defer src="https://cdn.jsdelivr.net/npm/consentloop/dist/consentloop.loader.min.js"><\/script>`;
-    document.getElementById("export-code").innerHTML = clSite.highlight(code, "html");
+  const EXPORT_HINTS = {
+    html: "Drop-in HTML: the ~1.5 KB smart loader from the CDN, config inline.",
+    js: "npm i consentloop — the same config through the ESM entry (UI code-splits automatically).",
+    react: "npm i consentloop @consentloop/react — provider on top of the same core.",
+  };
+  function exportCode(kind) {
+    const json = JSON.stringify(buildConfig(true), null, 2);
+    if (kind === "js") return `import * as ConsentLoop from "consentloop";\n\nConsentLoop.run(${json});`;
+    if (kind === "react") return `import { ConsentProvider } from "@consentloop/react";\n\nexport default function App() {\n  return (\n    <ConsentProvider config={${json.replace(/\n/g, "\n    ")}}>\n      {/* your app */}\n    </ConsentProvider>\n  );\n}`;
+    return `<script>\nwindow.consentloopConfig = ${json};\n<\/script>\n<script defer src="https://cdn.jsdelivr.net/npm/consentloop/dist/consentloop.loader.min.js"><\/script>`;
+  }
+  let exportKind = "html";
+  function renderExport() {
+    const code = exportCode(exportKind);
+    document.getElementById("export-hint").textContent = EXPORT_HINTS[exportKind];
+    document.getElementById("export-code").innerHTML = clSite.highlight(code, exportKind === "html" ? "html" : "js");
     document.getElementById("export-copy").onclick = (e) => navigator.clipboard.writeText(code).then(() => {
       e.target.textContent = "Copied ✓"; setTimeout(() => (e.target.textContent = "Copy"), 1200);
     });
+  }
+  document.querySelectorAll("#export-tabs button").forEach((b) =>
+    b.addEventListener("click", () => {
+      exportKind = b.dataset.v;
+      document.querySelectorAll("#export-tabs button").forEach((x) => x.classList.toggle("active", x === b));
+      renderExport();
+    })
+  );
+  document.getElementById("export").addEventListener("click", () => {
+    document.getElementById("export-cfg-link").href = "/docs/configuration#c=" + encodeState(state);
+    renderExport();
     dialog.showModal();
   });
+
+  if (restoredFromHash) push();
 
   push();
 })();

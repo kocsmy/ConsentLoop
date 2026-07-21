@@ -3,7 +3,7 @@
 # Repo: https://github.com/kocsmy/ConsentLoop
 
 ConsentLoop is a source-available cookie consent / consent-management layer built for performance:
-- ~1.4 KB gzip smart loader on the critical path; full widget (~11.6 KB gzip incl. UI+CSS+logic) loads lazily only when a banner must render.
+- ~1.5 KB gzip smart loader on the critical path; full widget (~12.1 KB gzip incl. UI+CSS+logic) loads lazily only when a banner must render.
 - Zero dependencies, zero third-party network calls, zero layout shift (all surfaces are position:fixed overlays), ~0 main-thread blocking (renders after first paint via requestIdleCallback).
 - Google Consent Mode v2, GDPR/CCPA presets, per-service consent, cookie auto-clear, i18n with lazy loading + RTL, Shadow-DOM isolation, full a11y, headless mode, React bindings, pluggable backend adapter.
 
@@ -20,7 +20,7 @@ Files shipped in the consentloop package:
   dist/index.js                 ESM entry (code-split; UI in a lazy chunk)
   dist/index.min.js             single-file minified ESM
   dist/consentloop.iife.min.js  classic build -> window.ConsentLoop (+ data-auto init)
-  dist/consentloop.loader.min.js  ~1.4 KB smart loader (see §9)
+  dist/consentloop.loader.min.js  ~1.5 KB smart loader (see §9)
   dist/index.d.ts               TypeScript types (JSDoc'd)
 
 =====================================================================
@@ -249,7 +249,7 @@ ui.shadow:false disables Shadow DOM if you want to style with plain CSS selector
 8. PERFORMANCE ARCHITECTURE (why it wins cookiebench-style tests)
 =====================================================================
 
-- Critical path: 0 bytes if you bundle (ESM entry defers UI chunk), or the ~1.4 KB loader on CDN.
+- Critical path: 0 bytes if you bundle (ESM entry defers UI chunk), or the ~1.5 KB loader on CDN.
 - Loader fast path: returning visitor with valid consent -> gated scripts activated immediately,
   Consent Mode defaults pushed, FULL WIDGET NEVER DOWNLOADED (proxy API loads it on demand).
 - First visit: full widget fetched after window.load + requestIdleCallback; banner renders

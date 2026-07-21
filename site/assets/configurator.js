@@ -23,6 +23,66 @@
     content: { lang: "en", title: "", description: "", privacyPolicyUrl: "", cookiePolicyUrl: "", termsUrl: "" },
   };
 
+  /* ---- shareable, refresh-proof state (#c= hash, same flat schema as /playground/) ---- */
+  const DEFAULTS = JSON.stringify(state);
+  const encodeState = (o) => btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  const decodeState = (s) => JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g, "+").replace(/_/g, "/")))));
+  const PG_FONTS = { serif: 'Georgia, "Times New Roman", serif', mono: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace' };
+  const PG_BORDER_COLORS = { strong: "rgba(9,9,11,.35)", black: "#18181b" };
+  // playground-only knobs (spacing, font) carried through into ui.tokens untouched
+  const extra = { pad: null, font: "" };
+  try {
+    const m = location.hash.match(/#c=([A-Za-z0-9_-]+)/);
+    if (m) {
+      const s = decodeState(m[1]);
+      const u = state.ui, c = state.content;
+      for (const k of ["layout", "position", "preferences", "theme"]) if (s[k]) u[k] = s[k];
+      if (typeof s.accent === "string") u.accent = s.accent;
+      if (s.radius != null) u.radius = +s.radius;
+      if (s.borderW != null) u.borderW = +s.borderW;
+      if (s.borderColor) u.borderColor = s.borderColor === "accent" ? s.accent || "#18181b" : PG_BORDER_COLORS[s.borderColor] || s.borderColor;
+      if (s.shadow != null) u.shadow = s.shadow;
+      if (s.showRejectAll === false) u.showRejectAll = false;
+      if (s.showPreferences === false) u.showPreferences = false;
+      if (s.floatingButton) u.floatingButton = true;
+      if (s.branding === false) u.branding = false;
+      if (s.us) state.behavior.regulation = "us-optout";
+      if (s.lang) c.lang = s.lang;
+      if (s.title) c.title = s.title;
+      if (s.desc || s.description) c.description = s.desc || s.description;
+      if (s.privacyUrl) c.privacyPolicyUrl = s.privacyUrl;
+      if (s.cookieUrl) c.cookiePolicyUrl = s.cookieUrl;
+      if (s.termsUrl) c.termsUrl = s.termsUrl;
+      if (s.pad != null && +s.pad !== 20) extra.pad = +s.pad;
+      if (s.font && PG_FONTS[s.font]) extra.font = s.font;
+    }
+  } catch {}
+  function flatState() {
+    const u = state.ui, c = state.content;
+    return {
+      layout: u.layout, position: u.position, preferences: u.preferences, theme: u.theme,
+      accent: u.accent, radius: +u.radius, borderW: +u.borderW, borderColor: u.borderColor, shadow: u.shadow,
+      showRejectAll: u.showRejectAll, showPreferences: u.showPreferences, floatingButton: u.floatingButton,
+      branding: u.branding, us: state.behavior.regulation === "us-optout", lang: c.lang,
+      title: c.title, desc: c.description, privacyUrl: c.privacyPolicyUrl, cookieUrl: c.cookiePolicyUrl, termsUrl: c.termsUrl,
+      ...(extra.pad != null ? { pad: extra.pad } : {}), ...(extra.font ? { font: extra.font } : {}),
+    };
+  }
+
+  /* button text follows the accent's luminance so generated configs stay WCAG AA */
+  const lum = (hex) => {
+    const c = hex.replace("#", "");
+    const [r, g, b] = [0, 2, 4]
+      .map((i) => parseInt(c.slice(i, i + 2), 16) / 255)
+      .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const contrast = (a, b) => {
+    const [h, l] = [lum(a), lum(b)].sort((x, y) => y - x);
+    return (h + 0.05) / (l + 0.05);
+  };
+  const bestFg = (accent) => (contrast(accent, "#ffffff") >= contrast(accent, "#18181b") ? "#ffffff" : "#18181b");
+
   // shadow presets map to the --cl-shadow token (default "soft" emits nothing)
   const SHADOWS = {
     none: "none",
@@ -59,9 +119,12 @@
     if (state.ui.preferences !== "modal") ui.preferences = state.ui.preferences;
     if (state.ui.theme !== "auto") ui.theme = state.ui.theme;
     const tokens = {};
+    if (extra.pad != null) tokens.pad = extra.pad + "px";
+    if (extra.font) tokens.font = PG_FONTS[extra.font];
     if (state.ui.accent) {
       tokens.accent = state.ui.accent;
       tokens["switch-on"] = state.ui.accent;
+      tokens["accent-fg"] = bestFg(state.ui.accent);
     }
     if (+state.ui.radius !== 16) tokens.radius = state.ui.radius + "px";
     if (+state.ui.borderW !== 1) tokens["border-w"] = state.ui.borderW + "px";
@@ -155,6 +218,8 @@
       if (lastMsg) frame.contentWindow.postMessage(lastMsg, "*");
       else pushPreview();
     }
+    // widget focus pulled the browser's focus into the preview frame; hand it back to the page
+    if (e.data?.type === "cl-banner-show" && document.activeElement === frame) frame.blur();
     if (e.data?.type === "cl-consent") {
       const el = $("#last-consent");
       if (el) {
@@ -173,6 +238,7 @@
       renderCode("code-react", codeReact(cfg), "js");
       renderCode("code-html", codeHtml(cfg), "html");
       pushPreview();
+      history.replaceState(null, "", JSON.stringify(state) === DEFAULTS && extra.pad == null && !extra.font ? location.pathname : "#c=" + encodeState(flatState()));
     }, now ? 0 : 150);
   }
 
@@ -266,7 +332,20 @@
     accentClear.addEventListener("click", () => {
       set("ui.accent", "");
       $("#accent-input").value = "#4f46e5";
+      syncAccentWarn();
     });
+  // warn when even the better of white/ink text can't reach AA on this accent
+  function syncAccentWarn() {
+    const el = $("#accent-contrast-warn");
+    if (!el) return;
+    const a = state.ui.accent;
+    if (!a) return void (el.hidden = true);
+    const best = Math.max(contrast(a, "#ffffff"), contrast(a, "#18181b"));
+    el.hidden = best >= 4.5;
+    if (!el.hidden) el.textContent = `⚠ Button text on this accent tops out at ${best.toFixed(2)}:1 — below the 4.5:1 WCAG AA minimum. Pick a lighter or darker shade.`;
+  }
+  $("#accent-input")?.addEventListener("input", syncAccentWarn);
+  syncAccentWarn();
   const borderColorClear = $("#border-color-clear");
   if (borderColorClear)
     borderColorClear.addEventListener("click", () => {
