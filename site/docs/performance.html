@@ -21,7 +21,7 @@
   <main class="content">
     <div class="breadcrumb">Docs / Performance</div>
     <h1>Performance</h1>
-    <p class="lead">A consent banner exists to <em>stop</em> scripts from hurting users. It shouldn’t be the thing hurting them. ConsentLoop is engineered — and continuously measured — around the metrics <a href="https://cookiebench.com" target="_blank" rel="noopener">cookiebench.com</a> scores: FCP, LCP, CLS, TBT, bundle strategy and network impact.</p>
+    <p class="lead">A consent banner exists to <em>stop</em> scripts from hurting users. It shouldn’t be the thing hurting them. ConsentLoop is engineered — and continuously measured — around the metrics that matter most: FCP, LCP, CLS, TBT, bundle strategy and network impact.</p>
 
     <div class="bignum">
       <div class="card"><div class="n good">≈0<small>ms</small></div><div class="l">FCP / LCP impact¹</div></div>
@@ -53,7 +53,7 @@
       <li><strong>Bundler-native path is even leaner.</strong> The ESM build is code-split: importing <code>consentloop</code> costs ~6.6 KB pre-minification (≈3 KB min+gz) on the critical path; the UI chunk loads only if a banner must render. <code>sideEffects: false</code>, tree-shakeable.</li>
     </ul>
 
-    <h2>Scoring against the cookiebench pillars</h2>
+    <h2>Performance pillars, scored</h2>
     <div class="table-scroll"><table class="props">
       <tr><th>Pillar</th><th>Weight</th><th>ConsentLoop</th></tr>
       <tr><td>Performance (FCP/LCP/CLS/TTI/TBT)</td><td>40%</td><td>Deferred + idle-scheduled; CLS 0; TBT ≈ 0 (0 on repeat views)</td></tr>

@@ -246,7 +246,7 @@ ui.shadow:false disables Shadow DOM if you want to style with plain CSS selector
 - Zero CLS by construction: every surface is position:fixed; animations are transform/opacity only.
 
 =====================================================================
-8. PERFORMANCE ARCHITECTURE (why it wins cookiebench-style tests)
+8. PERFORMANCE ARCHITECTURE (why it's fast)
 =====================================================================
 
 - Critical path: 0 bytes if you bundle (ESM entry defers UI chunk), or the ~1.5 KB loader on CDN.

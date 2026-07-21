@@ -101,8 +101,7 @@
       <a href="/docs/">Docs</a>
       <a href="/playground/">Playground</a>
       <a href="/llms.txt">llms.txt</a>
-      <a href="https://github.com/kocsmy/ConsentLoop" target="_blank" rel="noopener">GitHub</a>
-      <span class="muted">Benchmarked on <a href="https://cookiebench.com" target="_blank" rel="noopener">cookiebench.com</a></span>`;
+      <a href="https://github.com/kocsmy/ConsentLoop" target="_blank" rel="noopener">GitHub</a>`;
     document.body.appendChild(el);
   }
 
