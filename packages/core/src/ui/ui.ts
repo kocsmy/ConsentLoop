@@ -143,7 +143,7 @@ export function createUi(
         .join("");
     const brand =
       ui.branding !== false
-        ? `<a class="cl-brand" href="https://github.com/kocsmy/ConsentLoop" target="_blank" rel="noopener">Consent by <b>ConsentLoop</b></a>`
+        ? `<a class="cl-brand" href="https://github.com/kocsmy/ConsentLoop" target="_blank" rel="noopener">Powered by <b>ConsentLoop</b></a>`
         : "";
     // box: credit sits on its own line under the buttons; cloud/bar: it rides in the links row
     const inlineBrand = ui.layout === "box" ? "" : brand;

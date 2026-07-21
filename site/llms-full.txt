@@ -86,7 +86,7 @@ ui: false | {               // false = headless (engine only)
   showRejectAll?: boolean         // default true (keep true for GDPR)
   showPreferences?: boolean       // default true
   floatingButton?: boolean        // reopen bubble after consent, default false
-  branding?: boolean              // small "Consent by ConsentLoop" link (banner + preferences), default true
+  branding?: boolean              // small "Powered by ConsentLoop" link (banner + preferences), default true
   scrollLock?: boolean            // lock page scroll while banner/preferences open, default false
   trapFocus?: boolean             // trap keyboard focus in the preferences dialog, default true (WCAG)
   customCss?: string              // extra CSS injected inside the (shadow) root; target .cl-* classes
