@@ -15,7 +15,7 @@ Monorepo (pnpm workspaces) for ConsentLoop, a source-available (FSL-1.1-MIT), pe
 
 - `packages/core/src/` — zero-dependency TS core. `index.ts` orchestrates: `store.ts` (config resolve + consent records + cookie/localStorage), `gating.ts` (`data-consent` script/embed activation), `gcm.ts` (Google Consent Mode v2), `i18n.ts`, `adapter.ts` (managed-backend HTTP adapter), `ui/ui.ts` + `ui/styles.ts` (Shadow-DOM widget, lazily imported), `loader.ts` (standalone ~1.4 KB smart loader — duplicates minimal logic on purpose, keep it dependency-free and tiny).
 - `packages/react/` — thin bindings (`ConsentProvider`, `useConsent`, `ConsentGate`).
-- `site/` — static, no build step. Docs shell injected by `assets/site.js`; interactive config reference driven by `assets/configurator.js`; live preview iframe `assets/preview.html` (postMessage `{type:"run",config}`); `playground/` visual designer. `site/vendor/*` is generated — never edit by hand, run `pnpm build`.
+- `site/` — static, no build step; docs + playground only (no marketing pages — the root `/` is a stub that redirects to `/docs/`, mirrored by a temporary redirect in `vercel.json`; marketing lives in a separate repo). Docs shell injected by `assets/site.js`; interactive config reference driven by `assets/configurator.js`; live preview iframe `assets/preview.html` (postMessage `{type:"run",config}`); `playground/` visual designer. `site/vendor/*` is generated — never edit by hand, run `pnpm build`.
 - `schema/consentloop.schema.json` — config schema; keep in sync with `types.ts` when adding options (also copied to `packages/core/schema.json` and `site/` at build).
 
 ## Invariants to preserve

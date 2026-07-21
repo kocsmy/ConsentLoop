@@ -3,6 +3,9 @@
   "buildCommand": "pnpm run build",
   "outputDirectory": "site",
   "cleanUrls": true,
+  "redirects": [
+    { "source": "/", "destination": "/docs", "permanent": false }
+  ],
   "headers": [
     {
       "source": "/vendor/(.*)",

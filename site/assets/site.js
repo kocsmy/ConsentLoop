@@ -64,7 +64,7 @@
       ["AI", "/docs/ai"],
     ];
     el.innerHTML = `
-      <a class="brand" href="/"><span class="logo">${logoSvg}</span>ConsentLoop</a>
+      <a class="brand" href="/docs/"><span class="logo">${logoSvg}</span>ConsentLoop</a>
       <nav class="topnav">${links
         .map(([label, href]) => `<a href="${href}" ${isActive(href) || (href === "/docs/" && path.startsWith("/docs")) ? 'class="active"' : ""}>${label}</a>`)
         .join("")}</nav>
