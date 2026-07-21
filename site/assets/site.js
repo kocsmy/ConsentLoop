@@ -197,6 +197,16 @@
 
   window.clSite = { highlight, escapeHtml, syncRangeFills };
 
+  // Vercel Web Analytics — the plain-HTML flavor (site/ has no bundler, so
+  // @vercel/analytics' inject() would just add this same tag). The endpoint only
+  // exists on Vercel deployments; skip it locally to keep dev consoles clean.
+  if (!/^(localhost|127\.|0\.0\.0\.0)/.test(location.hostname)) {
+    const va = document.createElement("script");
+    va.defer = true;
+    va.src = "/_vercel/insights/script.js";
+    document.head.appendChild(va);
+  }
+
   // favicon for pages that don't declare one
   if (!document.querySelector("link[rel~='icon']")) {
     const icon = document.createElement("link");
