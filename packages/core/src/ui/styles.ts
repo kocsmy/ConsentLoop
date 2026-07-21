@@ -24,6 +24,7 @@ export const CSS = `
   --cl-text:14px;
   --cl-width:24.5rem;
   --cl-gap:16px;
+  --cl-pad:20px;
   --cl-z:2147483000;
   font-family:var(--cl-font);font-size:var(--cl-text);line-height:1.55;color:var(--cl-fg);
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
@@ -67,7 +68,7 @@ export const CSS = `
 .cl-banner{
   pointer-events:auto;background:var(--cl-bg);border:1px solid var(--cl-border);
   border-radius:var(--cl-radius);box-shadow:var(--cl-shadow);
-  width:100%;max-width:var(--cl-width);padding:20px;
+  width:100%;max-width:var(--cl-width);padding:var(--cl-pad);
   opacity:0;transform:translateY(10px);
   transition:opacity .18s ease,transform .24s cubic-bezier(.2,.9,.3,1.2);
 }
@@ -78,7 +79,7 @@ export const CSS = `
 .cl-links{display:flex;gap:14px;margin-top:10px}
 .cl-links a{color:var(--cl-muted);font-size:12.5px;text-decoration:underline;text-underline-offset:2px}
 .cl-links a:hover{color:var(--cl-fg)}
-.cl-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.cl-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:calc(var(--cl-pad)*.8)}
 .cl-root .cl-btn{
   flex:1 1 auto;min-height:38px;padding:8px 14px;border-radius:var(--cl-btn-radius);
   background:var(--cl-btn-bg);color:var(--cl-btn-fg);font-weight:500;white-space:nowrap;
@@ -95,7 +96,7 @@ export const CSS = `
 .cl-brand b{font-weight:600}
 
 /* cloud: one horizontal pill */
-[data-layout=cloud] .cl-banner{max-width:46rem;display:flex;align-items:center;gap:20px;padding:14px 14px 14px 22px;border-radius:calc(var(--cl-radius)*1.5)}
+[data-layout=cloud] .cl-banner{max-width:46rem;display:flex;align-items:center;gap:20px;padding:calc(var(--cl-pad)*.7) calc(var(--cl-pad)*.7) calc(var(--cl-pad)*.7) calc(var(--cl-pad)*1.1);border-radius:calc(var(--cl-radius)*1.5)}
 [data-layout=cloud] .cl-banner-body{flex:1 1 auto;min-width:0}
 [data-layout=cloud] .cl-title{font-size:14px}
 [data-layout=cloud] .cl-desc{margin-top:2px;font-size:13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -106,7 +107,7 @@ export const CSS = `
 
 /* bar: full-width strip */
 [data-layout=bar] .cl-banner-layer{padding:0}
-[data-layout=bar] .cl-banner{max-width:none;border-radius:0;border-left:0;border-right:0;display:flex;align-items:center;gap:24px;padding:14px clamp(16px,4vw,40px)}
+[data-layout=bar] .cl-banner{max-width:none;border-radius:0;border-left:0;border-right:0;display:flex;align-items:center;gap:24px;padding:calc(var(--cl-pad)*.7) clamp(16px,4vw,40px)}
 [data-layout=bar] .cl-banner-body{flex:1 1 auto}
 [data-layout=bar] .cl-desc{margin-top:2px}
 [data-layout=bar] .cl-actions{margin-top:0;flex-wrap:nowrap}
@@ -130,13 +131,13 @@ export const CSS = `
 [data-prefs=drawer] .cl-prefs-layer{justify-content:flex-end;padding:0}
 [data-prefs=drawer] .cl-prefs{height:100%;max-height:none;max-width:27rem;border-radius:0;border-top:0;border-bottom:0;border-right:0;transform:translateX(24px)}
 [data-prefs=drawer] .cl-on .cl-prefs{transform:none}
-.cl-prefs-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px 0}
+.cl-prefs-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(var(--cl-pad)*.9) var(--cl-pad) 0}
 .cl-prefs-head .cl-title{font-size:16px}
 .cl-root .cl-x{width:32px;height:32px;border-radius:calc(var(--cl-radius)*.5);color:var(--cl-muted);display:grid;place-items:center;flex:0 0 auto}
 .cl-root .cl-x:hover{background:var(--cl-btn-bg);color:var(--cl-fg)}
-.cl-prefs>.cl-desc{padding:6px 20px 0}
-.cl-cats{overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
-.cl-cat{border:1px solid var(--cl-border);border-radius:calc(var(--cl-radius)*.75);padding:14px 16px}
+.cl-prefs>.cl-desc{padding:6px var(--cl-pad) 0}
+.cl-cats{overflow-y:auto;padding:calc(var(--cl-pad)*.8) var(--cl-pad);display:flex;flex-direction:column;gap:calc(var(--cl-pad)*.5);overscroll-behavior:contain}
+.cl-cat{border:1px solid var(--cl-border);border-radius:calc(var(--cl-radius)*.75);padding:calc(var(--cl-pad)*.7) calc(var(--cl-pad)*.8)}
 .cl-cat-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
 .cl-cat-title{font-size:14px;font-weight:600}
 .cl-cat-desc{color:var(--cl-muted);font-size:13px;margin-top:2px}
@@ -147,9 +148,9 @@ export const CSS = `
 .cl-svcs summary::before{content:"";width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .15s ease}
 .cl-svcs[open] summary::before{transform:rotate(45deg)}
 .cl-svc{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:7px 0;font-size:13px}
-.cl-prefs-foot{display:flex;flex-wrap:wrap;gap:8px;padding:14px 20px 18px;border-top:1px solid var(--cl-border)}
+.cl-prefs-foot{display:flex;flex-wrap:wrap;gap:8px;padding:calc(var(--cl-pad)*.7) var(--cl-pad) calc(var(--cl-pad)*.9);border-top:1px solid var(--cl-border)}
 .cl-prefs-foot .cl-btn.cl-primary{flex:2 1 auto}
-.cl-legal{display:flex;flex-wrap:wrap;align-items:center;gap:4px 16px;padding:0 20px 14px;font-size:11.5px}
+.cl-legal{display:flex;flex-wrap:wrap;align-items:center;gap:4px 16px;padding:0 var(--cl-pad) calc(var(--cl-pad)*.7);font-size:11.5px}
 .cl-legal a{color:var(--cl-muted);text-decoration:underline;text-underline-offset:2px}
 .cl-legal a:hover{color:var(--cl-fg)}
 .cl-legal .cl-brand{display:inline;margin:0;margin-inline-start:auto;font-size:11px;text-decoration:none}

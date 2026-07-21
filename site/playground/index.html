@@ -102,11 +102,30 @@
     <h3>Roundness</h3>
     <input type="range" id="radius" min="0" max="24" step="2" value="16" style="width:100%">
 
+    <h3>Spacing</h3>
+    <input type="range" id="pad" min="12" max="28" step="2" value="20" style="width:100%" aria-label="Widget spacing">
+
+    <h3>Font</h3>
+    <div class="seg" id="font-seg">
+      <button data-v="">System</button><button data-v="serif">Serif</button><button data-v="mono">Mono</button>
+    </div>
+
     <h3>Language <span class="muted" style="text-transform:none;letter-spacing:0">(58 built-in)</span></h3>
     <select id="lang-select" style="width:100%" aria-label="Widget language"></select>
 
+    <h3>Copy <span class="muted" style="text-transform:none;letter-spacing:0">(English)</span></h3>
+    <input type="text" id="txt-title" placeholder="We value your privacy" style="width:100%" aria-label="Banner title">
+    <input type="text" id="txt-desc" placeholder="Banner description…" style="width:100%;margin-top:6px" aria-label="Banner description">
+
+    <h3>Legal links</h3>
+    <input type="url" id="url-privacy" placeholder="Privacy policy URL, e.g. /privacy" style="width:100%" aria-label="Privacy policy URL">
+    <input type="url" id="url-cookies" placeholder="Cookie policy URL" style="width:100%;margin-top:6px" aria-label="Cookie policy URL">
+    <input type="url" id="url-terms" placeholder="Terms &amp; conditions URL" style="width:100%;margin-top:6px" aria-label="Terms and conditions URL">
+    <p class="small muted" style="margin:6px 0 0">Labels auto-translate in all 58 languages.</p>
+
     <h3>Options</h3>
     <div class="switchrow"><span class="small">Reject-all button</span><button class="uiswitch" role="switch" id="sw-reject" aria-checked="true"></button></div>
+    <div class="switchrow"><span class="small">Preferences button</span><button class="uiswitch" role="switch" id="sw-prefsbtn" aria-checked="true"></button></div>
     <div class="switchrow"><span class="small">Floating button</span><button class="uiswitch" role="switch" id="sw-fab" aria-checked="false"></button></div>
     <div class="switchrow"><span class="small">US opt-out mode</span><button class="uiswitch" role="switch" id="sw-us" aria-checked="false"></button></div>
     <div class="switchrow"><span class="small">ConsentLoop branding</span><button class="uiswitch" role="switch" id="sw-brand" aria-checked="true"></button></div>
@@ -151,8 +170,14 @@
 (() => {
   const state = {
     layout: "box", position: "bottom-right", preferences: "modal",
-    theme: "light", accent: "", radius: 16, lang: "en",
-    showRejectAll: true, floatingButton: false, us: false, branding: true,
+    theme: "light", accent: "", radius: 16, pad: 20, font: "", lang: "en",
+    showRejectAll: true, showPreferences: true, floatingButton: false, us: false, branding: true,
+    title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "",
+  };
+
+  const FONTS = {
+    serif: 'Georgia, "Times New Roman", serif',
+    mono: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace',
   };
 
   // locale packs ship with the npm package; the preview uses this site's copy
@@ -178,10 +203,26 @@
     const tokens = {};
     if (state.accent) { tokens.accent = state.accent; tokens["switch-on"] = state.accent; }
     if (state.radius !== 16) tokens.radius = state.radius + "px";
+    if (state.pad !== 20) tokens.pad = state.pad + "px";
+    if (state.font) tokens.font = FONTS[state.font];
     if (Object.keys(tokens).length) cfg.ui.tokens = tokens;
     if (!state.showRejectAll) cfg.ui.showRejectAll = false;
+    if (!state.showPreferences) cfg.ui.showPreferences = false;
     if (state.floatingButton) cfg.ui.floatingButton = true;
     if (!state.branding) cfg.ui.branding = false;
+    if (state.privacyUrl) (cfg.content = cfg.content || {}).privacyPolicyUrl = state.privacyUrl;
+    if (state.cookieUrl) (cfg.content = cfg.content || {}).cookiePolicyUrl = state.cookieUrl;
+    if (state.termsUrl) (cfg.content = cfg.content || {}).termsUrl = state.termsUrl;
+    if (state.title || state.desc) {
+      cfg.content = cfg.content || {};
+      cfg.content.translations = cfg.content.translations || {};
+      const en = (cfg.content.translations.en = cfg.content.translations.en || {});
+      en.banner = {
+        ...(en.banner || {}),
+        ...(state.title ? { title: state.title } : {}),
+        ...(state.desc ? { description: state.desc } : {}),
+      };
+    }
     if (state.lang !== "en") {
       cfg.content = cfg.content || {};
       cfg.content.lang = state.lang;
@@ -224,6 +265,7 @@
   })();
   seg("prefs-seg", "preferences");
   seg("theme-seg", "theme");
+  seg("font-seg", "font");
 
   /* language dropdown — all 58 locale packs */
   const langSel = document.getElementById("lang-select");
@@ -246,6 +288,7 @@
   swEl.querySelectorAll(".swatch").forEach((b) => b.addEventListener("click", () => { state.accent = b.dataset.v; syncSw(); push(); }));
   syncSw();
   document.getElementById("radius").addEventListener("input", (e) => { state.radius = +e.target.value; push(); });
+  document.getElementById("pad").addEventListener("input", (e) => { state.pad = +e.target.value; push(); });
 
   /* switches */
   function uiswitch(id, key, after) {
@@ -256,9 +299,27 @@
     return sync;
   }
   uiswitch("sw-reject", "showRejectAll");
+  uiswitch("sw-prefsbtn", "showPreferences");
   uiswitch("sw-fab", "floatingButton");
   uiswitch("sw-us", "us");
   uiswitch("sw-brand", "branding");
+
+  /* text inputs (debounced so the preview doesn't re-boot per keystroke) */
+  const TEXT_INPUTS = [
+    ["txt-title", "title"], ["txt-desc", "desc"],
+    ["url-privacy", "privacyUrl"], ["url-cookies", "cookieUrl"], ["url-terms", "termsUrl"],
+  ];
+  let textTimer;
+  for (const [id, key] of TEXT_INPUTS) {
+    const el = document.getElementById(id);
+    el.addEventListener("input", () => {
+      state[key] = el.value.trim();
+      clearTimeout(textTimer);
+      textTimer = setTimeout(push, 200);
+    });
+  }
+  const syncTextInputs = () =>
+    TEXT_INPUTS.forEach(([id, key]) => { document.getElementById(id).value = state[key]; });
 
   /* presets */
   const PRESETS = {
@@ -268,19 +329,21 @@
     us: { layout: "box", position: "bottom-left", preferences: "modal", theme: "light", accent: "", radius: 16, lang: "en", showRejectAll: true, floatingButton: true, us: true, branding: true },
     dark: { layout: "box", position: "bottom-right", preferences: "drawer", theme: "dark", accent: "#818cf8", radius: 18, lang: "en", showRejectAll: true, floatingButton: false, us: false, branding: true },
   };
+  // options every preset resets to defaults (presets only override the keys they list)
+  const PRESET_BASE = { showPreferences: true, pad: 20, font: "", title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "" };
   document.querySelectorAll(".preset").forEach((b) =>
     b.addEventListener("click", () => {
-      Object.assign(state, PRESETS[b.dataset.preset]);
-      syncLayout(); syncPos(); syncSw();
+      Object.assign(state, PRESET_BASE, PRESETS[b.dataset.preset]);
+      syncLayout(); syncPos(); syncSw(); syncTextInputs();
       document.getElementById("radius").value = state.radius;
+      document.getElementById("pad").value = state.pad;
       langSel.value = state.lang;
-      ["prefs-seg","theme-seg"].forEach((id) => {
-        const el = document.getElementById(id);
-        const key = id === "prefs-seg" ? "preferences" : "theme";
-        el.querySelectorAll("button").forEach((x) => x.classList.toggle("active", x.dataset.v === state[key]));
+      [["prefs-seg","preferences"],["theme-seg","theme"],["font-seg","font"]].forEach(([id, key]) => {
+        document.getElementById(id).querySelectorAll("button")
+          .forEach((x) => x.classList.toggle("active", x.dataset.v === state[key]));
       });
-      ["sw-reject","sw-fab","sw-us","sw-brand"].forEach((id, i) => {
-        const keys = ["showRejectAll","floatingButton","us","branding"];
+      ["sw-reject","sw-prefsbtn","sw-fab","sw-us","sw-brand"].forEach((id, i) => {
+        const keys = ["showRejectAll","showPreferences","floatingButton","us","branding"];
         document.getElementById(id).setAttribute("aria-checked", String(state[keys[i]]));
       });
       push();
