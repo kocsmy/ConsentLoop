@@ -93,7 +93,7 @@ export const CSS = `
 .cl-root .cl-btn.cl-ghost{background:transparent;color:var(--cl-muted);flex-grow:0}
 .cl-root .cl-btn.cl-ghost:hover{color:var(--cl-fg);filter:none}
 .cl-root .cl-actions.cl-solo .cl-btn:not(.cl-ghost){flex:0 1 auto;padding:8px 18px}
-.cl-brand{display:block;margin-top:12px;color:var(--cl-muted);opacity:.75;text-decoration:underline;text-underline-offset:2px}
+.cl-brand{display:block;margin-top:12px;font-size:12px;color:var(--cl-muted);opacity:.75;text-decoration:underline;text-underline-offset:2px}
 .cl-brand:hover{opacity:1}
 .cl-brand b{font-weight:600}
 .cl-links .cl-brand{display:inline;margin:0}

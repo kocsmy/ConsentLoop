@@ -20,7 +20,7 @@
       trapFocus: true,
     },
     behavior: { regulation: "gdpr", gcm: true, storage: "cookie", expiresDays: 182, revision: 0 },
-    content: { lang: "en", title: "", description: "", privacyPolicyUrl: "", cookiePolicyUrl: "", termsUrl: "" },
+    content: { lang: "en", title: "", description: "", showTitle: true, privacyPolicyUrl: "", cookiePolicyUrl: "", termsUrl: "" },
   };
 
   /* ---- shareable, refresh-proof state (#c= hash, same flat schema as /playground/) ---- */
@@ -48,6 +48,7 @@
       if (s.branding === false) u.branding = false;
       if (s.us) state.behavior.regulation = "us-optout";
       if (s.lang) c.lang = s.lang;
+      if (s.showTitle === false) c.showTitle = false;
       if (s.title) c.title = s.title;
       if (s.desc || s.description) c.description = s.desc || s.description;
       if (s.privacyUrl) c.privacyPolicyUrl = s.privacyUrl;
@@ -64,7 +65,8 @@
       accent: u.accent, radius: +u.radius, borderW: +u.borderW, borderColor: u.borderColor, shadow: u.shadow,
       showRejectAll: u.showRejectAll, showPreferences: u.showPreferences, floatingButton: u.floatingButton,
       branding: u.branding, us: state.behavior.regulation === "us-optout", lang: c.lang,
-      title: c.title, desc: c.description, privacyUrl: c.privacyPolicyUrl, cookieUrl: c.cookiePolicyUrl, termsUrl: c.termsUrl,
+      showTitle: c.showTitle, title: c.title, desc: c.description,
+      privacyUrl: c.privacyPolicyUrl, cookieUrl: c.cookiePolicyUrl, termsUrl: c.termsUrl,
       ...(extra.pad != null ? { pad: extra.pad } : {}), ...(extra.font ? { font: extra.font } : {}),
     };
   }
@@ -150,7 +152,8 @@
     const translations = {};
     if (state.content.lang !== "en") translations[state.content.lang] = cdnLocale(state.content.lang);
     const en = {};
-    if (state.content.title) en.banner = { ...(en.banner || {}), title: state.content.title };
+    if (!state.content.showTitle) en.banner = { ...(en.banner || {}), title: "" };
+    else if (state.content.title) en.banner = { ...(en.banner || {}), title: state.content.title };
     if (state.content.description) en.banner = { ...(en.banner || {}), description: state.content.description };
     if (Object.keys(en).length) translations.en = en;
     const legalUrls = state.content.privacyPolicyUrl || state.content.cookiePolicyUrl || state.content.termsUrl;

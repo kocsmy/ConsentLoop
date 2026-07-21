@@ -115,6 +115,7 @@ export interface Translation {
   /** Right-to-left script. Sets `dir="rtl"` on the widget. */
   rtl?: boolean;
   banner?: {
+    /** Set to `""` to render the banner without a heading (description-only, a few px shorter). */
     title?: string;
     description?: string;
     acceptAll?: string;

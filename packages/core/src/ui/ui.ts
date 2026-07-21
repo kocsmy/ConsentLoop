@@ -191,12 +191,16 @@ export function createUi(
       })
       .join("");
 
+    // an empty banner title is valid (a leaner, headline-free banner) — the dialog still
+    // needs an accessible name, so it falls back to labelling itself by the description
+    const bannerName = b.title ? `aria-label="${esc(b.title)}"` : `aria-labelledby="cl-desc"`;
+
     root.innerHTML = `
     <div class="cl-layer cl-banner-layer" data-l="banner">
-      <div class="cl-banner" role="dialog" aria-modal="false" aria-label="${esc(b.title!)}" tabindex="-1">
+      <div class="cl-banner" role="dialog" aria-modal="false" ${bannerName} tabindex="-1">
         <div class="cl-banner-body">
-          <h2 class="cl-title">${esc(b.title!)}</h2>
-          <p class="cl-desc">${b.description || ""}</p>
+          ${b.title ? `<h2 class="cl-title">${esc(b.title)}</h2>` : ""}
+          <p class="cl-desc" id="cl-desc">${b.description || ""}</p>
           ${links || inlineBrand ? `<div class="cl-links">${links}${inlineBrand}</div>` : ""}
         </div>
         <div class="cl-actions${soloActions}">${bannerButtons}</div>

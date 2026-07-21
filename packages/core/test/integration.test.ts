@@ -288,6 +288,17 @@ describe("a11y & security", () => {
     expect(q('[data-a="accept-all"]').innerHTML).not.toContain("<b>");
   });
 
+  it("an empty banner title is omitted and the dialog falls back to labelling by its description", async () => {
+    await api.run({
+      content: { translations: { en: { banner: { title: "", description: "Custom description text" } } } },
+    });
+    expect(maybeQ(".cl-banner .cl-title")).toBeNull();
+    const desc = q(".cl-desc");
+    expect(desc.id).toBe("cl-desc");
+    expect(q(".cl-banner").getAttribute("aria-labelledby")).toBe("cl-desc");
+    expect(q(".cl-banner").hasAttribute("aria-label")).toBe(false);
+  });
+
   it("preferences dialog has aria-modal and switches expose role/aria-checked", async () => {
     await api.run({ categories: { analytics: {} } });
     click('[data-a="open-prefs"]');

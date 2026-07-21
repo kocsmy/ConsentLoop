@@ -1,1 +1,1 @@
-window.CL_META={"version":"0.1.0","gzip":{"loader":1.5,"full":12.23}};
+window.CL_META={"version":"0.1.0","gzip":{"loader":1.5,"full":12.24}};

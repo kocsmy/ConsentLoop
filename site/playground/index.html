@@ -167,7 +167,8 @@
         <h4>Language <span class="muted" style="text-transform:none;letter-spacing:0">(58 built-in)</span></h4>
         <select id="lang-select" style="width:100%" aria-label="Widget language"></select>
         <h4>Copy <span class="muted" style="text-transform:none;letter-spacing:0">(English)</span></h4>
-        <input type="text" id="txt-title" placeholder="We value your privacy" style="width:100%" aria-label="Banner title">
+        <div class="switchrow"><span class="small tip" data-tip="Off renders the banner without a heading — description-only, a touch shorter.">Show title</span><button class="uiswitch" role="switch" id="sw-title" aria-checked="true" aria-label="Show title"></button></div>
+        <input type="text" id="txt-title" placeholder="We value your privacy" style="width:100%;margin-top:6px" aria-label="Banner title">
         <input type="text" id="txt-desc" placeholder="Banner description…" style="width:100%;margin-top:6px" aria-label="Banner description">
         <h4>Legal links</h4>
         <input type="url" id="url-privacy" placeholder="Privacy policy URL, e.g. /privacy" style="width:100%" aria-label="Privacy policy URL">
@@ -235,7 +236,7 @@
     layout: "box", position: "bottom-right", preferences: "modal",
     theme: "light", accent: "", radius: 16, pad: 20, font: "", borderW: 0, borderColor: "", shadow: "", lang: "en",
     showRejectAll: true, showPreferences: true, floatingButton: false, us: false, dnsLink: false, branding: true,
-    title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "",
+    showTitle: true, title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "",
   };
 
   /* ---- shareable, refresh-proof state (#c= hash, also read by /docs/configuration) ---- */
@@ -244,7 +245,7 @@
   const SECTIONS = {
     "sec-layout": ["layout", "position", "preferences"],
     "sec-style": ["theme", "accent", "radius", "pad", "font", "borderW", "borderColor", "shadow"],
-    "sec-content": ["lang", "title", "desc", "privacyUrl", "cookieUrl", "termsUrl"],
+    "sec-content": ["lang", "showTitle", "title", "desc", "privacyUrl", "cookieUrl", "termsUrl"],
     "sec-behavior": ["showRejectAll", "showPreferences", "floatingButton", "us", "dnsLink", "branding"],
   };
   const secModified = (keys) => keys.some((k) => JSON.stringify(state[k]) !== JSON.stringify(DEFAULT_OBJ[k]));
@@ -331,13 +332,13 @@
     if (state.privacyUrl) (cfg.content = cfg.content || {}).privacyPolicyUrl = state.privacyUrl;
     if (state.cookieUrl) (cfg.content = cfg.content || {}).cookiePolicyUrl = state.cookieUrl;
     if (state.termsUrl) (cfg.content = cfg.content || {}).termsUrl = state.termsUrl;
-    if (state.title || state.desc) {
+    if (!state.showTitle || state.title || state.desc) {
       cfg.content = cfg.content || {};
       cfg.content.translations = cfg.content.translations || {};
       const en = (cfg.content.translations.en = cfg.content.translations.en || {});
       en.banner = {
         ...(en.banner || {}),
-        ...(state.title ? { title: state.title } : {}),
+        ...(!state.showTitle ? { title: "" } : state.title ? { title: state.title } : {}),
         ...(state.desc ? { description: state.desc } : {}),
       };
     }
@@ -449,6 +450,7 @@
   uiswitch("sw-us", "us");
   uiswitch("sw-dns", "dnsLink");
   uiswitch("sw-brand", "branding");
+  uiswitch("sw-title", "showTitle");
 
   /* text inputs (debounced so the preview doesn't re-boot per keystroke) */
   const TEXT_INPUTS = [
@@ -476,7 +478,7 @@
     dark: { layout: "box", position: "bottom-right", preferences: "drawer", theme: "dark", accent: "#818cf8", radius: 18, lang: "en", showRejectAll: true, floatingButton: false, us: false, branding: true },
   };
   // options every preset resets to defaults (presets only override the keys they list)
-  const PRESET_BASE = { showPreferences: true, pad: 20, font: "", borderW: 0, borderColor: "", shadow: "", dnsLink: false, title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "" };
+  const PRESET_BASE = { showPreferences: true, pad: 20, font: "", borderW: 0, borderColor: "", shadow: "", dnsLink: false, showTitle: true, title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "" };
   function applyControls() {
     syncLayout(); syncPos(); syncSw(); syncBorderSw(); syncTextInputs();
     document.getElementById("radius").value = state.radius;
@@ -487,8 +489,8 @@
       document.getElementById(id).querySelectorAll("button")
         .forEach((x) => x.classList.toggle("active", x.dataset.v === state[key]));
     });
-    ["sw-reject","sw-prefsbtn","sw-fab","sw-us","sw-dns","sw-brand"].forEach((id, i) => {
-      const keys = ["showRejectAll","showPreferences","floatingButton","us","dnsLink","branding"];
+    ["sw-reject","sw-prefsbtn","sw-fab","sw-us","sw-dns","sw-brand","sw-title"].forEach((id, i) => {
+      const keys = ["showRejectAll","showPreferences","floatingButton","us","dnsLink","branding","showTitle"];
       document.getElementById(id).setAttribute("aria-checked", String(state[keys[i]]));
     });
   }
