@@ -25,6 +25,7 @@ Monorepo (pnpm workspaces) for ConsentLoop, a source-available (FSL-1.1-MIT), pe
 3. Core has zero runtime dependencies; UI loads via dynamic import (code-split in ESM build).
 4. Stored cookie shape (`{id,t,u,r,a,j,s,g,m,v}`) is a compatibility contract between loader and core — bump carefully.
 5. Every new config option needs: `types.ts` JSDoc, schema entry, `llms-full.txt` section, a test, and (if visual) a configurator control.
+6. `site/vendor/*` filenames are not content-hashed, so vercel.json serves them with `max-age=0, must-revalidate` and site HTML references carry a `?v=` query. Never raise the TTL (a long TTL makes deploys invisible to returning visitors for its whole duration).
 
 ## Verify changes
 

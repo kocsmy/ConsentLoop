@@ -189,9 +189,9 @@ export default function App() {
   <button onclick="ConsentLoop.showPreferences()">Open preferences</button>
 </div>
 
-<script src="/vendor/meta.js"></script>
+<script src="/vendor/meta.js?v=0.1.0"></script>
 <script src="/assets/site.js"></script>
-<script defer src="/vendor/consentloop.iife.min.js"></script>
+<script defer src="/vendor/consentloop.iife.min.js?v=0.1.0"></script>
 <script>
   addEventListener("consentloop:consent", () => {
     setTimeout(() => document.getElementById("demo-hint").classList.add("on"), 600);
