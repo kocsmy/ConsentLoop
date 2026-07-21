@@ -92,7 +92,10 @@
   <aside class="pg-side">
     <div class="side-head">
       <h3>Presets</h3>
-      <button class="btn small" id="reset-btn" type="button" title="Back to the default design">↺ Reset</button>
+      <span style="display:flex;gap:6px">
+        <button class="btn small" id="rand-btn" type="button" title="Roll a random design">⚄ Randomize</button>
+        <button class="btn small" id="reset-btn" type="button" title="Back to the default design">↺ Reset</button>
+      </span>
     </div>
     <div class="presets">
       <button class="preset" data-preset="saas"><b>SaaS minimal</b><span>box · bottom-right · auto theme</span></button>
@@ -139,14 +142,14 @@
         <input type="range" id="radius" min="0" max="24" step="2" value="16" style="width:100%" aria-label="Corner roundness">
         <h4 class="lab">Spacing<output id="out-pad" for="pad">20px</output></h4>
         <input type="range" id="pad" min="12" max="28" step="2" value="20" style="width:100%" aria-label="Widget spacing">
-        <h4 class="lab">Border<output id="out-borderw" for="borderw">1px</output></h4>
+        <h4 class="lab">Border<output id="out-borderw" for="borderw">0px</output></h4>
         <div class="swatches" id="border-swatches">
           <button class="swatch none" data-v="" title="Auto (subtle)"></button>
           <button class="swatch" data-v="strong" style="background:#9d9da5" title="Strong"></button>
           <button class="swatch" data-v="black" style="background:#18181b" title="Black"></button>
           <button class="swatch" data-v="accent" style="background:conic-gradient(#4f46e5,#0ea5e9,#16a34a,#e11d48,#4f46e5)" title="Match accent"></button>
         </div>
-        <input type="range" id="borderw" min="0" max="4" step="1" value="1" style="width:100%;margin-top:10px" aria-label="Border width">
+        <input type="range" id="borderw" min="0" max="4" step="1" value="0" style="width:100%;margin-top:10px" aria-label="Border width">
         <h4>Shadow</h4>
         <div class="seg" id="shadow-seg">
           <button data-v="none">None</button><button data-v="subtle">Subtle</button><button data-v="">Soft</button><button data-v="strong">Strong</button>
@@ -181,6 +184,7 @@
         <div class="switchrow"><span class="small tip" data-tip="Lets visitors open a preferences panel and pick cookie categories individually.">Preferences button</span><button class="uiswitch" role="switch" id="sw-prefsbtn" aria-checked="true" aria-label="Preferences button"></button></div>
         <div class="switchrow"><span class="small tip" data-tip="A small round button that stays on the page after consent, so visitors can reopen and change their choice anytime.">Floating button</span><button class="uiswitch" role="switch" id="sw-fab" aria-checked="false" aria-label="Floating button"></button></div>
         <div class="switchrow"><span class="small tip" data-tip="US-style (CCPA/CPRA) notice: cookies run by default and the banner offers an opt-out, instead of asking before anything loads.">US opt-out mode</span><button class="uiswitch" role="switch" id="sw-us" aria-checked="false" aria-label="US opt-out mode"></button></div>
+        <div class="switchrow"><span class="small tip" data-tip="Adds a “Do Not Sell or Share My Personal Information” link to the banner. CCPA/CPRA wants this link somewhere on your site — your footer works too, so it's optional here.">Do-Not-Sell link</span><button class="uiswitch" role="switch" id="sw-dns" aria-checked="false" aria-label="Do-Not-Sell link"></button></div>
         <div class="switchrow"><span class="small tip" data-tip="The small “Powered by ConsentLoop” credit link shown in the banner and preferences.">ConsentLoop branding</span><button class="uiswitch" role="switch" id="sw-brand" aria-checked="true" aria-label="ConsentLoop branding"></button></div>
       </div>
     </details>
@@ -229,8 +233,8 @@
 (() => {
   const state = {
     layout: "box", position: "bottom-right", preferences: "modal",
-    theme: "light", accent: "", radius: 16, pad: 20, font: "", borderW: 1, borderColor: "", shadow: "", lang: "en",
-    showRejectAll: true, showPreferences: true, floatingButton: false, us: false, branding: true,
+    theme: "light", accent: "", radius: 16, pad: 20, font: "", borderW: 0, borderColor: "", shadow: "", lang: "en",
+    showRejectAll: true, showPreferences: true, floatingButton: false, us: false, dnsLink: false, branding: true,
     title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "",
   };
 
@@ -241,7 +245,7 @@
     "sec-layout": ["layout", "position", "preferences"],
     "sec-style": ["theme", "accent", "radius", "pad", "font", "borderW", "borderColor", "shadow"],
     "sec-content": ["lang", "title", "desc", "privacyUrl", "cookieUrl", "termsUrl"],
-    "sec-behavior": ["showRejectAll", "showPreferences", "floatingButton", "us", "branding"],
+    "sec-behavior": ["showRejectAll", "showPreferences", "floatingButton", "us", "dnsLink", "branding"],
   };
   const secModified = (keys) => keys.some((k) => JSON.stringify(state[k]) !== JSON.stringify(DEFAULT_OBJ[k]));
   const encodeState = (o) => btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
@@ -308,14 +312,15 @@
       cfg.regulation = "us-optout";
       cfg.categories.analytics.default = true;
       cfg.categories.marketing.default = true;
-      cfg.content = { translations: { en: { banner: { links: [{ label: "Do Not Sell or Share My Personal Information", href: "/do-not-sell" }] } } } };
     }
+    if (state.dnsLink)
+      cfg.content = { translations: { en: { banner: { links: [{ label: "Do Not Sell or Share My Personal Information", href: "/do-not-sell" }] } } } };
     const tokens = {};
     if (state.accent) { tokens.accent = state.accent; tokens["switch-on"] = state.accent; tokens["accent-fg"] = bestFg(state.accent); }
     if (state.radius !== 16) tokens.radius = state.radius + "px";
     if (state.pad !== 20) tokens.pad = state.pad + "px";
     if (state.font) tokens.font = FONTS[state.font];
-    if (state.borderW !== 1) tokens["border-w"] = state.borderW + "px";
+    if (state.borderW !== 0) tokens["border-w"] = state.borderW + "px";
     if (state.borderColor) tokens.border = borderColor();
     if (state.shadow) tokens.shadow = SHADOWS[state.shadow];
     if (Object.keys(tokens).length) cfg.ui.tokens = tokens;
@@ -442,6 +447,7 @@
   uiswitch("sw-prefsbtn", "showPreferences");
   uiswitch("sw-fab", "floatingButton");
   uiswitch("sw-us", "us");
+  uiswitch("sw-dns", "dnsLink");
   uiswitch("sw-brand", "branding");
 
   /* text inputs (debounced so the preview doesn't re-boot per keystroke) */
@@ -466,11 +472,11 @@
     saas: { layout: "box", position: "bottom-right", preferences: "modal", theme: "light", accent: "", radius: 16, lang: "en", showRejectAll: true, floatingButton: false, us: false, branding: true },
     brand: { layout: "cloud", position: "bottom-center", preferences: "modal", theme: "light", accent: "#4f46e5", radius: 20, lang: "en", showRejectAll: true, floatingButton: true, us: false, branding: true },
     publisher: { layout: "bar", position: "top-center", preferences: "modal", theme: "light", accent: "", radius: 8, lang: "en", showRejectAll: true, floatingButton: false, us: false, branding: true },
-    us: { layout: "box", position: "bottom-left", preferences: "modal", theme: "light", accent: "", radius: 16, lang: "en", showRejectAll: true, floatingButton: true, us: true, branding: true },
+    us: { layout: "box", position: "bottom-left", preferences: "modal", theme: "light", accent: "", radius: 16, lang: "en", showRejectAll: true, floatingButton: true, us: true, dnsLink: true, branding: true },
     dark: { layout: "box", position: "bottom-right", preferences: "drawer", theme: "dark", accent: "#818cf8", radius: 18, lang: "en", showRejectAll: true, floatingButton: false, us: false, branding: true },
   };
   // options every preset resets to defaults (presets only override the keys they list)
-  const PRESET_BASE = { showPreferences: true, pad: 20, font: "", borderW: 1, borderColor: "", shadow: "", title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "" };
+  const PRESET_BASE = { showPreferences: true, pad: 20, font: "", borderW: 0, borderColor: "", shadow: "", dnsLink: false, title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "" };
   function applyControls() {
     syncLayout(); syncPos(); syncSw(); syncBorderSw(); syncTextInputs();
     document.getElementById("radius").value = state.radius;
@@ -481,8 +487,8 @@
       document.getElementById(id).querySelectorAll("button")
         .forEach((x) => x.classList.toggle("active", x.dataset.v === state[key]));
     });
-    ["sw-reject","sw-prefsbtn","sw-fab","sw-us","sw-brand"].forEach((id, i) => {
-      const keys = ["showRejectAll","showPreferences","floatingButton","us","branding"];
+    ["sw-reject","sw-prefsbtn","sw-fab","sw-us","sw-dns","sw-brand"].forEach((id, i) => {
+      const keys = ["showRejectAll","showPreferences","floatingButton","us","dnsLink","branding"];
       document.getElementById(id).setAttribute("aria-checked", String(state[keys[i]]));
     });
   }
@@ -495,6 +501,34 @@
   );
   document.getElementById("reset-btn").addEventListener("click", () => {
     Object.assign(state, JSON.parse(DEFAULTS));
+    applyControls();
+    push();
+  });
+
+  /* randomize — rolls the visual design; content, language and behavior stay put */
+  const RAND_POS = {
+    box: ["bottom-right", "bottom-left", "top-right", "top-left"],
+    cloud: ["bottom-center", "bottom-right", "bottom-left", "top-center"],
+    bar: ["top-center", "bottom-center"],
+  };
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  document.getElementById("rand-btn").addEventListener("click", () => {
+    const layout = pick(["box", "box", "cloud", "bar"]);
+    Object.assign(state, {
+      layout,
+      position: pick(RAND_POS[layout]),
+      preferences: pick(["modal", "modal", "drawer"]),
+      theme: pick(["light", "light", "dark"]),
+      accent: pick([...document.querySelectorAll("#swatches .swatch")].map((b) => b.dataset.v)),
+      radius: pick([0, 4, 8, 12, 16, 20, 24]),
+      pad: pick([14, 16, 20, 24]),
+      font: pick(["", "", "serif", "mono"]),
+      borderW: pick([0, 0, 0, 1, 1, 2]),
+      borderColor: "",
+      shadow: pick(["", "", "subtle", "strong", "none"]),
+    });
+    if (state.borderW) state.borderColor = pick(["", "strong", "black", "accent"]);
+    if (state.shadow === "none" && !state.borderW) state.borderW = 1; // flat design still needs an edge
     applyControls();
     push();
   });
