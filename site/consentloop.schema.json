@@ -125,7 +125,7 @@
                     "type": "object",
                     "additionalProperties": false,
                     "properties": {
-                      "title": { "type": "string" },
+                      "title": { "type": "string", "description": "Set to \"\" to render the banner without a heading (description-only)." },
                       "description": { "type": "string", "description": "HTML allowed." },
                       "acceptAll": { "type": "string" },
                       "rejectAll": { "type": "string" },
