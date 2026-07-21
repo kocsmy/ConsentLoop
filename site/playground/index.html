@@ -108,6 +108,11 @@
     </div>
     <input type="range" id="borderw" min="0" max="4" step="1" value="1" style="width:100%;margin-top:10px" aria-label="Border width">
 
+    <h3>Shadow</h3>
+    <div class="seg" id="shadow-seg">
+      <button data-v="none">None</button><button data-v="subtle">Subtle</button><button data-v="">Soft</button><button data-v="strong">Strong</button>
+    </div>
+
     <h3>Roundness</h3>
     <input type="range" id="radius" min="0" max="24" step="2" value="16" style="width:100%">
 
@@ -179,7 +184,7 @@
 (() => {
   const state = {
     layout: "box", position: "bottom-right", preferences: "modal",
-    theme: "light", accent: "", radius: 16, pad: 20, font: "", borderW: 1, borderColor: "", lang: "en",
+    theme: "light", accent: "", radius: 16, pad: 20, font: "", borderW: 1, borderColor: "", shadow: "", lang: "en",
     showRejectAll: true, showPreferences: true, floatingButton: false, us: false, branding: true,
     title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "",
   };
@@ -191,6 +196,11 @@
   const BORDER_COLORS = { strong: "rgba(9,9,11,.35)", black: "#18181b" };
   const borderColor = () =>
     state.borderColor === "accent" ? state.accent || "#18181b" : BORDER_COLORS[state.borderColor];
+  const SHADOWS = {
+    none: "none",
+    subtle: "0 4px 16px rgba(9,9,11,.08)",
+    strong: "0 24px 64px rgba(9,9,11,.28), 0 4px 12px rgba(9,9,11,.1)",
+  };
 
   // locale packs ship with the npm package; the preview uses this site's copy
   const localeUrl = (code, forExport) =>
@@ -219,6 +229,7 @@
     if (state.font) tokens.font = FONTS[state.font];
     if (state.borderW !== 1) tokens["border-w"] = state.borderW + "px";
     if (state.borderColor) tokens.border = borderColor();
+    if (state.shadow) tokens.shadow = SHADOWS[state.shadow];
     if (Object.keys(tokens).length) cfg.ui.tokens = tokens;
     if (!state.showRejectAll) cfg.ui.showRejectAll = false;
     if (!state.showPreferences) cfg.ui.showPreferences = false;
@@ -280,6 +291,7 @@
   seg("prefs-seg", "preferences");
   seg("theme-seg", "theme");
   seg("font-seg", "font");
+  seg("shadow-seg", "shadow");
 
   /* language dropdown — all 58 locale packs */
   const langSel = document.getElementById("lang-select");
@@ -351,7 +363,7 @@
     dark: { layout: "box", position: "bottom-right", preferences: "drawer", theme: "dark", accent: "#818cf8", radius: 18, lang: "en", showRejectAll: true, floatingButton: false, us: false, branding: true },
   };
   // options every preset resets to defaults (presets only override the keys they list)
-  const PRESET_BASE = { showPreferences: true, pad: 20, font: "", borderW: 1, borderColor: "", title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "" };
+  const PRESET_BASE = { showPreferences: true, pad: 20, font: "", borderW: 1, borderColor: "", shadow: "", title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "" };
   document.querySelectorAll(".preset").forEach((b) =>
     b.addEventListener("click", () => {
       Object.assign(state, PRESET_BASE, PRESETS[b.dataset.preset]);
@@ -360,7 +372,7 @@
       document.getElementById("pad").value = state.pad;
       document.getElementById("borderw").value = state.borderW;
       langSel.value = state.lang;
-      [["prefs-seg","preferences"],["theme-seg","theme"],["font-seg","font"]].forEach(([id, key]) => {
+      [["prefs-seg","preferences"],["theme-seg","theme"],["font-seg","font"],["shadow-seg","shadow"]].forEach(([id, key]) => {
         document.getElementById(id).querySelectorAll("button")
           .forEach((x) => x.classList.toggle("active", x.dataset.v === state[key]));
       });

@@ -11,6 +11,7 @@
       radius: 16,
       borderW: 1,
       borderColor: "",
+      shadow: "",
       showRejectAll: true,
       showPreferences: true,
       floatingButton: false,
@@ -22,7 +23,14 @@
     content: { lang: "en", title: "", description: "", privacyPolicyUrl: "", cookiePolicyUrl: "", termsUrl: "" },
   };
 
-  // 50 locale packs ship in the npm package; the preview swaps the CDN URL for this site's copy
+  // shadow presets map to the --cl-shadow token (default "soft" emits nothing)
+  const SHADOWS = {
+    none: "none",
+    subtle: "0 4px 16px rgba(9,9,11,.08)",
+    strong: "0 24px 64px rgba(9,9,11,.28), 0 4px 12px rgba(9,9,11,.1)",
+  };
+
+  // 58 locale packs ship in the npm package; the preview swaps the CDN URL for this site's copy
   const cdnLocale = (code) => `https://cdn.jsdelivr.net/npm/consentloop/locales/${code}.json`;
   const langSelect = document.getElementById("cfg-lang");
   if (langSelect && window.CL_LOCALES) {
@@ -58,6 +66,7 @@
     if (+state.ui.radius !== 16) tokens.radius = state.ui.radius + "px";
     if (+state.ui.borderW !== 1) tokens["border-w"] = state.ui.borderW + "px";
     if (state.ui.borderColor) tokens.border = state.ui.borderColor;
+    if (state.ui.shadow) tokens.shadow = SHADOWS[state.ui.shadow];
     if (Object.keys(tokens).length) ui.tokens = tokens;
     if (!state.ui.showRejectAll) ui.showRejectAll = false;
     if (!state.ui.showPreferences) ui.showPreferences = false;

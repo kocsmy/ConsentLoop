@@ -79,7 +79,7 @@ ConsentLoop.run({
       <tr><td><code>--cl-pad</code></td><td><code>20px</code></td><td>One spacing knob scales all card &amp; dialog padding: banner, preferences sections (× .7–.9), category rows, list gaps (× .5)</td></tr>
       <tr><td><code>--cl-width</code></td><td><code>24.5rem</code></td><td>Box banner width</td></tr>
       <tr><td><code>--cl-border / --cl-border-w</code></td><td><code>rgba(9,9,11,.1) / 1px</code></td><td>Surface border color &amp; width (banner, dialog, category rows, floating button). <code>0</code> for borderless; try <code>2px</code> + radius <code>0</code> for a neobrutalist look. Internal dividers stay hairline.</td></tr>
-      <tr><td><code>--cl-shadow / --cl-overlay</code></td><td>soft</td><td>Elevation, modal backdrop</td></tr>
+      <tr><td><code>--cl-shadow / --cl-overlay</code></td><td>soft</td><td>Elevation &amp; modal backdrop. Any CSS <code>box-shadow</code> works: <code>none</code> for flat, a tight blur for subtle, a long soft blur for floating — pair <code>none</code> with a visible <code>--cl-border-w</code> so surfaces keep an edge</td></tr>
       <tr><td><code>--cl-font / --cl-text / --cl-z</code></td><td>system / 14px / 2147483000</td><td>Typography &amp; stacking</td></tr>
     </table></div>
     <p>Try tokens live in the <a href="/docs/configuration#opt-ui-tokens">configurator</a> or the <a href="/playground/">playground</a>.</p>
