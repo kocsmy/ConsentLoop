@@ -122,6 +122,8 @@ export interface Translation {
     preferences?: string;
     /** Label for the `content.privacyPolicyUrl` link. Pre-translated in all built-in locale packs. */
     privacyPolicy?: string;
+    /** Label for the `content.cookiePolicyUrl` link. Pre-translated in all built-in locale packs. */
+    cookiePolicy?: string;
     /** Label for the `content.termsUrl` link. Pre-translated in all built-in locale packs. */
     terms?: string;
     links?: ConsentLink[];
@@ -157,6 +159,8 @@ export interface ContentConfig {
    * the label is already translated in every built-in locale pack.
    */
   privacyPolicyUrl?: string;
+  /** URL of your cookie policy. Renders a localized link next to the privacy policy link. */
+  cookiePolicyUrl?: string;
   /** URL of your terms & conditions. Renders a link next to the privacy policy link. */
   termsUrl?: string;
 }
@@ -269,6 +273,12 @@ export interface ConsentLoopConfig {
   storage?: StorageConfig;
   /** Regulation preset. Default `gdpr`. */
   regulation?: Regulation;
+  /**
+   * Honor the Global Privacy Control browser signal under `regulation: "us-optout"`:
+   * visitors sending GPC are treated as already opted out — optional categories are not
+   * granted and the banner is skipped (CCPA/CPRA compliant). Default `true`.
+   */
+  respectGPC?: boolean;
   /** Enable Google Consent Mode v2 (`true` for defaults) or configure the mapping. */
   googleConsentMode?: boolean | GoogleConsentModeConfig;
   /** Automatically activate `<script type="text/plain" data-consent>` and `[data-consent-src]` elements. Default `true`. */
@@ -308,7 +318,7 @@ export interface ConsentRecord {
 }
 
 /** Normalized config after defaults are applied (what adapters and internals see). */
-export interface ResolvedConfig extends Required<Pick<ConsentLoopConfig, "regulation" | "autoScripts">> {
+export interface ResolvedConfig extends Required<Pick<ConsentLoopConfig, "regulation" | "autoScripts" | "respectGPC">> {
   categories: Record<string, Required<Pick<CategoryConfig, "required" | "default">> & CategoryConfig>;
   ui: (UiConfig & { layout: BannerLayout; position: BannerPosition; preferences: PreferencesLayout }) | false;
   content: ContentConfig;

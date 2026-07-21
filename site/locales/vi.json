@@ -6,7 +6,8 @@
   "rejectAll": "Từ chối tất cả",
   "preferences": "Tùy chọn",
   "privacyPolicy": "Chính sách bảo mật",
-  "terms": "Điều khoản và điều kiện"
+  "terms": "Điều khoản và điều kiện",
+  "cookiePolicy": "Chính sách cookie"
  },
  "preferences": {
   "title": "Tùy chọn quyền riêng tư",

@@ -6,7 +6,8 @@
   "rejectAll": "Atmesti visus",
   "preferences": "Nuostatos",
   "privacyPolicy": "Privatumo politika",
-  "terms": "Taisyklės ir sąlygos"
+  "terms": "Taisyklės ir sąlygos",
+  "cookiePolicy": "Slapukų politika"
  },
  "preferences": {
   "title": "Privatumo nuostatos",

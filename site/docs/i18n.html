@@ -21,7 +21,8 @@ ConsentLoop.run({
   content: {
     autoDetect: "document",       // read <html lang>; "browser" uses navigator.language
     fallback: "en",
-    privacyPolicyUrl: "/privacy", // linked in banner + preferences; label pre-translated in all 50 packs
+    privacyPolicyUrl: "/privacy", // linked in banner + preferences; label pre-translated in all 58 packs
+    cookiePolicyUrl: "/cookies",  // optional third link, same treatment
     termsUrl: "/terms",           // same for "Terms & conditions" (labels: banner.privacyPolicy / banner.terms)
     translations: {
       en: {
@@ -49,8 +50,8 @@ ConsentLoop.run({
       <li><strong>RTL:</strong> set <code>rtl: true</code> on a translation to flip the widget’s direction.</li>
     </ul>
 
-    <h2>50 ready-made languages</h2>
-    <p>Every install ships 50 locale packs — <code>consentloop/locales/&lt;code&gt;.json</code>, from Arabic to Vietnamese (<a href="/locales/index.json">full list</a>, RTL flags included). They plug into the URL-translation mechanism and lazy-load only when that language is actually needed:</p>
+    <h2>58 ready-made languages</h2>
+    <p>Every install ships 58 locale packs — <code>consentloop/locales/&lt;code&gt;.json</code>, from Arabic to Welsh — including every official EU language (<a href="/locales/index.json">full list</a>, RTL flags included). They plug into the URL-translation mechanism and lazy-load only when that language is actually needed:</p>
     <pre data-lang="js">
 ConsentLoop.run({
   content: {

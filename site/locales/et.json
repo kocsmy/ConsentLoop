@@ -6,7 +6,8 @@
   "rejectAll": "Keeldu kõigist",
   "preferences": "Eelistused",
   "privacyPolicy": "Privaatsuspoliitika",
-  "terms": "Kasutustingimused"
+  "terms": "Kasutustingimused",
+  "cookiePolicy": "Küpsiste poliitika"
  },
  "preferences": {
   "title": "Privaatsuseelistused",

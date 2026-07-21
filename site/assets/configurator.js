@@ -17,7 +17,7 @@
       trapFocus: true,
     },
     behavior: { regulation: "gdpr", gcm: true, storage: "cookie", expiresDays: 182, revision: 0 },
-    content: { lang: "en", title: "", description: "", privacyPolicyUrl: "", termsUrl: "" },
+    content: { lang: "en", title: "", description: "", privacyPolicyUrl: "", cookiePolicyUrl: "", termsUrl: "" },
   };
 
   // 50 locale packs ship in the npm package; the preview swaps the CDN URL for this site's copy
@@ -77,11 +77,12 @@
     if (state.content.title) en.banner = { ...(en.banner || {}), title: state.content.title };
     if (state.content.description) en.banner = { ...(en.banner || {}), description: state.content.description };
     if (Object.keys(en).length) translations.en = en;
-    const legalUrls = state.content.privacyPolicyUrl || state.content.termsUrl;
+    const legalUrls = state.content.privacyPolicyUrl || state.content.cookiePolicyUrl || state.content.termsUrl;
     if (Object.keys(translations).length || state.content.lang !== "en" || legalUrls) {
       c.content = {};
       if (state.content.lang !== "en") c.content.lang = state.content.lang;
       if (state.content.privacyPolicyUrl) c.content.privacyPolicyUrl = state.content.privacyPolicyUrl;
+      if (state.content.cookiePolicyUrl) c.content.cookiePolicyUrl = state.content.cookiePolicyUrl;
       if (state.content.termsUrl) c.content.termsUrl = state.content.termsUrl;
       if (Object.keys(translations).length) c.content.translations = translations;
     }

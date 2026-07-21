@@ -6,7 +6,8 @@
   "rejectAll": "Hylkää kaikki",
   "preferences": "Asetukset",
   "privacyPolicy": "Tietosuojaseloste",
-  "terms": "Käyttöehdot"
+  "terms": "Käyttöehdot",
+  "cookiePolicy": "Evästekäytäntö"
  },
  "preferences": {
   "title": "Yksityisyysasetukset",

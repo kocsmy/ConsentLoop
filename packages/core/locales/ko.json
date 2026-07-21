@@ -6,7 +6,8 @@
   "rejectAll": "모두 거부",
   "preferences": "설정",
   "privacyPolicy": "개인정보 처리방침",
-  "terms": "이용약관"
+  "terms": "이용약관",
+  "cookiePolicy": "쿠키 정책"
  },
  "preferences": {
   "title": "개인정보 설정",

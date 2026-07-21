@@ -1,0 +1,40 @@
+{
+ "banner": {
+  "title": "Nus respectain tia sfera privata",
+  "description": "Nus duvrain cookies per manar questa pagina e per chapir co ch'ella vegn duvrada. Ti tschernas tge che nus dastgain duvrar — ti pos midar avis da tut temp.",
+  "acceptAll": "Acceptar tut",
+  "rejectAll": "Refusar tut",
+  "preferences": "Preferenzas",
+  "privacyPolicy": "Directivas da protecziun da datas",
+  "terms": "Cundiziuns",
+  "cookiePolicy": "Directivas da cookies"
+ },
+ "preferences": {
+  "title": "Preferenzas da protecziun da datas",
+  "description": "Tscherna tenor categoria. Cookies necessaris tegnan en funcziun la pagina ed èn adina activs.",
+  "acceptAll": "Acceptar tut",
+  "rejectAll": "Refusar tut",
+  "save": "Memorisar las preferenzas",
+  "close": "Serrar",
+  "alwaysOn": "Adina activ",
+  "servicesLabel": "Servetschs"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Absolutamain necessari",
+   "description": "Necessari per funcziuns da basa sco segirezza e rait."
+  },
+  "functionality": {
+   "title": "Funcziunalitad",
+   "description": "Sa regorda da tias configuraziuns per persunalisar tia visita."
+  },
+  "analytics": {
+   "title": "Analisa",
+   "description": "Gida nus a chapir co che la pagina vegn duvrada."
+  },
+  "marketing": {
+   "title": "Marketing",
+   "description": "Vegn duvrà per cuntegns relevants e per mesirar reclamas."
+  }
+ }
+}

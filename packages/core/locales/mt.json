@@ -1,0 +1,40 @@
+{
+ "banner": {
+  "title": "Aħna napprezzaw il-privatezza tiegħek",
+  "description": "Nużaw il-cookies biex inħaddmu s-sit u nifhmu kif jintuża. Inti tagħżel x'nistgħu nużaw — tista' tibdel fehmtek meta trid.",
+  "acceptAll": "Aċċetta kollox",
+  "rejectAll": "Irrifjuta kollox",
+  "preferences": "Preferenzi",
+  "privacyPolicy": "Politika tal-privatezza",
+  "terms": "Termini",
+  "cookiePolicy": "Politika tal-cookies"
+ },
+ "preferences": {
+  "title": "Preferenzi tal-privatezza",
+  "description": "Agħżel skont il-kategorija. Il-cookies meħtieġa jżommu s-sit jaħdem u huma dejjem attivi.",
+  "acceptAll": "Aċċetta kollox",
+  "rejectAll": "Irrifjuta kollox",
+  "save": "Issejvja l-preferenzi",
+  "close": "Agħlaq",
+  "alwaysOn": "Dejjem attiv",
+  "servicesLabel": "Servizzi"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Strettament meħtieġa",
+   "description": "Meħtieġa għall-funzjonijiet bażiċi bħas-sigurtà u n-netwerk."
+  },
+  "functionality": {
+   "title": "Funzjonalità",
+   "description": "Jiftakar is-settings tiegħek biex jippersonalizza ż-żjara."
+  },
+  "analytics": {
+   "title": "Analitika",
+   "description": "Tgħinna nifhmu kif jintuża s-sit."
+  },
+  "marketing": {
+   "title": "Marketing",
+   "description": "Użati għal kontenut rilevanti u kejl tar-reklami."
+  }
+ }
+}

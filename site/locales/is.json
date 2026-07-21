@@ -1,0 +1,40 @@
+{
+ "banner": {
+  "title": "Við virðum friðhelgi þína",
+  "description": "Við notum vafrakökur til að reka vefinn og skilja notkun hans. Þú velur hvað við megum nota — þú getur skipt um skoðun hvenær sem er.",
+  "acceptAll": "Samþykkja allt",
+  "rejectAll": "Hafna öllu",
+  "preferences": "Stillingar",
+  "privacyPolicy": "Persónuverndarstefna",
+  "terms": "Skilmálar",
+  "cookiePolicy": "Vafrakökustefna"
+ },
+ "preferences": {
+  "title": "Persónuverndarstillingar",
+  "description": "Veldu eftir flokkum. Nauðsynlegar vafrakökur halda vefnum gangandi og eru alltaf virkar.",
+  "acceptAll": "Samþykkja allt",
+  "rejectAll": "Hafna öllu",
+  "save": "Vista stillingar",
+  "close": "Loka",
+  "alwaysOn": "Alltaf virkt",
+  "servicesLabel": "Þjónustur"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Bráðnauðsynlegar",
+   "description": "Nauðsynlegar fyrir grunnvirkni eins og öryggi og netstjórnun."
+  },
+  "functionality": {
+   "title": "Virkni",
+   "description": "Man stillingarnar þínar og sérsníður heimsóknina."
+  },
+  "analytics": {
+   "title": "Greining",
+   "description": "Hjálpar okkur að skilja hvernig vefurinn er notaður."
+  },
+  "marketing": {
+   "title": "Markaðssetning",
+   "description": "Notað fyrir viðeigandi efni og árangursmælingu auglýsinga."
+  }
+ }
+}

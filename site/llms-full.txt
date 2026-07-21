@@ -99,19 +99,20 @@ content: {
   autoDetect?: "document" | "browser" | false   // default "document" (<html lang>)
   fallback?: string                         // default "en"
   privacyPolicyUrl?: string                 // renders localized "Privacy policy" link (banner + preferences)
+  cookiePolicyUrl?: string                  // renders localized "Cookie policy" link next to it
   termsUrl?: string                         // renders localized "Terms & conditions" link next to it
   translations?: Record<string, Translation | string>  // string = URL fetched lazily
 }
 Translation = {
   rtl?: boolean
   banner?: { title, description /*HTML ok*/, acceptAll, rejectAll, preferences,
-             privacyPolicy?, terms?,   // labels for the two URL links; pre-translated in all 50 packs
+             privacyPolicy?, cookiePolicy?, terms?,  // labels for the URL links; pre-translated in all 58 packs
              links?: [{label, href}] }
   preferences?: { title, description?, acceptAll, rejectAll, save, close?, alwaysOn?, servicesLabel? }
   categories?: Record<catName, { title?, description? /*HTML ok*/ }>
 }
 Missing keys fall back to built-in English. "de-AT" matches "de".
-50 ready-made locale packs ship with the package: consentloop/locales/<code>.json (locales/index.json
+58 ready-made locale packs ship with the package: consentloop/locales/<code>.json (locales/index.json
 lists codes + names + rtl). Use them as lazy URLs:
   translations: { de: "https://cdn.jsdelivr.net/npm/consentloop/locales/de.json" }
 
@@ -128,6 +129,12 @@ regulation: "gdpr" | "us-optout" | "none"    // default "gdpr"
   us-optout: category defaults apply immediately as implied consent (method:"implied");
              banner offers opting out; Esc persists the implied choice. CCPA/CPRA-style.
   none:      opt-in UI, dismissable without choice.
+
+respectGPC: boolean                          // default true
+  Under us-optout, a visitor sending the Global Privacy Control signal
+  (navigator.globalPrivacyControl) is treated as already opted out: optional categories are
+  NOT granted and no banner is shown (the floating button / showPreferences() still work).
+  Set false to ignore the signal.
 
 googleConsentMode: boolean | { map?: Record<category, gcmKey[]>, waitForUpdate?: number /*500*/ }
   Default map: necessary→security_storage(always granted); functionality→functionality_storage,

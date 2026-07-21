@@ -6,7 +6,8 @@
   "rejectAll": "Avvis alle",
   "preferences": "Innstillinger",
   "privacyPolicy": "Personvernerklæring",
-  "terms": "Vilkår og betingelser"
+  "terms": "Vilkår og betingelser",
+  "cookiePolicy": "Cookie-erklæring"
  },
  "preferences": {
   "title": "Personverninnstillinger",

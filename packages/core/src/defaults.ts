@@ -10,6 +10,7 @@ export const EN: Translation = {
     rejectAll: "Reject all",
     preferences: "Preferences",
     privacyPolicy: "Privacy policy",
+    cookiePolicy: "Cookie policy",
     terms: "Terms & conditions",
   },
   preferences: {

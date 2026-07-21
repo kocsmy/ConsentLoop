@@ -80,7 +80,7 @@ import { ConsentProvider, ConsentGate, useConsent } from "@consentloop/react";
 - **Google Consent Mode v2** — correct `default` before Google tags, `update` after every choice, category→key mapping configurable.
 - **Regulation presets** — `gdpr` (opt-in), `us-optout` (CCPA-style implied consent + opt-out), `none`; consent `revision` bumping to re-prompt after policy changes.
 - **Granular consent** — categories *and* per-service toggles; auto-clear cookies (string/regex matchers) on withdrawal.
-- **i18n** — per-language translations with deep English fallback, `<html lang>`/browser detection, lazy URL-loaded language files, RTL, live `setLanguage()`. **50 ready-made locale packs** ship in the package (`consentloop/locales/*.json`).
+- **i18n** — per-language translations with deep English fallback, `<html lang>`/browser detection, lazy URL-loaded language files, RTL, live `setLanguage()`. **58 ready-made locale packs** ship in the package (`consentloop/locales/*.json`).
 - **Minimal, themeable UI** — box/cloud/bar layouts, 7 positions, modal/drawer preferences, light/dark/auto, `--cl-*` design tokens, Shadow-DOM isolation (opt-out-able), full a11y (dialog semantics, focus trap, switches).
 - **Headless mode** — `ui: false` keeps the whole engine (storage, gating, GCM, events) under your own UI.
 - **Managed-ready** — a two-call adapter contract (`init` → jurisdiction decision, `persist` → consent receipts) powers the upcoming **ConsentLoop Cloud** (geo rules, audit trail, certified CMP) and any self-hosted backend. Offline and networkless by default.

@@ -1,0 +1,40 @@
+{
+ "banner": {
+  "title": "Vi set personvernet ditt høgt",
+  "description": "Vi brukar informasjonskapslar for å drive nettstaden og forstå korleis han blir brukt. Du vel kva vi kan bruke — du kan ombestemme deg når som helst.",
+  "acceptAll": "Godta alle",
+  "rejectAll": "Avvis alle",
+  "preferences": "Innstillingar",
+  "privacyPolicy": "Personvernerklæring",
+  "terms": "Vilkår",
+  "cookiePolicy": "Cookie-erklæring"
+ },
+ "preferences": {
+  "title": "Personverninnstillingar",
+  "description": "Vel per kategori. Nødvendige informasjonskapslar held nettstaden i gang og er alltid på.",
+  "acceptAll": "Godta alle",
+  "rejectAll": "Avvis alle",
+  "save": "Lagre innstillingar",
+  "close": "Lukk",
+  "alwaysOn": "Alltid på",
+  "servicesLabel": "Tenester"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Strengt nødvendige",
+   "description": "Krevst for grunnleggjande funksjonar som tryggleik og nettverk."
+  },
+  "functionality": {
+   "title": "Funksjonalitet",
+   "description": "Hugsar innstillingane dine og tilpassar besøket ditt."
+  },
+  "analytics": {
+   "title": "Analyse",
+   "description": "Hjelper oss å forstå korleis nettstaden blir brukt."
+  },
+  "marketing": {
+   "title": "Marknadsføring",
+   "description": "Blir brukt til relevant innhald og annonsemåling."
+  }
+ }
+}

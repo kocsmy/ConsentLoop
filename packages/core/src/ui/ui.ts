@@ -129,6 +129,9 @@ export function createUi(
       cfg.content.privacyPolicyUrl
         ? `<a href="${esc(cfg.content.privacyPolicyUrl)}" target="_blank" rel="noopener">${esc(b.privacyPolicy!)}</a>`
         : "",
+      cfg.content.cookiePolicyUrl
+        ? `<a href="${esc(cfg.content.cookiePolicyUrl)}" target="_blank" rel="noopener">${esc(b.cookiePolicy!)}</a>`
+        : "",
       cfg.content.termsUrl
         ? `<a href="${esc(cfg.content.termsUrl)}" target="_blank" rel="noopener">${esc(b.terms!)}</a>`
         : "",

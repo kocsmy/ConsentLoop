@@ -384,3 +384,58 @@ describe("branding, legal links & UI behavior options", () => {
     expect(styles.indexOf("border-width:9px")).toBeGreaterThan(styles.indexOf(".cl-root"));
   });
 });
+
+describe("Global Privacy Control (us-optout)", () => {
+  const setGPC = (v: boolean | undefined) => {
+    if (v === undefined) {
+      delete (navigator as { globalPrivacyControl?: boolean }).globalPrivacyControl;
+    } else {
+      Object.defineProperty(navigator, "globalPrivacyControl", { value: v, configurable: true });
+    }
+  };
+  afterEach(() => setGPC(undefined));
+
+  it("GPC visitors are auto-opted-out: no optional grants, no banner", async () => {
+    setGPC(true);
+    await api.run({
+      regulation: "us-optout",
+      categories: { necessary: { required: true }, analytics: { default: true }, marketing: { default: true } },
+    });
+    // stronger than "banner hidden": GPC visitors never even mount the widget
+    expect(document.getElementById("consentloop")).toBeNull();
+    expect(api.isAccepted("necessary")).toBe(true);
+    expect(api.isAccepted("analytics")).toBe(false);
+    expect(api.isAccepted("marketing")).toBe(false);
+    expect(api.getConsent()?.method).toBe("implied");
+  });
+
+  it("respectGPC:false ignores the signal", async () => {
+    setGPC(true);
+    await api.run({
+      regulation: "us-optout",
+      respectGPC: false,
+      categories: { necessary: { required: true }, analytics: { default: true } },
+    });
+    expect(bannerVisible()).toBe(true);
+    expect(api.isAccepted("analytics")).toBe(true);
+  });
+
+  it("GPC has no effect under gdpr", async () => {
+    setGPC(true);
+    await api.run({ categories: { necessary: { required: true }, analytics: {} } });
+    expect(bannerVisible()).toBe(true);
+    expect(api.getConsent()).toBeNull();
+  });
+});
+
+describe("cookie policy link", () => {
+  it("renders the localized cookie policy link between privacy and terms", async () => {
+    await api.run({
+      categories: { necessary: { required: true } },
+      content: { privacyPolicyUrl: "/privacy", cookiePolicyUrl: "/cookies", termsUrl: "/terms" },
+    });
+    const anchors = [...q(".cl-banner .cl-links").querySelectorAll("a")];
+    expect(anchors.map((a) => a.textContent)).toEqual(["Privacy policy", "Cookie policy", "Terms & conditions"]);
+    expect(anchors[1]!.getAttribute("href")).toBe("/cookies");
+  });
+});

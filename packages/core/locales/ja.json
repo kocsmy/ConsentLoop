@@ -6,7 +6,8 @@
   "rejectAll": "すべて拒否",
   "preferences": "設定",
   "privacyPolicy": "プライバシーポリシー",
-  "terms": "利用規約"
+  "terms": "利用規約",
+  "cookiePolicy": "Cookieポリシー"
  },
  "preferences": {
   "title": "プライバシー設定",

@@ -108,6 +108,7 @@
         "autoDetect": { "enum": ["document", "browser", false], "default": "document" },
         "fallback": { "type": "string", "default": "en" },
         "privacyPolicyUrl": { "type": "string", "description": "Privacy policy URL — renders a localized link in the banner and preferences." },
+        "cookiePolicyUrl": { "type": "string", "description": "Cookie policy URL — renders a localized link next to the privacy policy link." },
         "termsUrl": { "type": "string", "description": "Terms & conditions URL — renders a localized link next to the privacy policy link." },
         "translations": {
           "type": "object",
@@ -130,6 +131,7 @@
                       "rejectAll": { "type": "string" },
                       "preferences": { "type": "string" },
                       "privacyPolicy": { "type": "string", "description": "Label for content.privacyPolicyUrl." },
+                      "cookiePolicy": { "type": "string", "description": "Label for content.cookiePolicyUrl." },
                       "terms": { "type": "string", "description": "Label for content.termsUrl." },
                       "links": {
                         "type": "array",
@@ -188,6 +190,7 @@
       }
     },
     "regulation": { "enum": ["gdpr", "us-optout", "none"], "default": "gdpr" },
+    "respectGPC": { "type": "boolean", "default": true, "description": "Under us-optout, honor the Global Privacy Control signal: GPC visitors are treated as opted out and see no banner." },
     "googleConsentMode": {
       "anyOf": [
         { "type": "boolean" },

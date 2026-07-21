@@ -6,7 +6,8 @@
   "rejectAll": "Alle ablehnen",
   "preferences": "Einstellungen",
   "privacyPolicy": "Datenschutzerklärung",
-  "terms": "Nutzungsbedingungen"
+  "terms": "Nutzungsbedingungen",
+  "cookiePolicy": "Cookie-Richtlinie"
  },
  "preferences": {
   "title": "Datenschutz-Einstellungen",

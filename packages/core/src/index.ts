@@ -288,11 +288,21 @@ async function run(config: ConsentLoopConfig = {}): Promise<ConsentLoopAPI> {
   if (decision?.lang) inst.forcedLang = decision.lang;
 
   const noBannerNeeded = decision?.show === false;
+  // Global Privacy Control: under us-optout the signal IS the visitor's opt-out (CCPA/CPRA),
+  // so optional categories stay ungranted and no banner is shown.
+  const gpc =
+    cfg.regulation === "us-optout" &&
+    cfg.respectGPC &&
+    typeof navigator !== "undefined" &&
+    (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl === true;
   if (noBannerNeeded || cfg.regulation === "us-optout") {
     // Opt-out world: defaults apply immediately, banner (if any) offers opting out.
     const defaults = noBannerNeeded
       ? Object.keys(cfg.categories)
-      : Object.keys(cfg.categories).filter((c) => cfg.categories[c]!.default);
+      : Object.keys(cfg.categories).filter((c) => {
+          const cat = cfg.categories[c]!;
+          return cat.required || (cat.default && !gpc);
+        });
     const implied = buildRecord(defaults, {}, cfg, null, "implied");
     inst.implied = implied;
     applyEffects({ accepted: [], services: {} }, implied, false);
@@ -300,7 +310,7 @@ async function run(config: ConsentLoopConfig = {}): Promise<ConsentLoopAPI> {
     emitter.emit("consent", implied);
   }
 
-  if (!noBannerNeeded && cfg.ui !== false) {
+  if (!noBannerNeeded && !gpc && cfg.ui !== false) {
     const ui = await ensureUi();
     ui?.showBanner();
   }

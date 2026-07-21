@@ -60,3 +60,25 @@ describe("i18n", () => {
     expect(host.shadowRoot!.querySelector(".cl-root")!.getAttribute("dir")).toBe("rtl");
   });
 });
+
+describe("locale packs", () => {
+  it("every pack listed in index.json exists and is complete", async () => {
+    const { readFileSync } = await import("node:fs");
+    const { join } = await import("node:path");
+    const dir = join(__dirname, "../locales");
+    const index = JSON.parse(readFileSync(join(dir, "index.json"), "utf8")) as {
+      code: string; name: string; rtl: boolean;
+    }[];
+    expect(index.length).toBe(58);
+    for (const { code } of index) {
+      const pack = JSON.parse(readFileSync(join(dir, `${code}.json`), "utf8"));
+      for (const key of ["title", "description", "acceptAll", "rejectAll", "preferences", "privacyPolicy", "cookiePolicy", "terms"]) {
+        expect(pack.banner?.[key], `${code}: banner.${key}`).toBeTruthy();
+      }
+      for (const key of ["title", "description", "save", "alwaysOn"]) {
+        expect(pack.preferences?.[key], `${code}: preferences.${key}`).toBeTruthy();
+      }
+      expect(Object.keys(pack.categories || {}).sort()).toEqual(["analytics", "functionality", "marketing", "necessary"]);
+    }
+  });
+});

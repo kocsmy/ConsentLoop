@@ -248,5 +248,45 @@
   "code": "az",
   "name": "Azərbaycanca",
   "rtl": false
+ },
+ {
+  "code": "nb",
+  "name": "Norsk bokmål",
+  "rtl": false
+ },
+ {
+  "code": "nn",
+  "name": "Norsk nynorsk",
+  "rtl": false
+ },
+ {
+  "code": "is",
+  "name": "Íslenska",
+  "rtl": false
+ },
+ {
+  "code": "ga",
+  "name": "Gaeilge",
+  "rtl": false
+ },
+ {
+  "code": "cy",
+  "name": "Cymraeg",
+  "rtl": false
+ },
+ {
+  "code": "mt",
+  "name": "Malti",
+  "rtl": false
+ },
+ {
+  "code": "lb",
+  "name": "Lëtzebuergesch",
+  "rtl": false
+ },
+ {
+  "code": "rm",
+  "name": "Rumantsch",
+  "rtl": false
  }
 ]

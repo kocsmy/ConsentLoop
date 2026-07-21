@@ -1,0 +1,40 @@
+{
+ "banner": {
+  "title": "Är Privatsphär ass eis wichteg",
+  "description": "Mir benotze Cookien fir de Site ze bedreiwen an ze verstoen, wéi e benotzt gëtt. Dir wielt, wat mir benotzen däerfen — Dir kënnt Iech jederzäit ëmentscheeden.",
+  "acceptAll": "All akzeptéieren",
+  "rejectAll": "All refuséieren",
+  "preferences": "Astellungen",
+  "privacyPolicy": "Dateschutzerklärung",
+  "terms": "Konditiounen",
+  "cookiePolicy": "Cookie-Richtlinn"
+ },
+ "preferences": {
+  "title": "Dateschutz-Astellungen",
+  "description": "Wielt pro Kategorie. Néideg Cookien halen de Site um Lafen a sinn ëmmer un.",
+  "acceptAll": "All akzeptéieren",
+  "rejectAll": "All refuséieren",
+  "save": "Astellunge späicheren",
+  "close": "Zoumaachen",
+  "alwaysOn": "Ëmmer un",
+  "servicesLabel": "Servicer"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Strikt néideg",
+   "description": "Néideg fir Basisfunktioune wéi Sécherheet an Netzwierk."
+  },
+  "functionality": {
+   "title": "Funktionalitéit",
+   "description": "Erënnert sech un Är Astellunge fir Äre Besuch ze personaliséieren."
+  },
+  "analytics": {
+   "title": "Analyse",
+   "description": "Hëlleft eis ze verstoen, wéi de Site benotzt gëtt."
+  },
+  "marketing": {
+   "title": "Marketing",
+   "description": "Gëtt fir relevant Inhalter an Annoncemiessung benotzt."
+  }
+ }
+}

@@ -6,7 +6,8 @@
   "rejectAll": "Avvisa alla",
   "preferences": "Inställningar",
   "privacyPolicy": "Integritetspolicy",
-  "terms": "Användarvillkor"
+  "terms": "Användarvillkor",
+  "cookiePolicy": "Cookiepolicy"
  },
  "preferences": {
   "title": "Integritetsinställningar",

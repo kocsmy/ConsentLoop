@@ -6,7 +6,7 @@ Monorepo (pnpm workspaces) for ConsentLoop, a source-available (FSL-1.1-MIT), pe
 
 - `pnpm install` — install everything (esbuild build script is pre-approved)
 - `pnpm build` — build `packages/core` + `packages/react`, then sync bundles into `site/vendor/`
-- `pnpm test` — vitest + jsdom suite for the core (60 tests)
+- `pnpm test` — vitest + jsdom suite for the core (65 tests)
 - `pnpm size` — gzip budgets: loader ≤ 1.6 KB, full widget ≤ 12.5 KB, ESM entry ≤ 7 KB. **Never merge a red budget.**
 - `pnpm bench` — Playwright benchmark (Chromium at `/opt/pw-browsers/chromium`); writes `bench/results/results.json` + `site/bench-results.json`
 - `pnpm site` — static server for `site/` on :4173

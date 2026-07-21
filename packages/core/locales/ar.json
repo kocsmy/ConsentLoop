@@ -7,7 +7,8 @@
   "rejectAll": "رفض الكل",
   "preferences": "التفضيلات",
   "privacyPolicy": "سياسة الخصوصية",
-  "terms": "الشروط والأحكام"
+  "terms": "الشروط والأحكام",
+  "cookiePolicy": "سياسة ملفات تعريف الارتباط"
  },
  "preferences": {
   "title": "تفضيلات الخصوصية",

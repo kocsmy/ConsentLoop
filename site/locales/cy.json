@@ -1,0 +1,40 @@
+{
+ "banner": {
+  "title": "Rydym yn gwerthfawrogi eich preifatrwydd",
+  "description": "Rydym yn defnyddio cwcis i redeg y wefan ac i ddeall sut mae'n cael ei defnyddio. Chi sy'n dewis — gallwch newid eich meddwl unrhyw bryd.",
+  "acceptAll": "Derbyn y cyfan",
+  "rejectAll": "Gwrthod y cyfan",
+  "preferences": "Dewisiadau",
+  "privacyPolicy": "Polisi preifatrwydd",
+  "terms": "Telerau",
+  "cookiePolicy": "Polisi cwcis"
+ },
+ "preferences": {
+  "title": "Dewisiadau preifatrwydd",
+  "description": "Dewiswch fesul categori. Mae cwcis angenrheidiol yn cadw'r wefan i weithio ac maent ymlaen bob amser.",
+  "acceptAll": "Derbyn y cyfan",
+  "rejectAll": "Gwrthod y cyfan",
+  "save": "Cadw dewisiadau",
+  "close": "Cau",
+  "alwaysOn": "Ymlaen bob amser",
+  "servicesLabel": "Gwasanaethau"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Cwbl angenrheidiol",
+   "description": "Yn angenrheidiol ar gyfer swyddogaethau craidd fel diogelwch a rhwydwaith."
+  },
+  "functionality": {
+   "title": "Ymarferoldeb",
+   "description": "Yn cofio eich gosodiadau i bersonoli eich ymweliad."
+  },
+  "analytics": {
+   "title": "Dadansoddeg",
+   "description": "Yn ein helpu i ddeall sut mae ymwelwyr yn defnyddio'r wefan."
+  },
+  "marketing": {
+   "title": "Marchnata",
+   "description": "Defnyddir ar gyfer cynnwys perthnasol a mesur hysbysebion."
+  }
+ }
+}

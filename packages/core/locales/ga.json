@@ -1,0 +1,40 @@
+{
+ "banner": {
+  "title": "Is mór againn do phríobháideachas",
+  "description": "Úsáidimid fianáin chun an suíomh a reáchtáil agus chun tuiscint a fháil ar an úsáid a bhaintear as. Is fútsa atá sé — is féidir d'intinn a athrú am ar bith.",
+  "acceptAll": "Glac le gach ceann",
+  "rejectAll": "Diúltaigh gach ceann",
+  "preferences": "Sainroghanna",
+  "privacyPolicy": "Polasaí príobháideachais",
+  "terms": "Téarmaí",
+  "cookiePolicy": "Polasaí fianán"
+ },
+ "preferences": {
+  "title": "Sainroghanna príobháideachais",
+  "description": "Roghnaigh de réir catagóire. Coinníonn fianáin riachtanacha an suíomh ag obair agus bíonn siad i gcónaí ar siúl.",
+  "acceptAll": "Glac le gach ceann",
+  "rejectAll": "Diúltaigh gach ceann",
+  "save": "Sábháil sainroghanna",
+  "close": "Dún",
+  "alwaysOn": "I gcónaí ar siúl",
+  "servicesLabel": "Seirbhísí"
+ },
+ "categories": {
+  "necessary": {
+   "title": "Fíor-riachtanach",
+   "description": "Riachtanach do bhunfheidhmeanna cosúil le slándáil agus líonra."
+  },
+  "functionality": {
+   "title": "Feidhmiúlacht",
+   "description": "Cuimhníonn sé ar do chuid socruithe chun do chuairt a phearsantú."
+  },
+  "analytics": {
+   "title": "Anailísíocht",
+   "description": "Cabhraíonn sé linn tuiscint conas a úsáidtear an suíomh."
+  },
+  "marketing": {
+   "title": "Margaíocht",
+   "description": "Úsáidtear é le haghaidh ábhar ábhartha agus tomhas fógraíochta."
+  }
+ }
+}

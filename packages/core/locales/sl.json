@@ -6,7 +6,8 @@
   "rejectAll": "Zavrni vse",
   "preferences": "Nastavitve",
   "privacyPolicy": "Politika zasebnosti",
-  "terms": "Pogoji uporabe"
+  "terms": "Pogoji uporabe",
+  "cookiePolicy": "Politika piškotkov"
  },
  "preferences": {
   "title": "Nastavitve zasebnosti",

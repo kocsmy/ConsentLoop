@@ -20,6 +20,7 @@ export function resolveConfig(user: ConsentLoopConfig = {}): ResolvedConfig {
   }
 
   const regulation: Regulation = user.regulation || "gdpr";
+  const respectGPC = user.respectGPC !== false;
   const uiUser = user.ui === false ? false : user.ui || {};
   const layout = uiUser === false ? "box" : uiUser.layout || "box";
 
@@ -34,6 +35,7 @@ export function resolveConfig(user: ConsentLoopConfig = {}): ResolvedConfig {
   return {
     categories,
     regulation,
+    respectGPC,
     autoScripts: user.autoScripts !== false,
     ui:
       uiUser === false

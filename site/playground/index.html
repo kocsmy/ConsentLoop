@@ -102,7 +102,7 @@
     <h3>Roundness</h3>
     <input type="range" id="radius" min="0" max="24" step="2" value="16" style="width:100%">
 
-    <h3>Language <span class="muted" style="text-transform:none;letter-spacing:0">(50 built-in)</span></h3>
+    <h3>Language <span class="muted" style="text-transform:none;letter-spacing:0">(58 built-in)</span></h3>
     <select id="lang-select" style="width:100%" aria-label="Widget language"></select>
 
     <h3>Options</h3>
@@ -225,7 +225,7 @@
   seg("prefs-seg", "preferences");
   seg("theme-seg", "theme");
 
-  /* language dropdown — all 50 locale packs */
+  /* language dropdown — all 58 locale packs */
   const langSel = document.getElementById("lang-select");
   langSel.innerHTML = window.CL_LOCALES.map((l) => `<option value="${l.code}">${l.name} · ${l.code}</option>`).join("");
   langSel.value = state.lang;

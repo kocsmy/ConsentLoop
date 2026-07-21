@@ -6,7 +6,8 @@
   "rejectAll": "Tout refuser",
   "preferences": "Préférences",
   "privacyPolicy": "Politique de confidentialité",
-  "terms": "Conditions générales"
+  "terms": "Conditions générales",
+  "cookiePolicy": "Politique de cookies"
  },
  "preferences": {
   "title": "Préférences de confidentialité",
