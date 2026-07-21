@@ -250,6 +250,28 @@ input[type="range"]:focus-visible::-moz-range-thumb { outline: 2px solid var(--a
 select:focus-visible, input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 label.field { display: block; font-size: 12.5px; font-weight: 550; color: var(--fg2); margin: 12px 0 5px; }
 
+/* dotted-underline term whose explanation (data-tip) pops up on hover or keyboard focus */
+.tip {
+  position: relative;
+  text-decoration: underline dotted;
+  text-decoration-color: var(--fg3);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  cursor: help;
+}
+.tip::after {
+  content: attr(data-tip);
+  position: absolute; left: 0; bottom: calc(100% + 7px); z-index: 60;
+  width: max-content; max-width: 224px;
+  background: var(--fg); color: var(--bg);
+  font-size: 12px; line-height: 1.45; font-weight: 450; letter-spacing: 0;
+  padding: 7px 10px; border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(9, 9, 11, 0.18);
+  opacity: 0; transform: translateY(3px); pointer-events: none;
+  transition: opacity 0.12s ease 0.15s, transform 0.12s ease 0.15s;
+}
+.tip:hover::after, .switchrow:focus-within .tip::after { opacity: 1; transform: none; }
+
 /* position 9-grid picker */
 .posgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 108px; }
 .posgrid button {
