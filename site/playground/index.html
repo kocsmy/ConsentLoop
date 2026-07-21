@@ -99,6 +99,15 @@
       <button class="swatch" data-v="#f59e0b" style="background:#f59e0b" title="Amber"></button>
     </div>
 
+    <h3>Border</h3>
+    <div class="swatches" id="border-swatches">
+      <button class="swatch none" data-v="" title="Auto (subtle)"></button>
+      <button class="swatch" data-v="strong" style="background:#9d9da5" title="Strong"></button>
+      <button class="swatch" data-v="black" style="background:#18181b" title="Black"></button>
+      <button class="swatch" data-v="accent" style="background:conic-gradient(#4f46e5,#0ea5e9,#16a34a,#e11d48,#4f46e5)" title="Match accent"></button>
+    </div>
+    <input type="range" id="borderw" min="0" max="4" step="1" value="1" style="width:100%;margin-top:10px" aria-label="Border width">
+
     <h3>Roundness</h3>
     <input type="range" id="radius" min="0" max="24" step="2" value="16" style="width:100%">
 
@@ -170,7 +179,7 @@
 (() => {
   const state = {
     layout: "box", position: "bottom-right", preferences: "modal",
-    theme: "light", accent: "", radius: 16, pad: 20, font: "", lang: "en",
+    theme: "light", accent: "", radius: 16, pad: 20, font: "", borderW: 1, borderColor: "", lang: "en",
     showRejectAll: true, showPreferences: true, floatingButton: false, us: false, branding: true,
     title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "",
   };
@@ -179,6 +188,9 @@
     serif: 'Georgia, "Times New Roman", serif',
     mono: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace',
   };
+  const BORDER_COLORS = { strong: "rgba(9,9,11,.35)", black: "#18181b" };
+  const borderColor = () =>
+    state.borderColor === "accent" ? state.accent || "#18181b" : BORDER_COLORS[state.borderColor];
 
   // locale packs ship with the npm package; the preview uses this site's copy
   const localeUrl = (code, forExport) =>
@@ -205,6 +217,8 @@
     if (state.radius !== 16) tokens.radius = state.radius + "px";
     if (state.pad !== 20) tokens.pad = state.pad + "px";
     if (state.font) tokens.font = FONTS[state.font];
+    if (state.borderW !== 1) tokens["border-w"] = state.borderW + "px";
+    if (state.borderColor) tokens.border = borderColor();
     if (Object.keys(tokens).length) cfg.ui.tokens = tokens;
     if (!state.showRejectAll) cfg.ui.showRejectAll = false;
     if (!state.showPreferences) cfg.ui.showPreferences = false;
@@ -289,6 +303,13 @@
   syncSw();
   document.getElementById("radius").addEventListener("input", (e) => { state.radius = +e.target.value; push(); });
   document.getElementById("pad").addEventListener("input", (e) => { state.pad = +e.target.value; push(); });
+  document.getElementById("borderw").addEventListener("input", (e) => { state.borderW = +e.target.value; push(); });
+
+  /* border color swatches */
+  const borderSwEl = document.getElementById("border-swatches");
+  const syncBorderSw = () => borderSwEl.querySelectorAll(".swatch").forEach((b) => b.classList.toggle("active", b.dataset.v === state.borderColor));
+  borderSwEl.querySelectorAll(".swatch").forEach((b) => b.addEventListener("click", () => { state.borderColor = b.dataset.v; syncBorderSw(); push(); }));
+  syncBorderSw();
 
   /* switches */
   function uiswitch(id, key, after) {
@@ -330,13 +351,14 @@
     dark: { layout: "box", position: "bottom-right", preferences: "drawer", theme: "dark", accent: "#818cf8", radius: 18, lang: "en", showRejectAll: true, floatingButton: false, us: false, branding: true },
   };
   // options every preset resets to defaults (presets only override the keys they list)
-  const PRESET_BASE = { showPreferences: true, pad: 20, font: "", title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "" };
+  const PRESET_BASE = { showPreferences: true, pad: 20, font: "", borderW: 1, borderColor: "", title: "", desc: "", privacyUrl: "", cookieUrl: "", termsUrl: "" };
   document.querySelectorAll(".preset").forEach((b) =>
     b.addEventListener("click", () => {
       Object.assign(state, PRESET_BASE, PRESETS[b.dataset.preset]);
-      syncLayout(); syncPos(); syncSw(); syncTextInputs();
+      syncLayout(); syncPos(); syncSw(); syncBorderSw(); syncTextInputs();
       document.getElementById("radius").value = state.radius;
       document.getElementById("pad").value = state.pad;
+      document.getElementById("borderw").value = state.borderW;
       langSel.value = state.lang;
       [["prefs-seg","preferences"],["theme-seg","theme"],["font-seg","font"]].forEach(([id, key]) => {
         document.getElementById(id).querySelectorAll("button")

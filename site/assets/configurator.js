@@ -9,6 +9,8 @@
       theme: "auto",
       accent: "",
       radius: 16,
+      borderW: 1,
+      borderColor: "",
       showRejectAll: true,
       showPreferences: true,
       floatingButton: false,
@@ -54,6 +56,8 @@
       tokens["switch-on"] = state.ui.accent;
     }
     if (+state.ui.radius !== 16) tokens.radius = state.ui.radius + "px";
+    if (+state.ui.borderW !== 1) tokens["border-w"] = state.ui.borderW + "px";
+    if (state.ui.borderColor) tokens.border = state.ui.borderColor;
     if (Object.keys(tokens).length) ui.tokens = tokens;
     if (!state.ui.showRejectAll) ui.showRejectAll = false;
     if (!state.ui.showPreferences) ui.showPreferences = false;
@@ -253,6 +257,12 @@
     accentClear.addEventListener("click", () => {
       set("ui.accent", "");
       $("#accent-input").value = "#4f46e5";
+    });
+  const borderColorClear = $("#border-color-clear");
+  if (borderColorClear)
+    borderColorClear.addEventListener("click", () => {
+      set("ui.borderColor", "");
+      $("#border-color-input").value = "#e4e4e7";
     });
 
   function syncAll() {

@@ -81,7 +81,8 @@ ui: false | {               // false = headless (engine only)
   preferences?: "modal" | "drawer"                 // default "modal"
   theme?: "light" | "dark" | "auto"                // default "auto"
   tokens?: Record<string,string>  // CSS vars w/o --cl- prefix, e.g. {accent:"#0ea5e9", radius:"8px",
-                                  //   pad:"16px" (density), font:"Georgia, serif", text:"15px", width:"26rem"}
+                                  //   pad:"16px" (density), border:"#18181b", "border-w":"2px",
+                                  //   font:"Georgia, serif", text:"15px", width:"26rem"}
   showRejectAll?: boolean         // default true (keep true for GDPR)
   showPreferences?: boolean       // default true
   floatingButton?: boolean        // reopen bubble after consent, default false

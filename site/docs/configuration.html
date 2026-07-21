@@ -110,7 +110,7 @@
           <div class="opt-head">
             <div>
               <div class="opt-title">Design tokens <code>ui.tokens</code></div>
-              <p class="opt-desc">Override any <code>--cl-*</code> token: accent, radius, font, shadow… Here: accent color and corner radius.</p>
+              <p class="opt-desc">Override any <code>--cl-*</code> token: accent, radius, spacing, border, font, shadow… Here: accent, corner radius and border.</p>
             </div>
             <div class="opt-control">
               <input type="color" id="accent-input" data-input="ui.accent" aria-label="accent color">
@@ -119,6 +119,13 @@
           </div>
           <label class="field" for="radius-input">radius: <span class="mono" id="radius-out"></span></label>
           <input type="range" id="radius-input" data-input="ui.radius" min="0" max="24" step="2" style="width:100%">
+          <label class="field" for="borderw-input">border-w: <span class="mono" id="borderw-out"></span></label>
+          <input type="range" id="borderw-input" data-input="ui.borderW" min="0" max="4" step="1" style="width:100%">
+          <label class="field" for="border-color-input">border <span class="mono muted">(color)</span></label>
+          <p style="display:flex;gap:8px;align-items:center;margin:0">
+            <input type="color" id="border-color-input" data-input="ui.borderColor" aria-label="border color">
+            <button class="btn small" id="border-color-clear" type="button">Default</button>
+          </p>
         </div>
         <div class="opt" id="opt-ui-buttons">
           <div class="opt-head">
@@ -232,10 +239,12 @@
 <script src="/assets/site.js"></script>
 <script>
   addEventListener("DOMContentLoaded", () => {
-    const r = document.getElementById("radius-input");
-    const out = document.getElementById("radius-out");
-    const sync = () => (out.textContent = r.value + "px");
-    r.addEventListener("input", sync); sync();
+    for (const [inputId, outId] of [["radius-input", "radius-out"], ["borderw-input", "borderw-out"]]) {
+      const r = document.getElementById(inputId);
+      const out = document.getElementById(outId);
+      const sync = () => (out.textContent = r.value + "px");
+      r.addEventListener("input", sync); sync();
+    }
   });
 </script>
 <script defer src="/assets/configurator.js"></script>
