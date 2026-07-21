@@ -4,7 +4,9 @@
   "description": "Vi använder cookies för att driva webbplatsen och förstå hur den används. Du väljer vad vi får använda — ändra när du vill.",
   "acceptAll": "Acceptera alla",
   "rejectAll": "Avvisa alla",
-  "preferences": "Inställningar"
+  "preferences": "Inställningar",
+  "privacyPolicy": "Integritetspolicy",
+  "terms": "Användarvillkor"
  },
  "preferences": {
   "title": "Integritetsinställningar",

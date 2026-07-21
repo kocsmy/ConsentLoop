@@ -149,6 +149,10 @@ export const CSS = `
 .cl-svc{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:7px 0;font-size:13px}
 .cl-prefs-foot{display:flex;flex-wrap:wrap;gap:8px;padding:14px 20px 18px;border-top:1px solid var(--cl-border)}
 .cl-prefs-foot .cl-btn.cl-primary{flex:2 1 auto}
+.cl-legal{display:flex;flex-wrap:wrap;align-items:center;gap:4px 16px;padding:0 20px 14px;font-size:11.5px}
+.cl-legal a{color:var(--cl-muted);text-decoration:underline;text-underline-offset:2px}
+.cl-legal a:hover{color:var(--cl-fg)}
+.cl-legal .cl-brand{display:inline;margin:0;margin-inline-start:auto;font-size:11px;text-decoration:none}
 
 /* ---- switch ------------------------------------------------------------ */
 .cl-root .cl-switch{

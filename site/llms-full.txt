@@ -84,7 +84,10 @@ ui: false | {               // false = headless (engine only)
   showRejectAll?: boolean         // default true (keep true for GDPR)
   showPreferences?: boolean       // default true
   floatingButton?: boolean        // reopen bubble after consent, default false
-  branding?: boolean              // small "Consent by ConsentLoop" link, default true
+  branding?: boolean              // small "Consent by ConsentLoop" link (banner + preferences), default true
+  scrollLock?: boolean            // lock page scroll while banner/preferences open, default false
+  trapFocus?: boolean             // trap keyboard focus in the preferences dialog, default true (WCAG)
+  customCss?: string              // extra CSS injected inside the (shadow) root; target .cl-* classes
   shadow?: boolean                // Shadow-DOM isolation, default true
   container?: string | HTMLElement
   disableTransitions?: boolean
@@ -95,11 +98,14 @@ content: {
   lang?: string                             // force language
   autoDetect?: "document" | "browser" | false   // default "document" (<html lang>)
   fallback?: string                         // default "en"
+  privacyPolicyUrl?: string                 // renders localized "Privacy policy" link (banner + preferences)
+  termsUrl?: string                         // renders localized "Terms & conditions" link next to it
   translations?: Record<string, Translation | string>  // string = URL fetched lazily
 }
 Translation = {
   rtl?: boolean
   banner?: { title, description /*HTML ok*/, acceptAll, rejectAll, preferences,
+             privacyPolicy?, terms?,   // labels for the two URL links; pre-translated in all 50 packs
              links?: [{label, href}] }
   preferences?: { title, description?, acceptAll, rejectAll, save, close?, alwaysOn?, servicesLabel? }
   categories?: Record<catName, { title?, description? /*HTML ok*/ }>

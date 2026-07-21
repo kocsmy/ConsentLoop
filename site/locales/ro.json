@@ -4,7 +4,9 @@
   "description": "Folosim cookie-uri pentru funcționarea site-ului și pentru a înțelege cum este utilizat. Tu alegi ce permitem — poți schimba oricând.",
   "acceptAll": "Acceptă tot",
   "rejectAll": "Respinge tot",
-  "preferences": "Preferințe"
+  "preferences": "Preferințe",
+  "privacyPolicy": "Politica de confidențialitate",
+  "terms": "Termeni și condiții"
  },
  "preferences": {
   "title": "Preferințe de confidențialitate",

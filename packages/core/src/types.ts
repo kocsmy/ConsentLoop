@@ -84,6 +84,16 @@ export interface UiConfig {
   floatingButton?: boolean;
   /** Show a subtle "ConsentLoop" credit link. Default `true`. Set `false` to hide. */
   branding?: boolean;
+  /** Lock page scrolling while the banner or the preferences dialog is open. Default `false`. */
+  scrollLock?: boolean;
+  /** Trap keyboard focus inside the preferences dialog while it is open. Default `true` (recommended for WCAG). */
+  trapFocus?: boolean;
+  /**
+   * Extra CSS injected inside the widget root — the supported way to restyle single elements
+   * without giving up Shadow-DOM isolation. Target the stable `.cl-*` class names,
+   * e.g. `.cl-banner{border:2px solid #000}`. Applied after the built-in styles.
+   */
+  customCss?: string;
   /** Render inside an isolating Shadow DOM so site CSS can never break the widget. Default `true`. */
   shadow?: boolean;
   /** Element (or selector) to mount into. Defaults to `document.body`. */
@@ -110,6 +120,10 @@ export interface Translation {
     acceptAll?: string;
     rejectAll?: string;
     preferences?: string;
+    /** Label for the `content.privacyPolicyUrl` link. Pre-translated in all built-in locale packs. */
+    privacyPolicy?: string;
+    /** Label for the `content.termsUrl` link. Pre-translated in all built-in locale packs. */
+    terms?: string;
     links?: ConsentLink[];
   };
   preferences?: {
@@ -138,6 +152,13 @@ export interface ContentConfig {
    * it is fetched lazily (JSON of shape `Translation`) the first time that language is needed.
    */
   translations?: Record<string, Translation | string>;
+  /**
+   * URL of your privacy policy. Renders a link in the banner and the preferences dialog —
+   * the label is already translated in every built-in locale pack.
+   */
+  privacyPolicyUrl?: string;
+  /** URL of your terms & conditions. Renders a link next to the privacy policy link. */
+  termsUrl?: string;
 }
 
 export interface StorageConfig {

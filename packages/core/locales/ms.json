@@ -4,7 +4,9 @@
   "description": "Kami menggunakan kuki untuk menjalankan laman ini dan memahami penggunaannya. Anda yang memilih — boleh ubah bila-bila masa.",
   "acceptAll": "Terima semua",
   "rejectAll": "Tolak semua",
-  "preferences": "Keutamaan"
+  "preferences": "Keutamaan",
+  "privacyPolicy": "Dasar privasi",
+  "terms": "Terma dan syarat"
  },
  "preferences": {
   "title": "Keutamaan privasi",

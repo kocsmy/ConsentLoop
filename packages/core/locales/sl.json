@@ -4,7 +4,9 @@
   "description": "Piškotke uporabljamo za delovanje strani in razumevanje njene uporabe. Vi izberete, kaj dovolite — odločitev lahko kadar koli spremenite.",
   "acceptAll": "Sprejmi vse",
   "rejectAll": "Zavrni vse",
-  "preferences": "Nastavitve"
+  "preferences": "Nastavitve",
+  "privacyPolicy": "Politika zasebnosti",
+  "terms": "Pogoji uporabe"
  },
  "preferences": {
   "title": "Nastavitve zasebnosti",

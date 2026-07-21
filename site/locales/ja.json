@@ -4,7 +4,9 @@
   "description": "当サイトの運営と利用状況の把握のために Cookie を使用します。許可する内容はあなたが選択でき、いつでも変更できます。",
   "acceptAll": "すべて同意",
   "rejectAll": "すべて拒否",
-  "preferences": "設定"
+  "preferences": "設定",
+  "privacyPolicy": "プライバシーポリシー",
+  "terms": "利用規約"
  },
  "preferences": {
   "title": "プライバシー設定",

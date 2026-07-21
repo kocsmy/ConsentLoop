@@ -4,7 +4,9 @@
   "description": "Kolačiće koristimo za rad stranice i razumijevanje njezine upotrebe. Vi birate što dopuštate — mišljenje možete promijeniti bilo kada.",
   "acceptAll": "Prihvati sve",
   "rejectAll": "Odbij sve",
-  "preferences": "Postavke"
+  "preferences": "Postavke",
+  "privacyPolicy": "Pravila privatnosti",
+  "terms": "Uvjeti korištenja"
  },
  "preferences": {
   "title": "Postavke privatnosti",

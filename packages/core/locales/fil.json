@@ -4,7 +4,9 @@
   "description": "Gumagamit kami ng cookies para patakbuhin ang site at maunawaan ang paggamit nito. Ikaw ang pipili — maaaring baguhin anumang oras.",
   "acceptAll": "Tanggapin lahat",
   "rejectAll": "Tanggihan lahat",
-  "preferences": "Mga kagustuhan"
+  "preferences": "Mga kagustuhan",
+  "privacyPolicy": "Patakaran sa privacy",
+  "terms": "Mga tuntunin at kundisyon"
  },
  "preferences": {
   "title": "Mga kagustuhan sa privacy",

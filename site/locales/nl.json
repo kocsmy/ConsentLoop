@@ -4,7 +4,9 @@
   "description": "We gebruiken cookies om deze site te laten werken en het gebruik te begrijpen. Jij kiest wat we mogen gebruiken — altijd aan te passen.",
   "acceptAll": "Alles accepteren",
   "rejectAll": "Alles weigeren",
-  "preferences": "Voorkeuren"
+  "preferences": "Voorkeuren",
+  "privacyPolicy": "Privacybeleid",
+  "terms": "Algemene voorwaarden"
  },
  "preferences": {
   "title": "Privacyvoorkeuren",

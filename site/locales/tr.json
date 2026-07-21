@@ -4,7 +4,9 @@
   "description": "Bu siteyi çalıştırmak ve nasıl kullanıldığını anlamak için çerezler kullanıyoruz. Neye izin vereceğinizi siz seçersiniz — istediğiniz zaman değiştirebilirsiniz.",
   "acceptAll": "Tümünü kabul et",
   "rejectAll": "Tümünü reddet",
-  "preferences": "Tercihler"
+  "preferences": "Tercihler",
+  "privacyPolicy": "Gizlilik politikası",
+  "terms": "Şartlar ve koşullar"
  },
  "preferences": {
   "title": "Gizlilik tercihleri",

@@ -4,7 +4,9 @@
   "description": "사이트 운영과 이용 현황 파악을 위해 쿠키를 사용합니다. 허용 여부는 직접 선택하며 언제든 변경할 수 있습니다.",
   "acceptAll": "모두 동의",
   "rejectAll": "모두 거부",
-  "preferences": "설정"
+  "preferences": "설정",
+  "privacyPolicy": "개인정보 처리방침",
+  "terms": "이용약관"
  },
  "preferences": {
   "title": "개인정보 설정",

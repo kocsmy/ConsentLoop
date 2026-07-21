@@ -4,7 +4,9 @@
   "description": "Tunatumia vidakuzi kuendesha tovuti hii na kuelewa jinsi inavyotumika. Wewe ndiye unayechagua — unaweza kubadilisha wakati wowote.",
   "acceptAll": "Kubali zote",
   "rejectAll": "Kataa zote",
-  "preferences": "Mapendeleo"
+  "preferences": "Mapendeleo",
+  "privacyPolicy": "Sera ya faragha",
+  "terms": "Vigezo na masharti"
  },
  "preferences": {
   "title": "Mapendeleo ya faragha",

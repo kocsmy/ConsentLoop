@@ -4,7 +4,9 @@
   "description": "Bu saytı işlətmək və istifadəsini anlamaq üçün kukilərdən istifadə edirik. Nəyə icazə verəcəyinizi siz seçirsiniz — istənilən vaxt dəyişə bilərsiniz.",
   "acceptAll": "Hamısını qəbul et",
   "rejectAll": "Hamısını rədd et",
-  "preferences": "Seçimlər"
+  "preferences": "Seçimlər",
+  "privacyPolicy": "Məxfilik siyasəti",
+  "terms": "Şərtlər və qaydalar"
  },
  "preferences": {
   "title": "Məxfilik seçimləri",

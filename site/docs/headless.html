@@ -60,6 +60,16 @@ ConsentLoop.run({
     },
   },
 });</pre>
+    <p>Need to restyle a single element beyond what tokens cover? <code>ui.customCss</code> injects your CSS <em>inside</em> the Shadow DOM, after the built-in styles — full control without giving up isolation. The <code>.cl-*</code> class names are a stable API:</p>
+    <pre data-lang="js">
+ConsentLoop.run({
+  ui: {
+    customCss: `
+      .cl-banner { border: 1px solid var(--cl-accent); }
+      .cl-title  { text-transform: uppercase; letter-spacing: .04em; }
+    `,
+  },
+});</pre>
     <div class="table-scroll"><table class="props">
       <tr><th>Token</th><th>Default (light)</th><th>What it styles</th></tr>
       <tr><td><code>--cl-bg / --cl-fg / --cl-muted</code></td><td><code>#fff / #18181b / #6b6b76</code></td><td>Surfaces &amp; text</td></tr>

@@ -4,7 +4,9 @@
   "description": "Cookies používáme k provozu webu a k pochopení, jak je využíván. Vy volíte, co povolíte — kdykoli to můžete změnit.",
   "acceptAll": "Přijmout vše",
   "rejectAll": "Odmítnout vše",
-  "preferences": "Předvolby"
+  "preferences": "Předvolby",
+  "privacyPolicy": "Zásady ochrany osobních údajů",
+  "terms": "Obchodní podmínky"
  },
  "preferences": {
   "title": "Předvolby soukromí",

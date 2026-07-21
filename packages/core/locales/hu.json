@@ -4,7 +4,9 @@
   "description": "Sütiket használunk az oldal működtetéséhez és a használat megértéséhez. Te döntesz, mit engedélyezel — bármikor meggondolhatod magad.",
   "acceptAll": "Összes elfogadása",
   "rejectAll": "Összes elutasítása",
-  "preferences": "Beállítások"
+  "preferences": "Beállítások",
+  "privacyPolicy": "Adatvédelmi tájékoztató",
+  "terms": "Felhasználási feltételek"
  },
  "preferences": {
   "title": "Adatvédelmi beállítások",

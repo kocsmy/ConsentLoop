@@ -109,6 +109,7 @@
     <div class="switchrow"><span class="small">Reject-all button</span><button class="uiswitch" role="switch" id="sw-reject" aria-checked="true"></button></div>
     <div class="switchrow"><span class="small">Floating button</span><button class="uiswitch" role="switch" id="sw-fab" aria-checked="false"></button></div>
     <div class="switchrow"><span class="small">US opt-out mode</span><button class="uiswitch" role="switch" id="sw-us" aria-checked="false"></button></div>
+    <div class="switchrow"><span class="small">ConsentLoop branding</span><button class="uiswitch" role="switch" id="sw-brand" aria-checked="true"></button></div>
   </aside>
 
   <div class="pg-main">
@@ -151,7 +152,7 @@
   const state = {
     layout: "box", position: "bottom-right", preferences: "modal",
     theme: "light", accent: "", radius: 16, lang: "en",
-    showRejectAll: true, floatingButton: false, us: false,
+    showRejectAll: true, floatingButton: false, us: false, branding: true,
   };
 
   // locale packs ship with the npm package; the preview uses this site's copy
@@ -180,6 +181,7 @@
     if (Object.keys(tokens).length) cfg.ui.tokens = tokens;
     if (!state.showRejectAll) cfg.ui.showRejectAll = false;
     if (state.floatingButton) cfg.ui.floatingButton = true;
+    if (!state.branding) cfg.ui.branding = false;
     if (state.lang !== "en") {
       cfg.content = cfg.content || {};
       cfg.content.lang = state.lang;
@@ -256,14 +258,15 @@
   uiswitch("sw-reject", "showRejectAll");
   uiswitch("sw-fab", "floatingButton");
   uiswitch("sw-us", "us");
+  uiswitch("sw-brand", "branding");
 
   /* presets */
   const PRESETS = {
-    saas: { layout: "box", position: "bottom-right", preferences: "modal", theme: "light", accent: "", radius: 16, lang: "en", showRejectAll: true, floatingButton: false, us: false },
-    brand: { layout: "cloud", position: "bottom-center", preferences: "modal", theme: "light", accent: "#4f46e5", radius: 20, lang: "en", showRejectAll: true, floatingButton: true, us: false },
-    publisher: { layout: "bar", position: "top-center", preferences: "modal", theme: "light", accent: "", radius: 8, lang: "en", showRejectAll: true, floatingButton: false, us: false },
-    us: { layout: "box", position: "bottom-left", preferences: "modal", theme: "light", accent: "", radius: 16, lang: "en", showRejectAll: true, floatingButton: true, us: true },
-    dark: { layout: "box", position: "bottom-right", preferences: "drawer", theme: "dark", accent: "#818cf8", radius: 18, lang: "en", showRejectAll: true, floatingButton: false, us: false },
+    saas: { layout: "box", position: "bottom-right", preferences: "modal", theme: "light", accent: "", radius: 16, lang: "en", showRejectAll: true, floatingButton: false, us: false, branding: true },
+    brand: { layout: "cloud", position: "bottom-center", preferences: "modal", theme: "light", accent: "#4f46e5", radius: 20, lang: "en", showRejectAll: true, floatingButton: true, us: false, branding: true },
+    publisher: { layout: "bar", position: "top-center", preferences: "modal", theme: "light", accent: "", radius: 8, lang: "en", showRejectAll: true, floatingButton: false, us: false, branding: true },
+    us: { layout: "box", position: "bottom-left", preferences: "modal", theme: "light", accent: "", radius: 16, lang: "en", showRejectAll: true, floatingButton: true, us: true, branding: true },
+    dark: { layout: "box", position: "bottom-right", preferences: "drawer", theme: "dark", accent: "#818cf8", radius: 18, lang: "en", showRejectAll: true, floatingButton: false, us: false, branding: true },
   };
   document.querySelectorAll(".preset").forEach((b) =>
     b.addEventListener("click", () => {
@@ -276,8 +279,8 @@
         const key = id === "prefs-seg" ? "preferences" : "theme";
         el.querySelectorAll("button").forEach((x) => x.classList.toggle("active", x.dataset.v === state[key]));
       });
-      ["sw-reject","sw-fab","sw-us"].forEach((id, i) => {
-        const keys = ["showRejectAll","floatingButton","us"];
+      ["sw-reject","sw-fab","sw-us","sw-brand"].forEach((id, i) => {
+        const keys = ["showRejectAll","floatingButton","us","branding"];
         document.getElementById(id).setAttribute("aria-checked", String(state[keys[i]]));
       });
       push();

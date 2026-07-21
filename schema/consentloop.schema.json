@@ -89,6 +89,9 @@
             "showPreferences": { "type": "boolean", "default": true },
             "floatingButton": { "type": "boolean", "default": false },
             "branding": { "type": "boolean", "default": true },
+            "scrollLock": { "type": "boolean", "default": false, "description": "Lock page scrolling while the banner or preferences dialog is open." },
+            "trapFocus": { "type": "boolean", "default": true, "description": "Trap keyboard focus inside the preferences dialog." },
+            "customCss": { "type": "string", "description": "Extra CSS injected inside the widget root (works with Shadow DOM). Target the stable .cl-* class names." },
             "shadow": { "type": "boolean", "default": true, "description": "Render in an isolating Shadow DOM." },
             "container": { "type": "string", "description": "CSS selector of the mount element." },
             "disableTransitions": { "type": "boolean" },
@@ -104,6 +107,8 @@
         "lang": { "type": "string", "description": "Force a language (otherwise auto-detected)." },
         "autoDetect": { "enum": ["document", "browser", false], "default": "document" },
         "fallback": { "type": "string", "default": "en" },
+        "privacyPolicyUrl": { "type": "string", "description": "Privacy policy URL — renders a localized link in the banner and preferences." },
+        "termsUrl": { "type": "string", "description": "Terms & conditions URL — renders a localized link next to the privacy policy link." },
         "translations": {
           "type": "object",
           "description": "Per-language Translation objects, or URL strings fetched lazily.",
@@ -124,6 +129,8 @@
                       "acceptAll": { "type": "string" },
                       "rejectAll": { "type": "string" },
                       "preferences": { "type": "string" },
+                      "privacyPolicy": { "type": "string", "description": "Label for content.privacyPolicyUrl." },
+                      "terms": { "type": "string", "description": "Label for content.termsUrl." },
                       "links": {
                         "type": "array",
                         "items": {

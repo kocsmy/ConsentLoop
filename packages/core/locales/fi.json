@@ -4,7 +4,9 @@
   "description": "Käytämme evästeitä sivuston toimintaan ja käytön ymmärtämiseen. Sinä valitset, mitä sallitaan — voit muuttaa valintaa milloin tahansa.",
   "acceptAll": "Hyväksy kaikki",
   "rejectAll": "Hylkää kaikki",
-  "preferences": "Asetukset"
+  "preferences": "Asetukset",
+  "privacyPolicy": "Tietosuojaseloste",
+  "terms": "Käyttöehdot"
  },
  "preferences": {
   "title": "Yksityisyysasetukset",

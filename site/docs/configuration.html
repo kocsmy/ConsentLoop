@@ -124,13 +124,15 @@
           <div class="opt-head">
             <div>
               <div class="opt-title">Buttons &amp; extras</div>
-              <p class="opt-desc"><code>ui.showRejectAll</code> keeps Accept and Reject equally weighted (keep it on under GDPR — it’s the law, and it’s the decent thing). <code>ui.floatingButton</code> shows a reopen bubble after consent. <code>ui.branding</code> toggles the small credit.</p>
+              <p class="opt-desc"><code>ui.showRejectAll</code> keeps Accept and Reject equally weighted (keep it on under GDPR — it’s the law, and it’s the decent thing). <code>ui.floatingButton</code> shows a reopen bubble after consent. <code>ui.branding</code> toggles the small credit in the banner and preferences. <code>ui.scrollLock</code> freezes page scrolling while a layer is open. <code>ui.trapFocus</code> keeps keyboard focus inside the preferences dialog (leave on for WCAG).</p>
             </div>
           </div>
           <div class="switchrow"><span>showRejectAll</span><button data-switch="ui.showRejectAll" aria-label="showRejectAll"></button></div>
           <div class="switchrow"><span>showPreferences</span><button data-switch="ui.showPreferences" aria-label="showPreferences"></button></div>
           <div class="switchrow"><span>floatingButton</span><button data-switch="ui.floatingButton" aria-label="floatingButton"></button></div>
           <div class="switchrow"><span>branding</span><button data-switch="ui.branding" aria-label="branding"></button></div>
+          <div class="switchrow"><span>scrollLock</span><button data-switch="ui.scrollLock" aria-label="scrollLock"></button></div>
+          <div class="switchrow"><span>trapFocus</span><button data-switch="ui.trapFocus" aria-label="trapFocus"></button></div>
         </div>
 
         <h2 class="section"><span class="n">03</span>Behavior</h2>
@@ -183,6 +185,10 @@
           <input type="text" id="title-input" data-input="content.title" placeholder="We value your privacy" style="width:100%">
           <label class="field" for="desc-input">banner.description (English)</label>
           <input type="text" id="desc-input" data-input="content.description" placeholder="We use cookies to run this site…" style="width:100%">
+          <label class="field" for="privacy-input">privacyPolicyUrl <span class="mono muted">— link label auto-translates in all 50 languages</span></label>
+          <input type="url" id="privacy-input" data-input="content.privacyPolicyUrl" placeholder="https://example.com/privacy" style="width:100%">
+          <label class="field" for="terms-input">termsUrl</label>
+          <input type="url" id="terms-input" data-input="content.termsUrl" placeholder="https://example.com/terms" style="width:100%">
         </div>
 
         <div class="callout">

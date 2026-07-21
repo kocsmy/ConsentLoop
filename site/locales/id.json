@@ -4,7 +4,9 @@
   "description": "Kami menggunakan cookie untuk menjalankan situs ini dan memahami penggunaannya. Anda yang memilih — dapat diubah kapan saja.",
   "acceptAll": "Terima semua",
   "rejectAll": "Tolak semua",
-  "preferences": "Preferensi"
+  "preferences": "Preferensi",
+  "privacyPolicy": "Kebijakan privasi",
+  "terms": "Syarat dan ketentuan"
  },
  "preferences": {
   "title": "Preferensi privasi",

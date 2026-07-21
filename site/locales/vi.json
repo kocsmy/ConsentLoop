@@ -4,7 +4,9 @@
   "description": "Chúng tôi dùng cookie để vận hành trang web và hiểu cách nó được sử dụng. Bạn quyết định cho phép gì — có thể thay đổi bất cứ lúc nào.",
   "acceptAll": "Chấp nhận tất cả",
   "rejectAll": "Từ chối tất cả",
-  "preferences": "Tùy chọn"
+  "preferences": "Tùy chọn",
+  "privacyPolicy": "Chính sách bảo mật",
+  "terms": "Điều khoản và điều kiện"
  },
  "preferences": {
   "title": "Tùy chọn quyền riêng tư",

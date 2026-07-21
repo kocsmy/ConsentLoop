@@ -9,6 +9,8 @@ export const EN: Translation = {
     acceptAll: "Accept all",
     rejectAll: "Reject all",
     preferences: "Preferences",
+    privacyPolicy: "Privacy policy",
+    terms: "Terms & conditions",
   },
   preferences: {
     title: "Privacy preferences",

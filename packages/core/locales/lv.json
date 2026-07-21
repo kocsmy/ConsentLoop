@@ -4,7 +4,9 @@
   "description": "Sīkdatnes izmantojam vietnes darbībai un lietojuma izpratnei. Jūs izvēlaties, ko atļaut — lēmumu varat mainīt jebkurā brīdī.",
   "acceptAll": "Pieņemt visas",
   "rejectAll": "Noraidīt visas",
-  "preferences": "Iestatījumi"
+  "preferences": "Iestatījumi",
+  "privacyPolicy": "Privātuma politika",
+  "terms": "Noteikumi un nosacījumi"
  },
  "preferences": {
   "title": "Privātuma iestatījumi",

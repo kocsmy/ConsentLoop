@@ -4,7 +4,9 @@
   "description": "Kasutame küpsiseid saidi toimimiseks ja kasutuse mõistmiseks. Teie valite, mida lubada — otsust saab alati muuta.",
   "acceptAll": "Nõustu kõigiga",
   "rejectAll": "Keeldu kõigist",
-  "preferences": "Eelistused"
+  "preferences": "Eelistused",
+  "privacyPolicy": "Privaatsuspoliitika",
+  "terms": "Kasutustingimused"
  },
  "preferences": {
   "title": "Privaatsuseelistused",

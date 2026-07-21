@@ -67,6 +67,18 @@ export function createUi(
     styleEl.textContent = CSS;
     rootNode.appendChild(styleEl);
   }
+  if (ui.customCss) {
+    // a <style> element sorts before adopted sheets, so mirror the mechanism used for the base CSS
+    if (adopted) {
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync(ui.customCss);
+      (rootNode as ShadowRoot).adoptedStyleSheets = [...(rootNode as ShadowRoot).adoptedStyleSheets, sheet];
+    } else {
+      const custom = doc!.createElement("style");
+      custom.textContent = ui.customCss;
+      rootNode.appendChild(custom);
+    }
+  }
 
   const root = doc!.createElement("div");
   root.className = "cl-root";
@@ -113,9 +125,23 @@ export function createUi(
     const b = t.banner!;
     const p = t.preferences!;
 
-    const links = (b.links || [])
-      .map((l) => `<a href="${esc(l.href)}" target="_blank" rel="noopener">${esc(l.label)}</a>`)
-      .join("");
+    const legal = [
+      cfg.content.privacyPolicyUrl
+        ? `<a href="${esc(cfg.content.privacyPolicyUrl)}" target="_blank" rel="noopener">${esc(b.privacyPolicy!)}</a>`
+        : "",
+      cfg.content.termsUrl
+        ? `<a href="${esc(cfg.content.termsUrl)}" target="_blank" rel="noopener">${esc(b.terms!)}</a>`
+        : "",
+    ].join("");
+    const links =
+      legal +
+      (b.links || [])
+        .map((l) => `<a href="${esc(l.href)}" target="_blank" rel="noopener">${esc(l.label)}</a>`)
+        .join("");
+    const brand =
+      ui.branding !== false
+        ? `<a class="cl-brand" href="https://github.com/kocsmy/ConsentLoop" target="_blank" rel="noopener">Consent by <b>ConsentLoop</b></a>`
+        : "";
 
     const bannerButtons = [
       `<button class="cl-btn cl-primary" data-a="accept-all">${esc(b.acceptAll!)}</button>`,
@@ -167,7 +193,7 @@ export function createUi(
           ${links ? `<div class="cl-links">${links}</div>` : ""}
         </div>
         <div class="cl-actions">${bannerButtons}</div>
-        ${ui.branding !== false ? `<a class="cl-brand" href="https://github.com/kocsmy/ConsentLoop" target="_blank" rel="noopener">Consent by <b>ConsentLoop</b></a>` : ""}
+        ${brand}
       </div>
     </div>
     <div class="cl-layer cl-prefs-layer" data-l="prefs">
@@ -186,6 +212,7 @@ export function createUi(
           ${ui.showRejectAll !== false ? `<button class="cl-btn" data-a="reject-all">${esc(p.rejectAll!)}</button>` : ""}
           <button class="cl-btn cl-primary" data-a="save">${esc(p.save!)}</button>
         </footer>
+        ${legal || brand ? `<div class="cl-legal">${legal}${brand}</div>` : ""}
       </div>
     </div>
     <div class="cl-layer cl-fab-layer" data-l="fab">
@@ -284,7 +311,7 @@ export function createUi(
       }
       return;
     }
-    if (e.key === "Tab" && prefsOpen) {
+    if (e.key === "Tab" && prefsOpen && ui.trapFocus !== false) {
       const card = query(".cl-prefs")!;
       const items = focusables(card);
       if (!items.length) return;
@@ -303,6 +330,22 @@ export function createUi(
 
   /* ------------------------------------------------------------- controls */
 
+  // Opt-in scroll lock (ui.scrollLock): freeze page scroll while a layer is open.
+  let scrollPrev: string | null = null;
+  function syncScrollLock(): void {
+    if (!ui.scrollLock || !doc) return;
+    const el = doc.documentElement;
+    if (bannerOpen || prefsOpen) {
+      if (scrollPrev === null) {
+        scrollPrev = el.style.overflow || "";
+        el.style.overflow = "hidden";
+      }
+    } else if (scrollPrev !== null) {
+      el.style.overflow = scrollPrev;
+      scrollPrev = null;
+    }
+  }
+
   function showBanner(): void {
     if (bannerOpen) return;
     bannerOpen = true;
@@ -311,6 +354,7 @@ export function createUi(
       performance.mark("consentloop:banner-visible");
       bannerMarked = true;
     }
+    syncScrollLock();
     (query(".cl-banner") as HTMLElement)?.focus({ preventScroll: true });
     emit("banner-show");
   }
@@ -319,6 +363,7 @@ export function createUi(
     if (!bannerOpen) return;
     bannerOpen = false;
     layer("banner").classList.remove("cl-on");
+    syncScrollLock();
     emit("banner-hide");
   }
 
@@ -330,6 +375,7 @@ export function createUi(
     syncSwitches();
     lastFocus = doc!.activeElement;
     layer("prefs").classList.add("cl-on");
+    syncScrollLock();
     (query(".cl-prefs") as HTMLElement)?.focus({ preventScroll: true });
     emit("preferences-show");
   }
@@ -338,6 +384,7 @@ export function createUi(
     if (!prefsOpen) return;
     prefsOpen = false;
     layer("prefs").classList.remove("cl-on");
+    syncScrollLock();
     emit("preferences-hide");
     if (lastFocus instanceof HTMLElement) lastFocus.focus({ preventScroll: true });
     if (prefsOpenedFromBanner && !getRecord()) showBanner();
@@ -369,6 +416,9 @@ export function createUi(
     setFabVisible,
     setI18n,
     destroy() {
+      bannerOpen = false;
+      prefsOpen = false;
+      syncScrollLock();
       host.removeEventListener("click", onClick);
       host.removeEventListener("keydown", onKeydown as EventListener);
       host.remove();

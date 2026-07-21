@@ -4,7 +4,9 @@
   "description": "We use cookies to run this site and to understand how it is used. You choose what we may use — change your mind any time.",
   "acceptAll": "Accept all",
   "rejectAll": "Reject all",
-  "preferences": "Preferences"
+  "preferences": "Preferences",
+  "privacyPolicy": "Privacy policy",
+  "terms": "Terms & conditions"
  },
  "preferences": {
   "title": "Privacy preferences",

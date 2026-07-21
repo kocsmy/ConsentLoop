@@ -4,7 +4,9 @@
   "description": "Wir nutzen Cookies für den Betrieb dieser Website und um ihre Nutzung zu verstehen. Du entscheidest, was wir verwenden dürfen — jederzeit änderbar.",
   "acceptAll": "Alle akzeptieren",
   "rejectAll": "Alle ablehnen",
-  "preferences": "Einstellungen"
+  "preferences": "Einstellungen",
+  "privacyPolicy": "Datenschutzerklärung",
+  "terms": "Nutzungsbedingungen"
  },
  "preferences": {
   "title": "Datenschutz-Einstellungen",

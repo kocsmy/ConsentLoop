@@ -4,7 +4,9 @@
   "description": "Slapukus naudojame svetainės veikimui ir jos naudojimui suprasti. Jūs pasirenkate, ką leisti — nuomonę galite pakeisti bet kada.",
   "acceptAll": "Priimti visus",
   "rejectAll": "Atmesti visus",
-  "preferences": "Nuostatos"
+  "preferences": "Nuostatos",
+  "privacyPolicy": "Privatumo politika",
+  "terms": "Taisyklės ir sąlygos"
  },
  "preferences": {
   "title": "Privatumo nuostatos",

@@ -13,9 +13,11 @@
       showPreferences: true,
       floatingButton: false,
       branding: true,
+      scrollLock: false,
+      trapFocus: true,
     },
     behavior: { regulation: "gdpr", gcm: true, storage: "cookie", expiresDays: 182, revision: 0 },
-    content: { lang: "en", title: "", description: "" },
+    content: { lang: "en", title: "", description: "", privacyPolicyUrl: "", termsUrl: "" },
   };
 
   // 50 locale packs ship in the npm package; the preview swaps the CDN URL for this site's copy
@@ -57,6 +59,8 @@
     if (!state.ui.showPreferences) ui.showPreferences = false;
     if (state.ui.floatingButton) ui.floatingButton = true;
     if (!state.ui.branding) ui.branding = false;
+    if (state.ui.scrollLock) ui.scrollLock = true;
+    if (!state.ui.trapFocus) ui.trapFocus = false;
     if (Object.keys(ui).length) c.ui = ui;
 
     if (state.behavior.regulation !== "gdpr") c.regulation = state.behavior.regulation;
@@ -73,9 +77,12 @@
     if (state.content.title) en.banner = { ...(en.banner || {}), title: state.content.title };
     if (state.content.description) en.banner = { ...(en.banner || {}), description: state.content.description };
     if (Object.keys(en).length) translations.en = en;
-    if (Object.keys(translations).length || state.content.lang !== "en") {
+    const legalUrls = state.content.privacyPolicyUrl || state.content.termsUrl;
+    if (Object.keys(translations).length || state.content.lang !== "en" || legalUrls) {
       c.content = {};
       if (state.content.lang !== "en") c.content.lang = state.content.lang;
+      if (state.content.privacyPolicyUrl) c.content.privacyPolicyUrl = state.content.privacyPolicyUrl;
+      if (state.content.termsUrl) c.content.termsUrl = state.content.termsUrl;
       if (Object.keys(translations).length) c.content.translations = translations;
     }
     return c;

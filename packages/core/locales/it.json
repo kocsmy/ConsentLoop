@@ -4,7 +4,9 @@
   "description": "Usiamo i cookie per far funzionare questo sito e capire come viene utilizzato. Scegli tu cosa consentire — puoi cambiare idea in ogni momento.",
   "acceptAll": "Accetta tutto",
   "rejectAll": "Rifiuta tutto",
-  "preferences": "Preferenze"
+  "preferences": "Preferenze",
+  "privacyPolicy": "Informativa sulla privacy",
+  "terms": "Termini e condizioni"
  },
  "preferences": {
   "title": "Preferenze sulla privacy",

@@ -4,7 +4,9 @@
   "description": "我们使用 Cookie 来运行本网站并了解其使用情况。您可以自主选择允许的内容，并随时更改。",
   "acceptAll": "全部接受",
   "rejectAll": "全部拒绝",
-  "preferences": "偏好设置"
+  "preferences": "偏好设置",
+  "privacyPolicy": "隐私政策",
+  "terms": "条款与条件"
  },
  "preferences": {
   "title": "隐私偏好设置",

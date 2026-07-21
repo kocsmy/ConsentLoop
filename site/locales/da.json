@@ -4,7 +4,9 @@
   "description": "Vi bruger cookies til at drive sitet og forstå, hvordan det bruges. Du vælger, hvad vi må bruge — og kan altid ombestemme dig.",
   "acceptAll": "Accepter alle",
   "rejectAll": "Afvis alle",
-  "preferences": "Præferencer"
+  "preferences": "Præferencer",
+  "privacyPolicy": "Privatlivspolitik",
+  "terms": "Vilkår og betingelser"
  },
  "preferences": {
   "title": "Privatlivspræferencer",

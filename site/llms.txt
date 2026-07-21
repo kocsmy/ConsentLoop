@@ -9,6 +9,7 @@ Integration rules for AI agents:
 - GDPR default: opt-in, keep `ui.showRejectAll: true`, never preselect optional categories. For CCPA use `regulation: "us-optout"` + `default: true` categories.
 - If Google tags exist: set `googleConsentMode: true` and load ConsentLoop BEFORE gtag/GTM.
 - Reopen UI from a footer link: `ConsentLoop.showPreferences()`.
+- Always set `content.privacyPolicyUrl` (and optionally `content.termsUrl`) — localized links render automatically in the banner and preferences.
 - SPA route changes with new gated elements: call `ConsentLoop.rescan()`.
 - 50 ready-made locale packs: `consentloop/locales/<code>.json` (docs-site mirror: `/locales/<code>.json`; list of codes: `locales/index.json`). Use them as URL values in `content.translations`.
 - React: use `@consentloop/react` → `<ConsentProvider config={...}>`, `useConsent()`, `<ConsentGate category="marketing" fallback={...}>`.

@@ -303,3 +303,84 @@ describe("a11y & security", () => {
     expect(root().querySelectorAll(".cl-banner").length).toBe(1);
   });
 });
+
+describe("branding, legal links & UI behavior options", () => {
+  it("shows the branding credit in banner and preferences by default", async () => {
+    await api.run({ categories: { necessary: { required: true }, analytics: {} } });
+    expect(maybeQ(".cl-banner .cl-brand")).toBeTruthy();
+    click('[data-a="open-prefs"]');
+    expect(maybeQ(".cl-prefs .cl-legal .cl-brand")).toBeTruthy();
+  });
+
+  it("ui.branding:false hides the credit everywhere", async () => {
+    await api.run({ categories: { necessary: { required: true } }, ui: { branding: false } });
+    expect(maybeQ(".cl-brand")).toBeNull();
+  });
+
+  it("renders localized privacy policy + terms links in banner and preferences", async () => {
+    await api.run({
+      categories: { necessary: { required: true }, analytics: {} },
+      content: { privacyPolicyUrl: "/privacy", termsUrl: "/terms" },
+    });
+    const anchors = q(".cl-banner .cl-links").querySelectorAll("a");
+    expect(anchors[0]!.getAttribute("href")).toBe("/privacy");
+    expect(anchors[0]!.textContent).toBe("Privacy policy");
+    expect(anchors[1]!.getAttribute("href")).toBe("/terms");
+    expect(anchors[1]!.textContent).toBe("Terms & conditions");
+    click('[data-a="open-prefs"]');
+    expect(maybeQ(".cl-legal a[href='/privacy']")).toBeTruthy();
+    expect(maybeQ(".cl-legal a[href='/terms']")).toBeTruthy();
+  });
+
+  it("legal link labels use the active language", async () => {
+    document.documentElement.lang = "de";
+    await api.run({
+      categories: { necessary: { required: true } },
+      content: {
+        privacyPolicyUrl: "/privacy",
+        translations: { de: { banner: { privacyPolicy: "Datenschutzerklärung" } } },
+      },
+    });
+    expect(q(".cl-links a").textContent).toBe("Datenschutzerklärung");
+    document.documentElement.lang = "";
+  });
+
+  it("custom banner links render after the legal links", async () => {
+    await api.run({
+      categories: { necessary: { required: true } },
+      content: {
+        termsUrl: "/terms",
+        translations: { en: { banner: { links: [{ label: "Imprint", href: "/imprint" }] } } },
+      },
+    });
+    const anchors = q(".cl-links").querySelectorAll("a");
+    expect([...anchors].map((a) => a.getAttribute("href"))).toEqual(["/terms", "/imprint"]);
+  });
+
+  it("ui.scrollLock freezes page scroll while a layer is open and restores it after", async () => {
+    document.documentElement.style.overflow = "auto";
+    await api.run({ categories: { necessary: { required: true }, analytics: {} }, ui: { scrollLock: true } });
+    expect(document.documentElement.style.overflow).toBe("hidden");
+    click('[data-a="accept-all"]');
+    expect(document.documentElement.style.overflow).toBe("auto");
+    document.documentElement.style.overflow = "";
+  });
+
+  it("without ui.scrollLock the page scroll is untouched", async () => {
+    document.documentElement.style.overflow = "auto";
+    await api.run({ categories: { necessary: { required: true }, analytics: {} } });
+    expect(document.documentElement.style.overflow).toBe("auto");
+    document.documentElement.style.overflow = "";
+  });
+
+  it("ui.customCss is injected inside the widget root after the base styles", async () => {
+    await api.run({
+      categories: { necessary: { required: true } },
+      ui: { customCss: ".cl-banner{border-width:9px}" },
+    });
+    const shadow = document.getElementById("consentloop")!.shadowRoot!;
+    const styles = [...shadow.querySelectorAll("style")].map((s) => s.textContent).join("");
+    expect(styles).toContain("border-width:9px");
+    expect(styles.indexOf("border-width:9px")).toBeGreaterThan(styles.indexOf(".cl-root"));
+  });
+});

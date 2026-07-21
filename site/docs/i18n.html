@@ -21,6 +21,8 @@ ConsentLoop.run({
   content: {
     autoDetect: "document",       // read <html lang>; "browser" uses navigator.language
     fallback: "en",
+    privacyPolicyUrl: "/privacy", // linked in banner + preferences; label pre-translated in all 50 packs
+    termsUrl: "/terms",           // same for "Terms & conditions" (labels: banner.privacyPolicy / banner.terms)
     translations: {
       en: {
         banner: {
