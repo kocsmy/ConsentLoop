@@ -136,6 +136,7 @@
       const raw = pre.textContent.replace(/^\n/, "").replace(/\s+$/, "");
       const wrap = document.createElement("div");
       wrap.className = "codeblock";
+      if (pre.dataset.tab) wrap.dataset.tab = pre.dataset.tab; // keep tab label for upgradeTabs()
       wrap.innerHTML = `<pre data-lang="${lang}"><code>${highlight(raw, lang)}</code></pre><button class="copy">Copy</button>`;
       wrap.querySelector(".copy").addEventListener("click", (e) => {
         navigator.clipboard.writeText(raw).then(() => {
