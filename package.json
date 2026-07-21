@@ -1,7 +1,7 @@
 {
   "name": "consentloop-monorepo",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "ConsentLoop — the fastest cookie consent for developers, designers and founders.",
   "license": "FSL-1.1-MIT",
   "packageManager": "pnpm@10.33.0",

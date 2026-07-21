@@ -1,7 +1,11 @@
 {
   "name": "@consentloop/react",
-  "version": "0.1.0",
-  "description": "React bindings for ConsentLoop — provider, hooks and <ConsentGate> for the fastest cookie consent on the web.",
+  "version": "0.1.1",
+  "description": "React bindings for ConsentLoop — the fastest cookie consent (CMP) for the web. Provider, useConsent hook and <ConsentGate>. GDPR & CCPA, Google Consent Mode v2, zero layout shift.",
+  "homepage": "https://consentloop.io",
+  "bugs": {
+    "url": "https://github.com/kocsmy/ConsentLoop/issues"
+  },
   "license": "FSL-1.1-MIT",
   "type": "module",
   "sideEffects": false,
@@ -30,8 +34,16 @@
   "keywords": [
     "cookie-consent",
     "react",
+    "react-cookie-consent",
+    "cookie-banner",
     "gdpr",
+    "ccpa",
     "consent-management",
+    "cmp",
+    "google-consent-mode",
+    "consent-mode-v2",
+    "privacy",
+    "hooks",
     "consentloop"
   ],
   "repository": {

@@ -19,7 +19,7 @@ const size = JSON.parse(readFileSync(join(dist, "size-report.json"), "utf8"));
 writeFileSync(
   join(vendor, "meta.js"),
   `window.CL_META=${JSON.stringify({
-    version: "0.1.0",
+    version: "0.1.1",
     gzip: {
       loader: +(size["consentloop.loader.min.js"].gzip / 1024).toFixed(2),
       full: +(size["consentloop.iife.min.js"].gzip / 1024).toFixed(2),

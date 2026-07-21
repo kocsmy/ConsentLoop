@@ -3,7 +3,7 @@ import { COOKIE_NAME, DEFAULT_EXPIRES_DAYS, GCM_MAP } from "./defaults";
 import { getCookie, setCookie, eraseCookie } from "./cookies";
 import { uuid } from "./util";
 
-export const VERSION = "0.1.0";
+export const VERSION = "0.1.1";
 
 /* ------------------------------------------------------------------ config */
 

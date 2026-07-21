@@ -1,7 +1,11 @@
 {
   "name": "consentloop",
-  "version": "0.1.0",
-  "description": "The fastest cookie consent for the web. Zero dependencies, zero layout shift, ~7KB, Google Consent Mode v2, script gating, i18n, headless mode. Built for developers, designers and founders — and for AI agents.",
+  "version": "0.1.1",
+  "description": "The fastest cookie consent banner for the web — a source-available CMP. Zero dependencies, zero layout shift, ~1.5 KB loader. Google Consent Mode v2, GDPR & CCPA presets, script & embed gating, per-service consent, 58 languages, headless mode.",
+  "homepage": "https://consentloop.io",
+  "bugs": {
+    "url": "https://github.com/kocsmy/ConsentLoop/issues"
+  },
   "license": "FSL-1.1-MIT",
   "type": "module",
   "sideEffects": false,
@@ -40,13 +44,22 @@
   },
   "keywords": [
     "cookie-consent",
+    "cookie-banner",
+    "cookie-consent-banner",
     "consent-management",
+    "consent-management-platform",
     "cmp",
     "gdpr",
     "ccpa",
-    "cookie-banner",
+    "dsgvo",
     "google-consent-mode",
+    "consent-mode-v2",
+    "cookie-notice",
+    "cookie-law",
     "privacy",
+    "cookies",
+    "consent",
+    "script-gating",
     "consentloop"
   ],
   "repository": {

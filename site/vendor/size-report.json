@@ -5,15 +5,15 @@
   },
   "index.min.js": {
     "bytes": 37806,
-    "gzip": 12581
+    "gzip": 12582
   },
   "consentloop.iife.min.js": {
     "bytes": 37723,
-    "gzip": 12538
+    "gzip": 12539
   },
   "index.js (unminified entry, UI in lazy chunk)": {
     "bytes": 23733,
-    "gzip": 6898,
+    "gzip": 6900,
     "chunks": 2
   }
 }
