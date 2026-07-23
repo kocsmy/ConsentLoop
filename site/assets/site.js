@@ -43,6 +43,13 @@
     },
   ];
 
+  const TOPLINKS = [
+    ["Docs", "/docs/"],
+    ["Playground", "/playground/"],
+    ["Performance", "/docs/performance"],
+    ["AI", "/docs/ai"],
+  ];
+
   const path = location.pathname.replace(/\.html$/, "").replace(/\/index$/, "/") || "/";
   const norm = (h) => h.replace(/\.html$/, "").replace(/\/index$/, "/");
   const isActive = (href) => norm(href) === path || norm(href) + "/" === path || norm(href) === path + "/";
@@ -53,19 +60,17 @@
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>';
   const ghSvg =
     '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.8a10.2 10.2 0 0 0-3.22 19.88c.51.1.7-.22.7-.49v-1.7c-2.84.61-3.44-1.37-3.44-1.37-.46-1.18-1.13-1.49-1.13-1.49-.93-.63.07-.62.07-.62 1.03.07 1.57 1.05 1.57 1.05.91 1.57 2.39 1.11 2.98.85.09-.66.36-1.11.65-1.37-2.27-.26-4.65-1.13-4.65-5.04 0-1.11.4-2.02 1.05-2.74-.11-.26-.46-1.3.1-2.7 0 0 .86-.28 2.8 1.05a9.73 9.73 0 0 1 5.1 0c1.95-1.33 2.8-1.05 2.8-1.05.56 1.4.21 2.44.1 2.7.65.72 1.05 1.63 1.05 2.74 0 3.92-2.39 4.78-4.66 5.03.37.32.69.94.69 1.9v2.81c0 .27.19.6.7.49A10.2 10.2 0 0 0 12 1.8Z"/></svg>';
+  const menuSvg =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+  const closeSvg =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
 
   function topbar() {
     const el = document.createElement("header");
     el.className = "topbar";
-    const links = [
-      ["Docs", "/docs/"],
-      ["Playground", "/playground/"],
-      ["Performance", "/docs/performance"],
-      ["AI", "/docs/ai"],
-    ];
     el.innerHTML = `
       <a class="brand" href="/docs/"><span class="logo">${logoSvg}</span>ConsentLoop</a>
-      <nav class="topnav">${links
+      <nav class="topnav">${TOPLINKS
         .map(([label, href]) => `<a href="${href}" ${isActive(href) || (href === "/docs/" && path.startsWith("/docs")) ? 'class="active"' : ""}>${label}</a>`)
         .join("")}</nav>
       <span class="spacer"></span>
@@ -73,9 +78,38 @@
         <span class="pill" id="version-pill">v0.1.0</span>
         <button class="iconbtn" title="Toggle theme" aria-label="Toggle theme" onclick="toggleTheme()">${sunSvg}</button>
         <a class="iconbtn" title="GitHub" aria-label="GitHub" href="https://github.com/kocsmy/ConsentLoop" target="_blank" rel="noopener">${ghSvg}</a>
+        <button class="iconbtn menubtn" title="Menu" aria-label="Menu" aria-expanded="false" aria-controls="mobilemenu" onclick="toggleMenu()"><span class="i-open">${menuSvg}</span><span class="i-close">${closeSvg}</span></button>
       </div>`;
     document.body.prepend(el);
   }
+
+  function mobileMenu() {
+    const el = document.createElement("div");
+    el.id = "mobilemenu-root";
+    el.innerHTML = `
+      <div class="mobilemenu-backdrop" onclick="toggleMenu(false)"></div>
+      <nav id="mobilemenu" class="mobilemenu" aria-label="Site navigation">
+        <div class="mm-top">${TOPLINKS
+          .map(([label, href]) => `<a href="${href}" ${isActive(href) ? 'class="active"' : ""}>${label}</a>`)
+          .join("")}</div>
+        ${DOCS.map(
+          (g) => `<div class="group"><div class="group-title">${g.group}</div>${g.items
+            .map(([label, href]) => `<a href="${href}" ${isActive(href) ? 'class="active"' : ""}>${label}</a>`)
+            .join("")}</div>`
+        ).join("")}
+      </nav>`;
+    document.body.appendChild(el);
+    el.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => window.toggleMenu(false)));
+    addEventListener("keydown", (e) => { if (e.key === "Escape") window.toggleMenu(false); });
+    addEventListener("resize", () => { if (innerWidth > 900) window.toggleMenu(false); });
+  }
+
+  window.toggleMenu = (force) => {
+    const open = force === undefined ? !document.body.classList.contains("menu-open") : force;
+    document.body.classList.toggle("menu-open", open);
+    const btn = document.querySelector(".menubtn");
+    if (btn) btn.setAttribute("aria-expanded", open ? "true" : "false");
+  };
 
   function sidebar() {
     const mount = document.querySelector("[data-sidebar]");
@@ -217,6 +251,7 @@
 
   addEventListener("DOMContentLoaded", () => {
     topbar();
+    mobileMenu();
     sidebar();
     upgradeCode();
     upgradeTabs();
